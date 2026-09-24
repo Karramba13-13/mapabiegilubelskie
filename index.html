@@ -1,199 +1,405 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalendarz Biegowy - Lubelskie Październik 2026</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+
+```
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f4f6f9;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        flex-shrink: 0;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 5px;
+    }
+
+    header p {
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    .container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+    }
+
+    /* PANEL BOCZNY */
+    .sidebar {
+        width: 350px;
+        background: white;
+        padding: 15px;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        min-width: 280px;
+    }
+
+    .scrollable-content {
+        overflow-y: auto;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .sidebar h2 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        color: #1e3c72;
+        border-bottom: 2px solid #2a5298;
+        padding-bottom: 5px;
+    }
+
+    .run-item {
+        padding: 12px 5px;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .run-item strong {
+        color: #2a5298;
+    }
+
+    .date-badge {
+        background: #e67e22;
+        color: white;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    /* PRZYCISK MAPY */
+    .btn-link {
+        display: inline-block;
+        margin-top: 6px;
+        color: #27ae60;
+        background: none;
+        border: none;
+        padding: 0;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    /* LINKI */
+    a.btn-link {
+        text-decoration: none;
+    }
+
+    a.btn-link:hover {
+        text-decoration: underline;
+    }
+
+    /* MAPA */
+    .map-container {
+        flex: 1;
+        height: 100%;
+        min-width: 0;
+        background: #e5e9f0;
+    }
+
+    #google-map {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    /* REKLAMA */
+    .ad-box {
+        background: #f9f9f9;
+        border: 2px dashed #ccc;
+        border-radius: 6px;
+        padding: 15px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+        margin-top: 15px;
+        flex-shrink: 0;
+    }
+
+    /* TELEFON */
+    @media (max-width: 768px) {
         body {
-            background-color: #f4f6f9;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            overflow: auto;
         }
-        header {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h1 { font-size: 22px; margin-bottom: 5px; }
-        header p { font-size: 13px; opacity: 0.9; }
-        
+
         .container {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            height: calc(100vh - 75px);
-        }
-        
-        /* Panel boczny */
-        .sidebar {
-            width: 350px;
-            background: white;
-            padding: 15px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-            display: flex;
             flex-direction: column;
-            justify-content: space-between;
-        }
-        .scrollable-content {
-            overflow-y: auto;
-            flex: 1;
-        }
-        .sidebar h2 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #1e3c72;
-            border-bottom: 2px solid #2a5298;
-            padding-bottom: 5px;
-        }
-        .run-item {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-        .run-item strong { color: #2a5298; }
-        .date-badge {
-            background: #e67e22;
-            color: white;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        
-        .btn-link {
-            display: inline-block;
-            margin-top: 6px;
-            color: #27ae60;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .btn-link:hover {
-            text-decoration: underline;
         }
 
-        /* Kontener mapy */
-        .map-container {
-            flex: 1;
-            height: 100%;
-            background: #e5e9f0;
-        }
-        iframe {
+        .sidebar {
             width: 100%;
-            height: 100%;
-            border: none;
+            max-height: 50vh;
         }
 
-        /* Sekcja reklamowa */
-        .ad-box {
-            background: #f9f9f9;
-            border: 2px dashed #ccc;
-            border-radius: 6px;
-            padding: 15px;
-            text-align: center;
-            font-size: 12px;
-            color: #777;
-            margin-top: 15px;
+        .map-container {
+            height: 50vh;
+            min-height: 400px;
         }
-    </style>
+    }
+</style>
+```
+
 </head>
+
 <body>
 
-    <header>
-        <h1>🏃‍♂️ Kalendarz Biegowy - Województwo Lubelskie</h1>
-        <p>Interaktywna mapa biegów i wydarzeń sportowych na bazie Google Maps – Październik 2026</p>
-    </header>
+<header>
+    <h1>🏃‍♂️ Kalendarz Biegowy - Województwo Lubelskie</h1>
+    <p>
+        Interaktywna mapa biegów i wydarzeń sportowych –
+        Październik 2026
+    </p>
+</header>
 
-    <div class="container">
-        <div class="sidebar">
-            <div class="scrollable-content">
-                <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
-                <div id="events-list">
-                    <!-- Kliknięcie w link "Pokaż na mapie" bezpiecznie zmienia lokalizację w ramce iframe -->
-                    <div class="run-item">
-                        <span class="date-badge">03.10</span> <strong>Biegi gen. Kleeberga</strong><br>
-                        📍 Kock | Uliczny / Patriotyczny<br>
-                        <span class="btn-link" onclick="changeLocation('Kock, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="https://kock.pl" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                    <div class="run-item">
-                        <span class="date-badge">03.10</span> <strong>Duathlon Olimpijski</strong><br>
-                        📍 Adamów | Bieg + Rower<br>
-                        <span class="btn-link" onclick="changeLocation('Adamów, łukowski, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="https://gminaadamow.pl" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                    <div class="run-item">
-                        <span class="date-badge">10.10</span> <strong>XXV Bieg Sobiborski</strong><br>
-                        📍 Włodawa | 21,1 km (Półmaraton)<br>
-                        <span class="btn-link" onclick="changeLocation('Włodawa, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="http://wlodawa.eu" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                    <div class="run-item">
-                        <span class="date-badge">11.10</span> <strong>Botaniczna Piątka</strong><br>
-                        📍 Lublin | 5 km (Ogród Botaniczny)<br>
-                        <span class="btn-link" onclick="changeLocation('Ogród Botaniczny UMCS, Lublin, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="https://botaniczna5.pl" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                    <div class="run-item">
-                        <span class="date-badge">11.10</span> <strong>Siódemka w Hrubieszowie</strong><br>
-                        📍 Hrubieszów | 7 km (Uliczny)<br>
-                        <span class="btn-link" onclick="changeLocation('Hrubieszów, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="https://frslublin.pl" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                    <div class="run-item">
-                        <span class="date-badge">18.10</span> <strong>10. Półmaraton Lubelski</strong><br>
-                        📍 Lublin | 21,1 km (Uliczny)<br>
-                        <span class="btn-link" onclick="changeLocation('Stadion Lekkoatletyczny, Piłsudskiego, Lublin, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="https://lublin.eu" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                    <div class="run-item">
-                        <span class="date-badge">TBD</span> <strong>Biegam, bo lubię lasy</strong><br>
-                        📍 Lubartów | 10 km (Trail leśny)<br>
-                        <span class="btn-link" onclick="changeLocation('Lubartów, Poland')">📍 Pokaż na mapie</span> | 
-                        <a class="btn-link" href="https://lasy.gov.pl" target="_blank">🎟️ Zapisy</a>
-                    </div>
-                </div>
+<div class="container">
+
+```
+<!-- PANEL BOCZNY -->
+<div class="sidebar">
+
+    <div class="scrollable-content">
+
+        <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
+
+        <div id="events-list">
+
+            <div class="run-item">
+                <span class="date-badge">03.10</span>
+                <strong>Biegi gen. Kleeberga</strong><br>
+                📍 Kock | Uliczny / Patriotyczny<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Kock, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="https://kock.pl"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
             </div>
-            
-            <div class="ad-box">
-                <p>📢 <strong>Miejsce na Twoją Reklamę</strong></p>
-                <p style="font-size: 11px; color:#aaa; margin-top:4px;">Kontakt: reklama@twojadomena.pl</p>
+
+
+            <div class="run-item">
+                <span class="date-badge">03.10</span>
+                <strong>Duathlon Olimpijski</strong><br>
+                📍 Adamów | Bieg + Rower<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Adamów, Łukowski, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="https://gminaadamow.pl"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
             </div>
-        </div>
-        
-        <!-- Otwarta, darmowa i w 100% akceptowana przez Operę ramka Google Maps -->
-        <div class="map-container">
-            <iframe 
-                id="google-map"
-                src="https://google.com" 
-                allowfullscreen 
-                loading="lazy">
-            </iframe>
+
+
+            <div class="run-item">
+                <span class="date-badge">10.10</span>
+                <strong>XXV Bieg Sobiborski</strong><br>
+                📍 Włodawa | 21,1 km (Półmaraton)<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Włodawa, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="http://wlodawa.eu"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
+            </div>
+
+
+            <div class="run-item">
+                <span class="date-badge">11.10</span>
+                <strong>Botaniczna Piątka</strong><br>
+                📍 Lublin | 5 km (Ogród Botaniczny)<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Ogród Botaniczny UMCS, Lublin, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="https://botaniczna5.pl"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
+            </div>
+
+
+            <div class="run-item">
+                <span class="date-badge">11.10</span>
+                <strong>Siódemka w Hrubieszowie</strong><br>
+                📍 Hrubieszów | 7 km (Uliczny)<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Hrubieszów, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="https://frslublin.pl"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
+            </div>
+
+
+            <div class="run-item">
+                <span class="date-badge">18.10</span>
+                <strong>10. Półmaraton Lubelski</strong><br>
+                📍 Lublin | 21,1 km (Uliczny)<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Stadion Lekkoatletyczny, Piłsudskiego, Lublin, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="https://lublin.eu"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
+            </div>
+
+
+            <div class="run-item">
+                <span class="date-badge">TBD</span>
+                <strong>Biegam, bo lubię lasy</strong><br>
+                📍 Lubartów | 10 km (Trail leśny)<br>
+
+                <button
+                    class="btn-link"
+                    onclick="changeLocation('Lubartów, Poland')">
+                    📍 Pokaż na mapie
+                </button>
+                |
+
+                <a
+                    class="btn-link"
+                    href="https://lasy.gov.pl"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    🎟️ Zapisy
+                </a>
+            </div>
+
         </div>
     </div>
 
-    <script>
-        // Funkcja JavaScript, która po kliknięciu "Pokaż na mapie" automatycznie centruje i przybliża mapę Google na wybrane miasto
-        function changeLocation(query) {
-            const encodedQuery = encodeURIComponent(query);
-            const newSrc = `https://google.com{encodedQuery}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
-            document.getElementById('google-map').src = newSrc;
+
+    <div class="ad-box">
+        <p>📢 <strong>Miejsce na Twoją Reklamę</strong></p>
+        <p style="font-size: 11px; color:#aaa; margin-top:4px;">
+            Kontakt: reklama@twojadomena.pl
+        </p>
+    </div>
+
+</div>
+
+
+<!-- MAPA -->
+<div class="map-container">
+
+    <iframe
+        id="google-map"
+        src="https://www.google.com/maps?q=Lublin%2C%20Poland&z=11&output=embed"
+        allowfullscreen
+        loading="lazy">
+    </iframe>
+
+</div>
+```
+
+</div>
+
+<script>
+    /**
+     * Zmiana lokalizacji mapy po kliknięciu wydarzenia.
+     */
+    function changeLocation(query) {
+
+        // Kodowanie adresu/lokalizacji
+        const encodedQuery = encodeURIComponent(query);
+
+        // Budowanie poprawnego adresu Google Maps
+        const newSrc =
+            `https://www.google.com/maps?q=${encodedQuery}&z=13&output=embed`;
+
+        // Pobranie iframe
+        const map = document.getElementById('google-map');
+
+        // Zmiana lokalizacji mapy
+        if (map) {
+            map.src = newSrc;
         }
-    </script>
+    }
+</script>
 
 </body>
 </html>
