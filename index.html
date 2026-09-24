@@ -76,7 +76,7 @@
         /* Kontener na mapę-obrazek i nakładane punkty */
         .map-wrapper {
             flex: 1;
-            background-color: #e5e9f0;
+            background-color: #f4f6f9;
             position: relative;
             display: flex;
             justify-content: center;
@@ -90,7 +90,17 @@
             display: block;
         }
 
-        /* Stylizacja etykiet i punktów biegowych bezpośrednio na obrazku */
+        /* Kontener na dymek informacyjny (tooltip) po najechaniu */
+        .pin-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        /* Stylizacja etykiet biegowych bezpośrednio na obrazku */
         .run-pin {
             position: absolute;
             background: #1e3c72;
@@ -104,13 +114,13 @@
             cursor: pointer;
             transition: transform 0.2s, background-color 0.2s;
             white-space: nowrap;
+            pointer-events: auto;
         }
         .run-pin:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
             background-color: #2a5298;
         }
         
-        /* Wyróżnienie stolicy województwa */
         .run-pin.capital {
             background: #c0392b;
         }
@@ -118,13 +128,42 @@
             background-color: #e74c3c;
         }
 
-        /* Pozycjonowanie punktów procentowo na obszarze mapy */
-        #pin-adamow { top: 32%; left: 42%; }
-        #pin-kock { top: 39%; left: 48%; }
-        #pin-lubartow { top: 46%; left: 53%; }
-        #pin-lublin { top: 55%; left: 51%; }
-        #pin-wlodawa { top: 43%; left: 74%; }
-        #pin-hrubieszow { top: 76%; left: 78%; }
+        /* Poprawione, precyzyjne pozycjonowanie miast pod Twoją mapę */
+        #pin-adamow { top: 38%; left: 47%; }
+        #pin-kock { top: 44%; left: 51%; }
+        #pin-lubartow { top: 51%; left: 54%; }
+        #pin-lublin { top: 60%; left: 53%; }
+        #pin-wlodawa { top: 46%; left: 69%; }
+        #pin-hrubieszow { top: 76%; left: 71%; }
+
+        /* Wbudowany system tooltipów (popover) linkujących */
+        .tooltip-box {
+            display: none;
+            position: absolute;
+            background: white;
+            color: #333;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid #ccc;
+            z-index: 10;
+            width: 180px;
+            pointer-events: auto;
+        }
+        .tooltip-box h4 { font-size: 12px; margin-bottom: 4px; color: #1e3c72; }
+        .tooltip-box p { font-size: 11px; margin-bottom: 6px; color: #666; }
+        .btn-register {
+            display: block;
+            text-align: center;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 4px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .btn-register:hover { background: #219653; }
 
         /* Miejsce na reklamę */
         .ad-box {
@@ -181,19 +220,40 @@
             </div>
         </div>
         
-        <!-- Sekcja z czystym obrazkiem wysokiej rozdzielczości i punktami -->
+        <!-- Sekcja z mapą i punktami w kontenerze -->
         <div class="map-wrapper">
             <img class="map-image" src="mapa.png" alt="Mapa Lubelskie">
             
-            <!-- Punkty nałożone na mapę z datami -->
-            <div class="run-pin" id="pin-adamow" title="Duathlon Olimpijski">Adamów (03.10)</div>
-            <div class="run-pin" id="pin-kock" title="Biegi gen. Kleeberga">Kock (03.10)</div>
-            <div class="run-pin" id="pin-lubartow" title="Biegam, bo lubię lasy">Lubartów (TBD)</div>
-            <div class="run-pin capital" id="pin-lublin" title="Półmaraton Lubelski & Botaniczna Piątka">Lublin (11 & 18.10)</div>
-            <div class="run-pin" id="pin-wlodawa" title="XXV Bieg Sobiborski">Włodawa (10.10)</div>
-            <div class="run-pin" id="pin-hrubieszow" title="Siódemka w Hrubieszowie">Hrubieszów (11.10)</div>
+            <div class="pin-container">
+                <!-- Punkty nałożone na mapę z datami -->
+                <div class="run-pin" id="pin-adamow" onmouseover="showTooltip(event, 'Duathlon Olimpijski', 'Gmina Adamów', 'https://gminaadamow.pl')" onmouseout="hideTooltip()">Adamów (03.10)</div>
+                <div class="run-pin" id="pin-kock" onmouseover="showTooltip(event, 'Biegi gen. Kleeberga', 'Bieg Miejski', 'https://kock.pl')" onmouseout="hideTooltip()">Kock (03.10)</div>
+                <div class="run-pin" id="pin-lubartow" onmouseover="showTooltip(event, 'Biegam, bo lubię lasy', 'Nadleśnictwo Lubartów', 'https://lasy.gov.pl')" onmouseout="hideTooltip()">Lubartów (TBD)</div>
+                <div class="run-pin capital" id="pin-lublin" onmouseover="showTooltip(event, 'Półmaraton Lubelski', 'Maraton Lubelski', 'https://lublin.eu')" onmouseout="hideTooltip()">Lublin (11 & 18.10)</div>
+                <div class="run-pin" id="pin-wlodawa" onmouseover="showTooltip(event, 'XXV Bieg Sobiborski', 'MOSiR Włodawa', 'http://wlodawa.eu')" onmouseout="hideTooltip()">Włodawa (10.10)</div>
+                <div class="run-pin" id="pin-hrubieszow" onmouseover="showTooltip(event, 'Siódemka w Hrubieszowie', 'Zapisy FRSLublin', 'https://frslublin.pl')" onmouseout="hideTooltip()">Hrubieszów (11.10)</div>
+            </div>
+
+            <!-- Blok dynamicznego okienka informacyjnego -->
+            <div id="tooltip" class="tooltip-box" onmouseover="cancelHide()" onmouseout="hideTooltip()">
+                <h4 id="tt-title">Nazwa Biegu</h4>
+                <p id="tt-org">Organizator</p>
+                <a id="tt-link" class="btn-register" href="#" target="_blank">🎟️ Zapisz się</a>
+            </div>
         </div>
     </div>
 
-</body>
-</html>
+    <script>
+        const tooltip = document.getElementById('tooltip');
+        const ttTitle = document.getElementById('tt-title');
+        const ttOrg = document.getElementById('tt-org');
+        const ttLink = document.getElementById('tt-link');
+        let hideTimeout;
+
+        function showTooltip(e, title, organizer, linkUrl) {
+            clearTimeout(hideTimeout);
+            ttTitle.innerText = title;
+            ttOrg.innerText = "Organizator: " + organizer;
+            ttLink.href = linkUrl;
+            
+            // Pozycjonowanie dymka obok kursora myszy
