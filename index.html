@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktywna Mapa Biegów - Lubelskie Październik 2026</title>
-    
+    <title>Kalendarz Biegowy - Lubelskie Październik 2026</title>
     <style>
         * {
             box-sizing: border-box;
@@ -37,6 +36,7 @@
             height: calc(100vh - 75px);
         }
         
+        /* Panel boczny */
         .sidebar {
             width: 350px;
             background: white;
@@ -62,11 +62,6 @@
             border-bottom: 1px solid #eee;
             font-size: 13px;
             line-height: 1.5;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .run-item:hover {
-            background: #f0f4f8;
         }
         .run-item strong { color: #2a5298; }
         .date-badge {
@@ -78,12 +73,60 @@
             font-weight: bold;
         }
 
-        #map {
+        /* Kontener na mapę-obrazek i nakładane punkty */
+        .map-wrapper {
             flex: 1;
-            height: 100%;
-            background: #e5e9f0;
+            background-color: #e5e9f0;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .map-image {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+            display: block;
         }
 
+        /* Stylizacja etykiet i punktów biegowych bezpośrednio na obrazku */
+        .run-pin {
+            position: absolute;
+            background: #1e3c72;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            white-space: nowrap;
+        }
+        .run-pin:hover {
+            transform: scale(1.1);
+            background-color: #2a5298;
+        }
+        
+        /* Wyróżnienie stolicy województwa */
+        .run-pin.capital {
+            background: #c0392b;
+        }
+        .run-pin.capital:hover {
+            background-color: #e74c3c;
+        }
+
+        /* Pozycjonowanie punktów procentowo na obszarze mapy */
+        #pin-adamow { top: 32%; left: 42%; }
+        #pin-kock { top: 39%; left: 48%; }
+        #pin-lubartow { top: 46%; left: 53%; }
+        #pin-lublin { top: 55%; left: 51%; }
+        #pin-wlodawa { top: 43%; left: 74%; }
+        #pin-hrubieszow { top: 76%; left: 78%; }
+
+        /* Miejsce na reklamę */
         .ad-box {
             background: #f9f9f9;
             border: 2px dashed #ccc;
@@ -94,22 +137,7 @@
             color: #777;
             margin-top: 15px;
         }
-
-        /* Style okienek Popup dostosowane do układu wektorowego */
-        .leaflet-popup { position: absolute; text-align: center; pointer-events: none; }
-        .leaflet-popup-content-wrapper { padding: 1px; text-align: left; border-radius: 8px; background: white; box-shadow: 0 3px 14px rgba(0,0,0,0.3); }
-        .leaflet-popup-content { margin: 14px; line-height: 1.4; font-size: 13px; }
-        .leaflet-popup-tip-container { width: 40px; height: 20px; position: absolute; left: 50%; margin-left: -20px; overflow: hidden; }
-        .leaflet-popup-tip { width: 17px; height: 17px; padding: 1px; margin: -10px auto 0; transform: rotate(45deg); background: white; }
-        
-        .popup-info h3 { margin-bottom: 4px; color: #1e3c72; font-size: 14px; }
-        .popup-info p { margin: 2px 0; font-size: 12px; color: #555; }
-        .popup-badge { display: inline-block; background: #e67e22; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-top: 4px; font-weight: bold; }
     </style>
-    
-    <!-- Pobieranie silnika Leaflet z stabilnego i bezpiecznego źródła cdnjs -->
-    <link rel="stylesheet" href="https://cloudflare.com" />
-    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
@@ -123,25 +151,25 @@
             <div class="scrollable-content">
                 <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
                 <div id="events-list">
-                    <div class="run-item" onclick="focusCity([620, 430], 1)">
+                    <div class="run-item">
                         <span class="date-badge">03.10</span> <strong>Biegi gen. Kleeberga</strong><br>📍 Kock | Uliczny / Patriotyczny
                     </div>
-                    <div class="run-item" onclick="focusCity([680, 340], 2)">
+                    <div class="run-item">
                         <span class="date-badge">03.10</span> <strong>Duathlon Olimpijski</strong><br>📍 Adamów | Bieg + Rower
                     </div>
-                    <div class="run-item" onclick="focusCity([570, 810], 3)">
+                    <div class="run-item">
                         <span class="date-badge">10.10</span> <strong>XXV Bieg Sobiborski</strong><br>📍 Włodawa | 21,1 km (Półmaraton)
                     </div>
-                    <div class="run-item" onclick="focusCity([440, 470], 4)">
+                    <div class="run-item">
                         <span class="date-badge">11.10</span> <strong>Botaniczna Piątka</strong><br>📍 Lublin | 5 km (Ogród Botaniczny)
                     </div>
-                    <div class="run-item" onclick="focusCity([220, 860], 5)">
+                    <div class="run-item">
                         <span class="date-badge">11.10</span> <strong>Siódemka w Hrubieszowie</strong><br>📍 Hrubieszów | 7 km (Uliczny)
                     </div>
-                    <div class="run-item" onclick="focusCity([440, 470], 6)">
+                    <div class="run-item">
                         <span class="date-badge">18.10</span> <strong>10. Półmaraton Lubelski</strong><br>📍 Lublin | 21,1 km (Uliczny)
                     </div>
-                    <div class="run-item" onclick="focusCity([520, 490], 7)">
+                    <div class="run-item">
                         <span class="date-badge">TBD</span> <strong>Biegam, bo lubię lasy</strong><br>📍 Lubartów | 10 km (Trail leśny)
                     </div>
                 </div>
@@ -153,76 +181,19 @@
             </div>
         </div>
         
-        <div id="map"></div>
+        <!-- Sekcja z czystym obrazkiem wysokiej rozdzielczości i punktami -->
+        <div class="map-wrapper">
+            <img class="map-image" src="https://wikimedia.org" alt="Mapa Lubelskie">
+            
+            <!-- Punkty nałożone na mapę z datami -->
+            <div class="run-pin" id="pin-adamow" title="Duathlon Olimpijski">Adamów (03.10)</div>
+            <div class="run-pin" id="pin-kock" title="Biegi gen. Kleeberga">Kock (03.10)</div>
+            <div class="run-pin" id="pin-lubartow" title="Biegam, bo lubię lasy">Lubartów (TBD)</div>
+            <div class="run-pin capital" id="pin-lublin" title="Półmaraton Lubelski & Botaniczna Piątka">Lublin (11 & 18.10)</div>
+            <div class="run-pin" id="pin-wlodawa" title="XXV Bieg Sobiborski">Włodawa (10.10)</div>
+            <div class="run-pin" id="pin-hrubieszow" title="Siódemka w Hrubieszowie">Hrubieszów (11.10)</div>
+        </div>
     </div>
 
-    <script>
-        let map;
-        const markers = {};
-
-        // Koordynaty XY dopasowane idealnie do rozdzielczości grafiki wektorowej województwa
-        const runData = [
-            { id: 1, name: "Ogólnopolskie Biegi Uliczne Pamięci Gen. Kleeberga", city: "Kock", coords:, date: "03.10.2026", dist: "Uliczny / Patriotyczny" },
-            { id: 2, name: "Duathlon Olimpijski", city: "Adamów", coords:, date: "03.10.2026", dist: "Bieg + Rower" },
-            { id: 3, name: "XXV Bieg Sobiborski", city: "Włodawa", coords:, date: "10.10.2026", dist: "21,1 km (Półmaraton)" },
-            { id: 4, name: "Botaniczna Piątka – Edycja Jesienna", city: "Lublin", coords:, date: "11.10.2026", dist: "5 km (Ogród Botaniczny)" },
-            { id: 5, name: "Listtowie – Siódemka w Hrubieszowie", city: "Hrubieszów", coords:, date: "11.10.2026", dist: "7 km (Uliczny)" },
-            { id: 6, name: "STOKROTKA 10. Półmaraton Lubelski", city: "Lublin", coords:, date: "18.10.2026", dist: "21,1 km (Uliczny)" },
-            { id: 7, name: "Biegam, bo lubię lasy", city: "Lubartów", coords:, date: "Październik 2026", dist: "10 km (Trail)" }
-        ];
-
-        window.onload = function() {
-            // Konfiguracja niezależnego systemu współrzędnych obrazu (L.CRS.Simple)
-            map = L.map('map', {
-                crs: L.CRS.Simple,
-                minZoom: -1,
-                maxZoom: 2
-            });
-
-            // Wymiary bazowe grafiki wektorowej województwa lubelskiego
-            const bounds = [[0, 0], [1000, 1000]];
-            
-            // Załadowanie oficjalnego wektora SVG jako tła całej interaktywnej mapy
-            L.imageOverlay('https://wikimedia.org', bounds).addTo(map);
-            
-            map.fitBounds(bounds);
-
-            // Nanoszenie punktów interaktywnych
-            runData.forEach(run => {
-                const popupContent = `
-                    <div class="popup-info">
-                        <h3>${run.name}</h3>
-                        <p><strong>📍 Miejscowość:</strong> ${run.city}</p>
-                        <p><strong>📅 Data:</strong> ${run.date}</p>
-                        <span class="popup-badge">${run.dist}</span>
-                    </div>
-                `;
-
-                // Rysowanie wektorowych okręgów sportowych
-                const marker = L.circleMarker(run.coords, {
-                    radius: 10,
-                    fillColor: run.city === "Lublin" ? "#c0392b" : "#1e3c72", // Wyróżnienie stolicy
-                    color: "#fff",
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.9
-                }).addTo(map).bindPopup(popupContent);
-
-                markers[run.id] = marker;
-
-                marker.on('mouseover', function () {
-                    this.openPopup();
-                });
-            });
-        };
-
-        // Funkcja nawigacji z panelu bocznego
-        function focusCity(coords, id) {
-            if (map && markers[id]) {
-                map.setView(coords, 1);
-                markers[id].openPopup();
-            }
-        }
-    </script>
 </body>
 </html>
