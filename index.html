@@ -2,990 +2,1736 @@
 
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<title>Kalendarz Biegowy Polska 2026</title>
 
-<title>
-    Kalendarz Biegowy - Lubelskie Październik 2026
-</title>
-
-<!-- ================================
-     LEAFLET CSS
-================================= -->
-
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 
-    /* =================================
-       RESET
-    ================================= */
+:root {
+    --blue: #173b72;
+    --blue2: #2457a6;
+    --green: #18a56b;
+    --orange: #f28c28;
+    --bg: #f3f6fa;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
 
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family:
-            'Segoe UI',
-            Tahoma,
-            Geneva,
-            Verdana,
-            sans-serif;
-    }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background: var(--bg);
+    color: var(--text);
+
+    height: 100vh;
+    overflow: hidden;
+}
 
 
-    /* =================================
-       BODY
-    ================================= */
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    background:
+        linear-gradient(
+            135deg,
+            #102c59 0%,
+            #2457a6 60%,
+            #1b6fa8 100%
+        );
+
+    color: white;
+    padding: 18px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.16);
+
+    position: relative;
+    z-index: 1000;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.14);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 27px;
+}
+
+.header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.3px;
+}
+
+.header p {
+    margin-top: 3px;
+    font-size: 12px;
+    opacity: .82;
+}
+
+.stats {
+    display: flex;
+    gap: 10px;
+}
+
+.stat {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+
+    border-radius: 10px;
+
+    padding: 8px 12px;
+
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 18px;
+}
+
+.stat span {
+    font-size: 10px;
+    opacity: .75;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.navigation {
+    background: white;
+
+    border-bottom: 1px solid var(--border);
+
+    padding: 10px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    overflow-x: auto;
+
+    position: relative;
+    z-index: 900;
+}
+
+.nav-btn {
+    border: 1px solid var(--border);
+    background: #fff;
+
+    color: #4b5563;
+
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: .2s;
+}
+
+.nav-btn:hover {
+    border-color: var(--blue2);
+    color: var(--blue2);
+}
+
+.nav-btn.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters {
+    background: #f8fafc;
+
+    border-bottom: 1px solid var(--border);
+
+    padding: 10px 20px;
+
+    display: flex;
+    gap: 10px;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    position: relative;
+    z-index: 800;
+}
+
+.select,
+.search {
+    height: 38px;
+
+    border: 1px solid var(--border);
+
+    background: white;
+
+    border-radius: 8px;
+
+    padding: 0 12px;
+
+    font-size: 12px;
+
+    color: var(--text);
+
+    outline: none;
+}
+
+.select:focus,
+.search:focus {
+    border-color: var(--blue2);
+}
+
+.search {
+    width: 240px;
+}
+
+.filter-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+
+/* =========================
+   LAYOUT
+========================= */
+
+.main {
+    display: flex;
+
+    height:
+        calc(
+            100vh - 151px
+        );
+
+    min-height: 0;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 390px;
+    min-width: 330px;
+
+    background: white;
+
+    border-right: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 700;
+}
+
+.sidebar-top {
+    padding: 13px 16px;
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-title {
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.counter {
+    background: #eaf1ff;
+
+    color: var(--blue2);
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.events {
+    overflow-y: auto;
+    flex: 1;
+}
+
+
+/* =========================
+   EVENT CARD
+========================= */
+
+.event {
+    padding: 13px 16px;
+
+    border-bottom: 1px solid var(--border);
+
+    cursor: pointer;
+
+    transition: .18s;
+}
+
+.event:hover {
+    background: #f7faff;
+}
+
+.event.selected {
+    background: #edf5ff;
+
+    border-left:
+        4px solid var(--blue2);
+
+    padding-left: 12px;
+}
+
+.event-date {
+    display: inline-block;
+
+    background: var(--orange);
+
+    color: white;
+
+    padding: 3px 7px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    margin-bottom: 5px;
+}
+
+.event-name {
+    font-size: 13px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    color: #1f3f73;
+}
+
+.event-location {
+    font-size: 11px;
+
+    color: var(--muted);
+
+    margin-top: 4px;
+}
+
+.event-footer {
+    margin-top: 8px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.event-distance {
+    font-size: 10px;
+
+    color: #64748b;
+}
+
+.event-region {
+    font-size: 9px;
+
+    background: #eef2f7;
+
+    color: #64748b;
+
+    padding: 3px 6px;
+
+    border-radius: 4px;
+}
+
+
+/* =========================
+   MAP
+========================= */
+
+.map-wrapper {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =========================
+   MAP LEGEND
+========================= */
+
+.map-info {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    z-index: 500;
+
+    background: rgba(255,255,255,.96);
+
+    border-radius: 10px;
+
+    padding: 9px 12px;
+
+    box-shadow:
+        0 4px 16px rgba(0,0,0,.12);
+
+    font-size: 10px;
+}
+
+.map-info strong {
+    display: block;
+    color: var(--blue);
+    margin-bottom: 2px;
+}
+
+
+/* =========================
+   POPUP
+========================= */
+
+.popup-title {
+    color: var(--blue);
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    margin-bottom: 6px;
+}
+
+.popup-date {
+    display: inline-block;
+
+    background: var(--orange);
+
+    color: white;
+
+    padding: 3px 7px;
+
+    border-radius: 4px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    margin-bottom: 7px;
+}
+
+.popup-info {
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    color: #4b5563;
+
+    margin-bottom: 9px;
+}
+
+.popup-button {
+    display: inline-block;
+
+    background: var(--green);
+
+    color: white !important;
+
+    text-decoration: none;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+.popup-button:hover {
+    background: #128455;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+    padding: 35px 20px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.empty-icon {
+    font-size: 30px;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
 
     body {
-        background-color: #f4f6f9;
-        color: #333;
+        height: auto;
+        overflow: auto;
+    }
 
-        display: flex;
+    .header {
+        padding: 13px 15px;
+    }
+
+    .header h1 {
+        font-size: 17px;
+    }
+
+    .header p {
+        display: none;
+    }
+
+    .stats {
+        display: none;
+    }
+
+    .navigation {
+        padding: 8px 10px;
+    }
+
+    .filters {
+        padding: 8px 10px;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .main {
+        height: auto;
+        min-height: 800px;
+
         flex-direction: column;
-
-        width: 100%;
-        height: 100vh;
-
-        overflow: hidden;
     }
-
-
-    /* =================================
-       HEADER
-    ================================= */
-
-    header {
-        background:
-            linear-gradient(
-                135deg,
-                #1e3c72,
-                #2a5298
-            );
-
-        color: white;
-
-        padding: 15px;
-
-        text-align: center;
-
-        box-shadow:
-            0 4px 6px rgba(0,0,0,0.1);
-
-        flex-shrink: 0;
-    }
-
-
-    header h1 {
-        font-size: 22px;
-        margin-bottom: 5px;
-    }
-
-
-    header p {
-        font-size: 13px;
-        opacity: 0.9;
-    }
-
-
-    /* =================================
-       GŁÓWNY KONTENER
-    ================================= */
-
-    .container {
-        display: flex;
-
-        flex: 1;
-
-        width: 100%;
-
-        min-height: 0;
-    }
-
-
-    /* =================================
-       PANEL BOCZNY
-    ================================= */
 
     .sidebar {
-
-        width: 360px;
-        min-width: 300px;
-
-        background: white;
-
-        padding: 15px;
-
-        box-shadow:
-            2px 0 5px rgba(0,0,0,0.05);
-
-        display: flex;
-        flex-direction: column;
-
-        min-height: 0;
-    }
-
-
-    .scrollable-content {
-
-        flex: 1;
-
-        overflow-y: auto;
-
-        min-height: 0;
-    }
-
-
-    .sidebar h2 {
-
-        font-size: 16px;
-
-        margin-bottom: 15px;
-
-        color: #1e3c72;
-
-        border-bottom:
-            2px solid #2a5298;
-
-        padding-bottom: 5px;
-    }
-
-
-    /* =================================
-       POJEDYNCZY BIEG
-    ================================= */
-
-    .run-item {
-
-        padding: 12px 5px;
-
-        border-bottom:
-            1px solid #eeeeee;
-
-        font-size: 13px;
-
-        line-height: 1.5;
-    }
-
-
-    .run-item strong {
-
-        color: #2a5298;
-    }
-
-
-    /* =================================
-       DATA
-    ================================= */
-
-    .date-badge {
-
-        background: #e67e22;
-
-        color: white;
-
-        padding: 2px 5px;
-
-        border-radius: 3px;
-
-        font-size: 11px;
-
-        font-weight: bold;
-    }
-
-
-    /* =================================
-       PRZYCISKI
-    ================================= */
-
-    .btn-link {
-
-        display: inline-block;
-
-        margin-top: 6px;
-
-        color: #27ae60;
-
-        background: transparent;
-
-        border: none;
-
-        padding: 0;
-
-        font-weight: bold;
-
-        font-size: 12px;
-
-        cursor: pointer;
-    }
-
-
-    .btn-link:hover {
-
-        text-decoration: underline;
-    }
-
-
-    a.btn-link {
-
-        text-decoration: none;
-    }
-
-
-    a.btn-link:hover {
-
-        text-decoration: underline;
-    }
-
-
-    /* =================================
-       MAPA
-    ================================= */
-
-    .map-container {
-
-        flex: 1;
-
+        width: 100%;
         min-width: 0;
 
-        min-height: 0;
+        height: 390px;
 
-        position: relative;
-
-        background: #e5e9f0;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
     }
 
-
-    #map {
-
-        width: 100%;
-
-        height: 100%;
-
-        min-height: 400px;
+    .map-wrapper {
+        height: 55vh;
+        min-height: 430px;
     }
-
-
-    /* =================================
-       POPUP
-    ================================= */
-
-    .popup-title {
-
-        font-size: 15px;
-
-        font-weight: bold;
-
-        color: #1e3c72;
-
-        margin-bottom: 6px;
-    }
-
-
-    .popup-date {
-
-        display: inline-block;
-
-        background: #e67e22;
-
-        color: white;
-
-        padding: 3px 6px;
-
-        border-radius: 3px;
-
-        font-size: 11px;
-
-        font-weight: bold;
-
-        margin-bottom: 7px;
-    }
-
-
-    .popup-info {
-
-        font-size: 12px;
-
-        line-height: 1.5;
-
-        margin-bottom: 10px;
-    }
-
-
-    .popup-link {
-
-        display: inline-block;
-
-        background: #27ae60;
-
-        color: white !important;
-
-        text-decoration: none;
-
-        padding: 7px 10px;
-
-        border-radius: 4px;
-
-        font-size: 11px;
-
-        font-weight: bold;
-    }
-
-
-    .popup-link:hover {
-
-        background: #219653;
-    }
-
-
-    /* =================================
-       REKLAMA
-    ================================= */
-
-    .ad-box {
-
-        background: #f9f9f9;
-
-        border:
-            2px dashed #cccccc;
-
-        border-radius: 6px;
-
-        padding: 15px;
-
-        text-align: center;
-
-        font-size: 12px;
-
-        color: #777;
-
-        margin-top: 15px;
-
-        flex-shrink: 0;
-    }
-
-
-    /* =================================
-       MOBILE
-    ================================= */
-
-    @media (max-width: 768px) {
-
-        body {
-
-            height: auto;
-
-            min-height: 100vh;
-
-            overflow: auto;
-        }
-
-
-        .container {
-
-            flex-direction: column;
-        }
-
-
-        .sidebar {
-
-            width: 100%;
-
-            min-width: 0;
-
-            max-height: 50vh;
-        }
-
-
-        .map-container {
-
-            width: 100%;
-
-            height: 55vh;
-
-            min-height: 400px;
-        }
-
-
-        #map {
-
-            min-height: 400px;
-        }
-
-
-        header h1 {
-
-            font-size: 18px;
-        }
-
-
-        header p {
-
-            font-size: 11px;
-        }
-
-    }
+}
 
 </style>
-```
 
 </head>
 
 <body>
 
-<!-- =====================================
-     NAGŁÓWEK
-===================================== -->
+<!-- =========================
+     HEADER
+========================= -->
 
-<header>
+<header class="header">
 
 ```
-<h1>
-    🏃‍♂️ Kalendarz Biegowy -
-    Województwo Lubelskie
-</h1>
+<div class="logo-area">
 
-<p>
-    Interaktywna mapa biegów i wydarzeń
-    sportowych – Październik 2026
-</p>
+    <div class="logo">
+        🏃
+    </div>
+
+    <div>
+
+        <h1>
+            Kalendarz Biegowy Polska
+        </h1>
+
+        <p>
+            Biegi uliczne • trail • maratony • półmaratony • duathlony
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="stats">
+
+    <div class="stat">
+        <strong id="stat-events">0</strong>
+        <span>wydarzeń</span>
+    </div>
+
+    <div class="stat">
+        <strong id="stat-cities">0</strong>
+        <span>miast</span>
+    </div>
+
+</div>
 ```
 
 </header>
 
-<!-- =====================================
-     GŁÓWNY KONTENER
-===================================== -->
+<!-- =========================
+     TABS
+========================= -->
 
-<div class="container">
+<nav class="navigation">
 
 ```
-<!-- =================================
-     PANEL
-================================== -->
+<button
+    class="nav-btn active"
+    data-region="ALL"
+    onclick="setRegion('ALL')"
+>
+    🇵🇱 Cała Polska
+</button>
+
+<button
+    class="nav-btn"
+    data-region="LUBELSKIE"
+    onclick="setRegion('LUBELSKIE')"
+>
+    Lubelskie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="MAZOWIECKIE"
+    onclick="setRegion('MAZOWIECKIE')"
+>
+    Mazowieckie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="MAŁOPOLSKIE"
+    onclick="setRegion('MAŁOPOLSKIE')"
+>
+    Małopolskie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="DOLNOŚLĄSKIE"
+    onclick="setRegion('DOLNOŚLĄSKIE')"
+>
+    Dolnośląskie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="ŚLĄSKIE"
+    onclick="setRegion('ŚLĄSKIE')"
+>
+    Śląskie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="WIELKOPOLSKIE"
+    onclick="setRegion('WIELKOPOLSKIE')"
+>
+    Wielkopolskie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="OPOLSKIE"
+    onclick="setRegion('OPOLSKIE')"
+>
+    Opolskie
+</button>
+
+<button
+    class="nav-btn"
+    data-region="PODKARPACKIE"
+    onclick="setRegion('PODKARPACKIE')"
+>
+    Podkarpackie
+</button>
+```
+
+</nav>
+
+<!-- =========================
+     FILTERS
+========================= -->
+
+<div class="filters">
+
+```
+<span class="filter-label">
+    MIESIĄC:
+</span>
+
+<select
+    id="month"
+    class="select"
+    onchange="renderEvents()"
+>
+
+    <option value="10">
+        Październik 2026
+    </option>
+
+    <option value="11">
+        Listopad 2026
+    </option>
+
+    <option value="12">
+        Grudzień 2026
+    </option>
+
+</select>
+
+
+<span class="filter-label">
+    WOJEWÓDZTWO:
+</span>
+
+<select
+    id="province"
+    class="select"
+    onchange="provinceChanged()"
+>
+
+    <option value="ALL">
+        Wszystkie
+    </option>
+
+    <option value="LUBELSKIE">
+        Lubelskie
+    </option>
+
+    <option value="MAZOWIECKIE">
+        Mazowieckie
+    </option>
+
+    <option value="MAŁOPOLSKIE">
+        Małopolskie
+    </option>
+
+    <option value="DOLNOŚLĄSKIE">
+        Dolnośląskie
+    </option>
+
+    <option value="ŚLĄSKIE">
+        Śląskie
+    </option>
+
+    <option value="WIELKOPOLSKIE">
+        Wielkopolskie
+    </option>
+
+    <option value="OPOLSKIE">
+        Opolskie
+    </option>
+
+    <option value="PODKARPACKIE">
+        Podkarpackie
+    </option>
+
+    <option value="ŚWIĘTOKRZYSKIE">
+        Świętokrzyskie
+    </option>
+
+    <option value="ŁÓDZKIE">
+        Łódzkie
+    </option>
+
+</select>
+
+
+<input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="🔎 Szukaj biegu, miasta..."
+    oninput="renderEvents()"
+>
+```
+
+</div>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+```
+<!-- SIDEBAR -->
 
 <aside class="sidebar">
 
-
-    <div class="scrollable-content">
-
-
-        <h2>
-            🗓️ Lista Wydarzeń
-        </h2>
-
-
-        <div id="events-list">
-
-
-            <!-- =================================
-                 KOCK
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    03.10
-                </span>
-
-                <strong>
-                    Biegi gen. Kleeberga
-                </strong>
-
-                <br>
-
-                📍 Kock |
-                Uliczny / Patriotyczny
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(0)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="https://kock.pl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-            <!-- =================================
-                 ADAMÓW
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    03.10
-                </span>
-
-                <strong>
-                    Duathlon Olimpijski
-                </strong>
-
-                <br>
-
-                📍 Adamów |
-                Bieg + Rower
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(1)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="https://gminaadamow.pl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-            <!-- =================================
-                 WŁODAWA
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    10.10
-                </span>
-
-                <strong>
-                    XXV Bieg Sobiborski
-                </strong>
-
-                <br>
-
-                📍 Włodawa |
-                21,1 km (Półmaraton)
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(2)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="http://wlodawa.eu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-            <!-- =================================
-                 LUBLIN
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    11.10
-                </span>
-
-                <strong>
-                    Botaniczna Piątka
-                </strong>
-
-                <br>
-
-                📍 Lublin |
-                5 km (Ogród Botaniczny)
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(3)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="https://botaniczna5.pl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-            <!-- =================================
-                 HRUBIESZÓW
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    11.10
-                </span>
-
-                <strong>
-                    Siódemka w Hrubieszowie
-                </strong>
-
-                <br>
-
-                📍 Hrubieszów |
-                7 km (Uliczny)
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(4)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="https://frslublin.pl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-            <!-- =================================
-                 PÓŁMARATON LUBELSKI
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    18.10
-                </span>
-
-                <strong>
-                    10. Półmaraton Lubelski
-                </strong>
-
-                <br>
-
-                📍 Lublin |
-                21,1 km (Uliczny)
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(5)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="https://frslublin.pl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-            <!-- =================================
-                 LUBARTÓW
-            ================================== -->
-
-            <div class="run-item">
-
-                <span class="date-badge">
-                    04.10
-                </span>
-
-                <strong>
-                    Biegam, bo lubię lasy
-                </strong>
-
-                <br>
-
-                📍 Lubartów |
-                10 km (Trail leśny)
-
-                <br>
-
-                <button
-                    class="btn-link"
-                    onclick="showEvent(6)"
-                >
-                    📍 Pokaż na mapie
-                </button>
-
-                |
-
-                <a
-                    class="btn-link"
-                    href="https://lubartow.lublin.lasy.gov.pl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    🎟️ Organizator
-                </a>
-
-            </div>
-
-
-        </div>
-
-    </div>
-
-
-    <!-- =================================
-         REKLAMA
-    ================================== -->
-
-    <div class="ad-box">
-
-        <p>
-            📢
-            <strong>
-                Miejsce na Twoją Reklamę
-            </strong>
-        </p>
-
-        <p
-            style="
-                font-size: 11px;
-                color:#aaa;
-                margin-top:4px;
-            "
+    <div class="sidebar-top">
+
+        <span class="sidebar-title">
+            Najbliższe wydarzenia
+        </span>
+
+        <span
+            id="counter"
+            class="counter"
         >
-            Kontakt:
-            reklama@twojadomena.pl
-        </p>
+            0
+        </span>
 
     </div>
 
+
+    <div
+        id="events"
+        class="events"
+    ></div>
 
 </aside>
 
 
-<!-- =================================
-     MAPA
-================================== -->
+<!-- MAP -->
 
-<main class="map-container">
+<main class="map-wrapper">
 
     <div id="map"></div>
+
+    <div class="map-info">
+
+        <strong>
+            🗺️ Mapa wydarzeń
+        </strong>
+
+        Kliknij pinezkę, aby zobaczyć szczegóły
+
+    </div>
 
 </main>
 ```
 
 </div>
 
-<!-- =====================================
-     LEAFLET JAVASCRIPT
-===================================== -->
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-    /* =====================================
-       DANE WYDARZEŃ
-    ===================================== */
+/* =====================================================
+   BAZA WYDARZEŃ
+===================================================== */
 
-    const events = [
+const events = [
 
+/* =======================
+   PAŹDZIERNIK
+======================= */
+
+{
+    name: "ING Biegnij Warszawo",
+    date: "2026-10-03",
+    city: "Warszawa",
+    region: "MAZOWIECKIE",
+    distance: "10 km",
+    lat: 52.2297,
+    lng: 21.0122,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Biegi gen. Kleeberga",
+    date: "2026-10-03",
+    city: "Kock",
+    region: "LUBELSKIE",
+    distance: "bieg uliczny",
+    lat: 51.6398,
+    lng: 22.4438,
+    url: "https://kock.pl/"
+},
+
+{
+    name: "Duathlon Olimpijski",
+    date: "2026-10-03",
+    city: "Adamów",
+    region: "LUBELSKIE",
+    distance: "bieg + rower",
+    lat: 51.7430,
+    lng: 22.2640,
+    url: "https://gminaadamow.pl/"
+},
+
+{
+    name: "X Bieg Liczyrzepy",
+    date: "2026-10-03",
+    city: "Szczytna",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg górski",
+    lat: 50.414,
+    lng: 16.448,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "NightWave",
+    date: "2026-10-03",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg uliczny",
+    lat: 51.1079,
+    lng: 17.0385,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "III Bieg z kozą",
+    date: "2026-10-03",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg",
+    lat: 51.1079,
+    lng: 17.0385,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "PKO Olsztyn Półmaraton",
+    date: "2026-10-04",
+    city: "Olsztyn",
+    region: "WARMIŃSKO-MAZURSKIE",
+    distance: "21,097 km",
+    lat: 53.7784,
+    lng: 20.4801,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Wild Run",
+    date: "2026-10-04",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg",
+    lat: 51.1079,
+    lng: 17.0385,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "XV Legnica Półmaraton",
+    date: "2026-10-04",
+    city: "Legnica",
+    region: "DOLNOŚLĄSKIE",
+    distance: "21,097 km",
+    lat: 51.2070,
+    lng: 16.1553,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "2. Maraton Kłokoczycki",
+    date: "2026-10-04",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "42,195 km",
+    lat: 51.1079,
+    lng: 17.0385,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "VII Duathlon Crossowy",
+    date: "2026-10-04",
+    city: "Jelcz-Laskowice",
+    region: "DOLNOŚLĄSKIE",
+    distance: "duathlon",
+    lat: 51.021,
+    lng: 17.316,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Botaniczna Piątka – jesienna",
+    date: "2026-10-25",
+    city: "Stradomia Dolna",
+    region: "DOLNOŚLĄSKIE",
+    distance: "5 km",
+    lat: 51.237,
+    lng: 17.611,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "12. PKO Cracovia Półmaraton Królewski",
+    date: "2026-10-11",
+    city: "Kraków",
+    region: "MAŁOPOLSKIE",
+    distance: "21,097 km",
+    lat: 50.0647,
+    lng: 19.9450,
+    url: "https://online.datasport.pl/"
+},
+
+{
+    name: "Czaniecka Piątka",
+    date: "2026-10-11",
+    city: "Kraków",
+    region: "MAŁOPOLSKIE",
+    distance: "5 km",
+    lat: 50.0647,
+    lng: 19.9450,
+    url: "https://online.datasport.pl/"
+},
+
+{
+    name: "XXV Bieg Sobiborski",
+    date: "2026-10-10",
+    city: "Włodawa",
+    region: "LUBELSKIE",
+    distance: "21,1 km",
+    lat: 51.551,
+    lng: 23.554,
+    url: "http://wlodawa.eu/"
+},
+
+{
+    name: "Botaniczna Piątka",
+    date: "2026-10-11",
+    city: "Lublin",
+    region: "LUBELSKIE",
+    distance: "5 km",
+    lat: 51.2685,
+    lng: 22.5300,
+    url: "https://botaniczna5.pl/"
+},
+
+{
+    name: "Siódemka w Hrubieszowie",
+    date: "2026-10-11",
+    city: "Hrubieszów",
+    region: "LUBELSKIE",
+    distance: "7 km",
+    lat: 50.805,
+    lng: 23.8925,
+    url: "https://frslublin.pl/"
+},
+
+{
+    name: "33. Bieg Solidarności – bieg dorosłych",
+    date: "2026-10-10",
+    city: "Lublin",
+    region: "LUBELSKIE",
+    distance: "bieg uliczny",
+    lat: 51.2465,
+    lng: 22.5684,
+    url: "https://frslublin.pl/"
+},
+
+{
+    name: "10. Półmaraton Lubelski",
+    date: "2026-10-18",
+    city: "Lublin",
+    region: "LUBELSKIE",
+    distance: "21,1 km",
+    lat: 51.247,
+    lng: 22.5545,
+    url: "https://frslublin.pl/"
+},
+
+{
+    name: "52. Maraton Dębno",
+    date: "2026-10-18",
+    city: "Dębno",
+    region: "ZACHODNIOPOMORSKIE",
+    distance: "42,195 km",
+    lat: 52.739,
+    lng: 14.698,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "43. Toruń Maraton",
+    date: "2026-10-18",
+    city: "Toruń",
+    region: "KUJAWSKO-POMORSKIE",
+    distance: "42,195 km",
+    lat: 53.0138,
+    lng: 18.5984,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "7. Radzymiński Trail",
+    date: "2026-10-18",
+    city: "Radzymin",
+    region: "MAZOWIECKIE",
+    distance: "trail",
+    lat: 52.414,
+    lng: 21.181,
+    url: "https://www.zapisy.inessport.pl/"
+},
+
+{
+    name: "IV Ultra Szakal",
+    date: "2026-10-24",
+    city: "Łódź",
+    region: "ŁÓDZKIE",
+    distance: "ultra",
+    lat: 51.759,
+    lng: 19.456,
+    url: "https://www.zapisy.inessport.pl/"
+},
+
+{
+    name: "XVI Półmaraton Szakala",
+    date: "2026-10-25",
+    city: "Łódź",
+    region: "ŁÓDZKIE",
+    distance: "21,097 km",
+    lat: 51.759,
+    lng: 19.456,
+    url: "https://www.zapisy.inessport.pl/"
+},
+
+{
+    name: "34. Memoriał Jerzego Chromika",
+    date: "2026-10-25",
+    city: "Mysłowice",
+    region: "ŚLĄSKIE",
+    distance: "15 km / 5 km",
+    lat: 50.208,
+    lng: 19.166,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Nocny Patrol",
+    date: "2026-10-31",
+    city: "Kielce",
+    region: "ŚWIĘTOKRZYSKIE",
+    distance: "35 km / 17 km",
+    lat: 50.866,
+    lng: 20.628,
+    url: "https://www.datasport.pl/"
+},
+
+/* =======================
+   LISTOPAD
+======================= */
+
+{
+    name: "11. RST Półmaraton Świdnicki",
+    date: "2026-11-07",
+    city: "Świdnica",
+    region: "DOLNOŚLĄSKIE",
+    distance: "21,097 km",
+    lat: 50.843,
+    lng: 16.488,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "11. Rogoziński Półmaraton Przemysła II",
+    date: "2026-11-07",
+    city: "Rogoźno",
+    region: "WIELKOPOLSKIE",
+    distance: "21,097 km",
+    lat: 52.752,
+    lng: 17.001,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Międzygminny Bieg Żbika dla Niepodległej",
+    date: "2026-11-08",
+    city: "Pruszków",
+    region: "MAZOWIECKIE",
+    distance: "bieg uliczny",
+    lat: 52.170,
+    lng: 20.812,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Legnicki Bieg Niepodległości",
+    date: "2026-11-10",
+    city: "Legnica",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg",
+    lat: 51.207,
+    lng: 16.155,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Bieg Niepodległości – Jelenia Góra",
+    date: "2026-11-11",
+    city: "Jelenia Góra",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg uliczny",
+    lat: 50.904,
+    lng: 15.719,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Bieg Niepodległości z wąsem",
+    date: "2026-11-11",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "10 km",
+    lat: 51.108,
+    lng: 17.039,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "13. Wolsztyński Bieg Niepodległości",
+    date: "2026-11-11",
+    city: "Wolsztyn",
+    region: "WIELKOPOLSKIE",
+    distance: "bieg",
+    lat: 52.115,
+    lng: 16.117,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "12. Gnieźnieński Bieg Niepodległości",
+    date: "2026-11-11",
+    city: "Gniezno",
+    region: "WIELKOPOLSKIE",
+    distance: "bieg",
+    lat: 52.535,
+    lng: 17.582,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Bieg Niepodległości – Poznań RunPoland",
+    date: "2026-11-11",
+    city: "Poznań",
+    region: "WIELKOPOLSKIE",
+    distance: "10 km",
+    lat: 52.406,
+    lng: 16.925,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "14. Górski Bieg Niepodległości",
+    date: "2026-11-11",
+    city: "Świerki",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg górski",
+    lat: 50.627,
+    lng: 16.396,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Nocny Telegraf Trail",
+    date: "2026-11-21",
+    city: "Kielce",
+    region: "ŚWIĘTOKRZYSKIE",
+    distance: "trail",
+    lat: 50.866,
+    lng: 20.628,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "Półmaraton Górski Orzeł",
+    date: "2026-11-21",
+    city: "Sokolec",
+    region: "DOLNOŚLĄSKIE",
+    distance: "21 km",
+    lat: 50.654,
+    lng: 16.484,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "6. Półmaraton Kocich Gór KOCUR",
+    date: "2026-11-21",
+    city: "Oborniki Śląskie",
+    region: "DOLNOŚLĄSKIE",
+    distance: "21 km",
+    lat: 51.301,
+    lng: 16.914,
+    url: "https://www.datasport.pl/"
+},
+
+{
+    name: "XXIV Maraton Odrzański",
+    date: "2026-11-15",
+    city: "Kędzierzyn-Koźle",
+    region: "OPOLSKIE",
+    distance: "42,195 km",
+    lat: 50.349,
+    lng: 18.226,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Chęć na pięć – szybka Piątka",
+    date: "2026-11-29",
+    city: "Lublin",
+    region: "LUBELSKIE",
+    distance: "5 km",
+    lat: 51.247,
+    lng: 22.568,
+    url: "https://frslublin.pl/"
+},
+
+{
+    name: "XXIII Maraton Komandosa",
+    date: "2026-11-28",
+    city: "Lubliniec",
+    region: "ŚLĄSKIE",
+    distance: "maraton",
+    lat: 50.668,
+    lng: 18.684,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "9. Żorski Półmaraton Leśny",
+    date: "2026-11-29",
+    city: "Żory",
+    region: "ŚLĄSKIE",
+    distance: "21 km",
+    lat: 50.044,
+    lng: 18.700,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+/* =======================
+   GRUDZIEŃ
+======================= */
+
+{
+    name: "VI Nocny Mikołajkowy Bieg Nyski",
+    date: "2026-12-05",
+    city: "Nysa",
+    region: "OPOLSKIE",
+    distance: "bieg",
+    lat: 50.473,
+    lng: 17.334,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Grand Prix CITY TRAIL",
+    date: "2026-12-05",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "5 km",
+    lat: 51.108,
+    lng: 17.039,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "W pogoni za św. Mikołajem",
+    date: "2026-12-06",
+    city: "Wrocław",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg",
+    lat: 51.108,
+    lng: 17.039,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Festiwal Biegów Świętych Mikołajów",
+    date: "2026-12-06",
+    city: "Toruń",
+    region: "KUJAWSKO-POMORSKIE",
+    distance: "21,097 km",
+    lat: 53.014,
+    lng: 18.598,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Bieg Śladami Żubra",
+    date: "2026-12-12",
+    city: "Studzienice",
+    region: "ŚLĄSKIE",
+    distance: "bieg",
+    lat: 49.963,
+    lng: 18.990,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Bieg po moczkę i makówki",
+    date: "2026-12-19",
+    city: "Stanowice",
+    region: "ŚLĄSKIE",
+    distance: "bieg",
+    lat: 50.133,
+    lng: 18.584,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Zimna Połówka",
+    date: "2026-12-19",
+    city: "Niegowonice",
+    region: "ŚLĄSKIE",
+    distance: "21 km",
+    lat: 50.379,
+    lng: 19.416,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Bieg Charytatywny",
+    date: "2026-12-20",
+    city: "Oława",
+    region: "DOLNOŚLĄSKIE",
+    distance: "bieg",
+    lat: 50.946,
+    lng: 17.293,
+    url: "https://www.maratonypolskie.pl/"
+},
+
+{
+    name: "Szansa na 5 – Trzeźwo, Zdrowo, Sportowo",
+    date: "2026-12-05",
+    city: "Radomsko",
+    region: "ŁÓDZKIE",
+    distance: "5 km",
+    lat: 51.067,
+    lng: 19.445,
+    url: "https://www.zapisy.inessport.pl/"
+},
+
+{
+    name: "XVII Grand Prix Mysłowic",
+    date: "2026-12-05",
+    city: "Mysłowice",
+    region: "ŚLĄSKIE",
+    distance: "bieg",
+    lat: 50.208,
+    lng: 19.166,
+    url: "https://www.maratonypolskie.pl/"
+}
+
+];
+
+
+/* =====================================================
+   MAPA
+===================================================== */
+
+const map = L.map("map", {
+    zoomControl: true
+});
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom: 19,
+        attribution:
+            "&copy; OpenStreetMap contributors"
+    }
+).addTo(map);
+
+
+/* =====================================================
+   ZMIENNE
+===================================================== */
+
+let currentRegion = "ALL";
+
+let markers = [];
+
+let markerLayer = L.layerGroup().addTo(map);
+
+
+/* =====================================================
+   FUNKCJE
+===================================================== */
+
+function formatDate(date) {
+
+    const d = new Date(date + "T12:00:00");
+
+    return d.toLocaleDateString(
+        "pl-PL",
         {
-            name: "Biegi gen. Kleeberga",
-            date: "03.10.2026",
-            city: "Kock",
-            type: "Uliczny / Patriotyczny",
-
-            lat: 51.6398,
-            lng: 22.4438,
-
-            organizer: "https://kock.pl"
-        },
-
-
-        {
-            name: "Duathlon Olimpijski",
-            date: "03.10.2026",
-            city: "Adamów",
-            type: "Bieg + Rower",
-
-            lat: 51.7430,
-            lng: 22.2640,
-
-            organizer: "https://gminaadamow.pl"
-        },
-
-
-        {
-            name: "XXV Bieg Sobiborski",
-            date: "10.10.2026",
-            city: "Włodawa",
-            type: "21,1 km – Półmaraton",
-
-            lat: 51.5510,
-            lng: 23.5540,
-
-            organizer: "http://wlodawa.eu"
-        },
-
-
-        {
-            name: "Botaniczna Piątka",
-            date: "11.10.2026",
-            city: "Lublin – Ogród Botaniczny UMCS",
-            type: "5 km",
-
-            lat: 51.2685,
-            lng: 22.5300,
-
-            organizer: "https://botaniczna5.pl"
-        },
-
-
-        {
-            name: "Siódemka w Hrubieszowie",
-            date: "11.10.2026",
-            city: "Hrubieszów",
-            type: "7 km – Uliczny",
-
-            lat: 50.8050,
-            lng: 23.8925,
-
-            organizer: "https://frslublin.pl"
-        },
-
-
-        {
-            name: "10. Półmaraton Lubelski",
-            date: "18.10.2026",
-            city: "Lublin – Stadion Lekkoatletyczny",
-            type: "21,1 km – Uliczny",
-
-            lat: 51.2470,
-            lng: 22.5545,
-
-            organizer: "https://frslublin.pl"
-        },
-
-
-        {
-            name: "Biegam, bo lubię lasy",
-            date: "04.10.2026",
-            city: "Lubartów",
-            type: "10 km – Trail leśny",
-
-            lat: 51.5050,
-            lng: 22.5700,
-
-            organizer:
-                "https://lubartow.lublin.lasy.gov.pl"
-        }
-
-    ];
-
-
-    /* =====================================
-       UTWORZENIE MAPY
-    ===================================== */
-
-    const map = L.map(
-        'map',
-        {
-            zoomControl: true
+            day: "2-digit",
+            month: "2-digit"
         }
     );
+}
 
 
-    /* =====================================
-       PODKŁAD MAPY
-    ===================================== */
+function getMonth(date) {
 
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
+    return date.split("-")[1];
+}
 
-            attribution:
-                '&copy; OpenStreetMap contributors'
+
+function getFilteredEvents() {
+
+    const month =
+        document.getElementById("month").value;
+
+    const province =
+        document.getElementById("province").value;
+
+    const search =
+        document.getElementById("search")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    return events.filter(event => {
+
+        const monthOK =
+            getMonth(event.date) === month;
+
+
+        let regionOK =
+            currentRegion === "ALL"
+            || event.region === currentRegion;
+
+
+        if (province !== "ALL") {
+
+            regionOK =
+                event.region === province;
         }
-    ).addTo(map);
 
 
-    /* =====================================
-       MARKERY
-    ===================================== */
+        const searchOK =
+            !search
+            ||
+            event.name.toLowerCase().includes(search)
+            ||
+            event.city.toLowerCase().includes(search)
+            ||
+            event.region.toLowerCase().includes(search);
 
-    const markers = [];
+
+        return (
+            monthOK
+            &&
+            regionOK
+            &&
+            searchOK
+        );
+
+    });
+
+}
 
 
-    events.forEach(
+/* =====================================================
+   RENDER LISTY
+===================================================== */
+
+function renderEvents() {
+
+    const container =
+        document.getElementById("events");
+
+    const filtered =
+        getFilteredEvents();
+
+
+    container.innerHTML = "";
+
+
+    document.getElementById("counter")
+        .textContent = filtered.length;
+
+
+    document.getElementById("stat-events")
+        .textContent = filtered.length;
+
+
+    const cities =
+        new Set(
+            filtered.map(
+                event => event.city
+            )
+        );
+
+
+    document.getElementById("stat-cities")
+        .textContent = cities.size;
+
+
+    markerLayer.clearLayers();
+
+    markers = [];
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔎
+                </div>
+
+                Nie znaleziono wydarzeń
+                dla wybranych filtrów.
+
+            </div>
+
+        `;
+
+        map.setView(
+            [52.0, 19.0],
+            6
+        );
+
+        return;
+    }
+
+
+    filtered.forEach(
         (event, index) => {
 
-
-            const marker = L.marker(
-                [
-                    event.lat,
-                    event.lng
-                ]
-            ).addTo(map);
+            const item =
+                document.createElement("div");
 
 
-            /* ===============================
-               POPUP
-            =============================== */
+            item.className =
+                "event";
+
+
+            item.innerHTML = `
+
+                <span class="event-date">
+                    ${formatDate(event.date)}
+                </span>
+
+                <div class="event-name">
+                    ${event.name}
+                </div>
+
+                <div class="event-location">
+                    📍 ${event.city}
+                </div>
+
+                <div class="event-footer">
+
+                    <span class="event-distance">
+                        🏃 ${event.distance}
+                    </span>
+
+                    <span class="event-region">
+                        ${event.region}
+                    </span>
+
+                </div>
+
+            `;
+
+
+            item.onclick =
+                () => showEvent(
+                    event,
+                    index
+                );
+
+
+            container.appendChild(item);
+
+
+            const marker =
+                L.marker(
+                    [
+                        event.lat,
+                        event.lng
+                    ]
+                );
+
 
             marker.bindPopup(`
 
@@ -995,11 +1741,9 @@
                         ${event.name}
                     </div>
 
-
                     <div class="popup-date">
-                        ${event.date}
+                        ${formatDate(event.date)}.2026
                     </div>
-
 
                     <div class="popup-info">
 
@@ -1007,18 +1751,21 @@
 
                         <br>
 
-                        🏃 ${event.type}
+                        🏃 ${event.distance}
+
+                        <br>
+
+                        🗺️ ${event.region}
 
                     </div>
 
-
                     <a
-                        class="popup-link"
-                        href="${event.organizer}"
+                        class="popup-button"
+                        href="${event.url}"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        🎟️ Strona organizatora
+                        🌐 Informacje / zapisy
                     </a>
 
                 </div>
@@ -1026,90 +1773,176 @@
             `);
 
 
-            markers.push(marker);
+            marker.addTo(markerLayer);
+
+            markers.push({
+                marker,
+                item,
+                event
+            });
 
         }
     );
 
 
-    /* =====================================
-       POKAZANIE WSZYSTKICH PINEZEK
-    ===================================== */
+    fitMap();
+
+
+    setTimeout(
+        () => map.invalidateSize(),
+        150
+    );
+
+}
+
+
+/* =====================================================
+   POKAŻ WYDARZENIE
+===================================================== */
+
+function showEvent(
+    event,
+    index
+) {
+
+    markers.forEach(
+        object =>
+            object.item.classList.remove(
+                "selected"
+            )
+    );
+
+
+    markers[index]
+        .item
+        .classList.add(
+            "selected"
+        );
+
+
+    map.setView(
+        [
+            event.lat,
+            event.lng
+        ],
+        12,
+        {
+            animate: true
+        }
+    );
+
+
+    markers[index]
+        .marker
+        .openPopup();
+
+}
+
+
+/* =====================================================
+   DOPASOWANIE MAPY
+===================================================== */
+
+function fitMap() {
+
+    if (
+        markers.length === 0
+    ) {
+        return;
+    }
+
 
     const group =
-        L.featureGroup(markers);
+        L.featureGroup(
+            markers.map(
+                object =>
+                    object.marker
+            )
+        );
 
 
     map.fitBounds(
         group.getBounds(),
         {
             padding: [
-                40,
-                40
-            ]
+                45,
+                45
+            ],
+            maxZoom: 8
         }
     );
 
-
-    /* =====================================
-       FUNKCJA "POKAŻ NA MAPIE"
-    ===================================== */
-
-    function showEvent(index) {
-
-        const event =
-            events[index];
-
-        const marker =
-            markers[index];
+}
 
 
-        map.setView(
-            [
-                event.lat,
-                event.lng
-            ],
+/* =====================================================
+   WOJEWÓDZTWO
+===================================================== */
 
-            13,
+function setRegion(region) {
 
-            {
-                animate: true
-            }
-        );
+    currentRegion = region;
 
 
-        marker.openPopup();
-    }
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.region === region
+            );
+
+        });
 
 
-    /* =====================================
-       NAPRAWA WYMIARÓW MAPY
-       PO ZAŁADOWANIU STRONY
-    ===================================== */
+    document.getElementById("province")
+        .value = region;
 
-    setTimeout(
-        function () {
 
-            map.invalidateSize();
+    renderEvents();
 
-            if (markers.length > 0) {
+}
 
-                map.fitBounds(
-                    group.getBounds(),
-                    {
-                        padding: [
-                            40,
-                            40
-                        ]
-                    }
-                );
 
-            }
+function provinceChanged() {
 
-        },
-        300
-    );
+    const value =
+        document.getElementById("province")
+        .value;
 
+
+    currentRegion = value;
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.region === value
+            );
+
+        });
+
+
+    renderEvents();
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+renderEvents();
+
+
+setTimeout(
+    () => map.invalidateSize(),
+    500
+);
 
 </script>
 
