@@ -12,2136 +12,1902 @@
 />
 
 <style>
-:root {
-    --bg: #f3f6fa;
-    --card: #ffffff;
-    --text: #172033;
-    --muted: #6b7280;
-    --accent: #e11d48;
-    --accent-dark: #be123c;
-    --border: #e2e8f0;
-    --dark: #111827;
-    --green: #15803d;
-}
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-    background: var(--bg);
-    color: var(--text);
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #17202a;
 }
 
-/* HEADER */
+/* =========================
+   NAGŁÓWEK
+========================= */
 
 header {
-    background:
-        linear-gradient(135deg, #111827, #1f2937);
-    color: white;
-    padding: 28px 24px;
-}
-
-.header-inner {
-    max-width: 1500px;
-    margin: auto;
+  background: linear-gradient(135deg, #0f766e, #16a085);
+  color: white;
+  padding: 22px 25px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.15);
 }
 
 header h1 {
-    margin: 0 0 7px;
-    font-size: clamp(25px, 4vw, 38px);
+  margin: 0 0 6px;
+  font-size: 27px;
 }
 
 header p {
-    margin: 0;
-    color: #cbd5e1;
-    font-size: 15px;
+  margin: 0;
+  opacity: .92;
 }
 
-/* TOOLBAR */
+/* =========================
+   FILTRY
+========================= */
 
 .toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 
-    background: rgba(255,255,255,.96);
-    backdrop-filter: blur(10px);
+  background: white;
+  padding: 12px;
 
-    border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
 
-    padding: 14px 18px;
-
-    display: grid;
-    grid-template-columns:
-        minmax(150px, .8fr)
-        minmax(200px, 1fr)
-        minmax(240px, 1.4fr)
-        auto;
-
-    gap: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.toolbar-inner {
-    width: 100%;
+.toolbar select,
+.toolbar input,
+.toolbar button {
+  border: 1px solid #d5dadd;
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: white;
 }
 
-select,
-input,
-button {
-    width: 100%;
-    border: 1px solid #d7dee8;
-    border-radius: 11px;
-
-    background: white;
-
-    padding: 11px 13px;
-
-    font-size: 14px;
-    color: var(--text);
+.toolbar input {
+  min-width: 220px;
+  flex: 1;
 }
 
-input:focus,
-select:focus {
-    outline: 2px solid rgba(225,29,72,.15);
-    border-color: var(--accent);
+.toolbar button {
+  cursor: pointer;
+  font-weight: bold;
 }
 
-button {
-    cursor: pointer;
-    font-weight: 700;
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-    padding-left: 18px;
-    padding-right: 18px;
+.toolbar button:hover {
+  background: #eef7f6;
 }
 
-button:hover {
-    background: var(--accent-dark);
-}
-
-/* MAIN */
+/* =========================
+   UKŁAD
+========================= */
 
 .layout {
-    display: grid;
-    grid-template-columns: 440px 1fr;
-    min-height: calc(100vh - 145px);
+  display: grid;
+  grid-template-columns: 430px 1fr;
+
+  height: calc(100vh - 145px);
+  min-height: 650px;
 }
+
+/* =========================
+   LISTA
+========================= */
 
 .sidebar {
-    background: #f8fafc;
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    height: calc(100vh - 145px);
-    padding: 15px;
-}
+  background: #fff;
+  overflow-y: auto;
 
-#map {
-    width: 100%;
-    height: calc(100vh - 145px);
-    min-height: 550px;
-}
+  border-right: 1px solid #ddd;
 
-/* SUMMARY */
+  padding: 14px;
+}
 
 .summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 8px 4px 14px;
 
-    margin: 0 0 12px;
-    padding: 4px 2px;
+  color: #5d6870;
 
-    font-size: 14px;
-    font-weight: 800;
+  font-size: 14px;
 }
 
-.summary-count {
-    color: var(--accent);
+/* =========================
+   KARTA BIEGU
+========================= */
+
+.event {
+  background: white;
+
+  border: 1px solid #e0e5e8;
+  border-left: 5px solid #16a085;
+
+  border-radius: 11px;
+
+  margin-bottom: 10px;
+  padding: 13px;
+
+  cursor: pointer;
+
+  transition: .15s;
+
+  box-shadow: 0 2px 5px rgba(0,0,0,.04);
 }
 
-/* EVENT CARD */
+.event:hover {
+  transform: translateY(-1px);
 
-.event-card {
-    background: var(--card);
-
-    border: 1px solid var(--border);
-    border-radius: 14px;
-
-    padding: 14px;
-    margin-bottom: 10px;
-
-    cursor: pointer;
-
-    transition:
-        transform .12s ease,
-        box-shadow .12s ease,
-        border-color .12s ease;
+  box-shadow:
+    0 5px 13px rgba(0,0,0,.09);
 }
 
-.event-card:hover {
-    transform: translateY(-1px);
-    border-color: #cbd5e1;
-    box-shadow: 0 5px 18px rgba(15,23,42,.07);
+.event.active {
+  border-left-color: #0b5d56;
+
+  background: #f0faf8;
+
+  box-shadow:
+    0 0 0 2px rgba(22,160,133,.18);
 }
 
 .event-date {
-    color: var(--accent);
-    font-size: 13px;
-    font-weight: 850;
+  color: #16a085;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  margin-bottom: 4px;
 }
 
 .event-name {
-    margin-top: 5px;
-    font-size: 15px;
-    line-height: 1.35;
-    font-weight: 800;
+  font-weight: 700;
+
+  font-size: 16px;
+
+  line-height: 1.25;
+
+  margin-bottom: 6px;
 }
 
 .event-location {
-    margin-top: 7px;
-    color: var(--muted);
-    font-size: 13px;
+  font-size: 13px;
+
+  color: #66727a;
+
+  margin-bottom: 8px;
 }
 
-.event-bottom {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 9px;
+.event-description {
+  font-size: 13px;
+
+  line-height: 1.45;
+
+  color: #39434a;
 }
 
 .badge {
-    display: inline-block;
+  display: inline-block;
 
-    background: #f1f5f9;
-    color: #334155;
+  background: #e8f6f3;
 
-    padding: 4px 8px;
-    border-radius: 999px;
+  color: #117864;
 
-    font-size: 11px;
-    font-weight: 750;
+  border-radius: 20px;
+
+  padding: 4px 8px;
+
+  font-size: 11px;
+
+  margin-top: 8px;
 }
 
-.badge.province {
-    background: #ecfdf5;
-    color: var(--green);
+/* =========================
+   MAPA
+========================= */
+
+#map {
+  width: 100%;
+  height: 100%;
 }
 
-/* POPUP */
+/* =========================
+   POPUP
+========================= */
 
 .popup-title {
-    font-size: 16px;
-    font-weight: 850;
-    margin-bottom: 6px;
+  font-size: 16px;
+
+  font-weight: bold;
+
+  margin-bottom: 6px;
 }
 
-.popup-line {
-    font-size: 13px;
-    margin: 3px 0;
+.popup-date {
+  color: #117864;
+
+  font-weight: bold;
+
+  margin-bottom: 6px;
 }
 
-/* EMPTY */
+.popup-description {
+  line-height: 1.4;
 
-.empty {
-    background: white;
-    border: 1px dashed #cbd5e1;
-    border-radius: 14px;
-    padding: 25px;
-    text-align: center;
-    color: var(--muted);
+  margin-top: 8px;
+
+  max-width: 300px;
 }
 
-/* MOBILE */
+/* =========================
+   LEGENDA
+========================= */
 
-@media (max-width: 1000px) {
+.legend {
+  position: fixed;
 
-    .toolbar {
-        grid-template-columns: 1fr 1fr;
-    }
+  right: 15px;
+  bottom: 15px;
 
-    .layout {
-        grid-template-columns: 1fr;
-    }
+  z-index: 999;
 
-    .sidebar {
-        height: auto;
-        max-height: none;
-        order: 2;
-    }
+  background: white;
 
-    #map {
-        order: 1;
-        height: 55vh;
-        min-height: 420px;
-    }
+  border-radius: 9px;
+
+  padding: 10px 12px;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,.18);
+
+  font-size: 12px;
 }
 
-@media (max-width: 600px) {
+.legend-dot {
+  display: inline-block;
 
-    header {
-        padding: 22px 16px;
-    }
+  width: 10px;
+  height: 10px;
 
-    .toolbar {
-        grid-template-columns: 1fr;
-        position: static;
-    }
+  background: #16a085;
 
-    #map {
-        height: 52vh;
-    }
+  border-radius: 50%;
+
+  margin-right: 5px;
 }
+
+/* =========================
+   MARKER DLA WIELU BIEGÓW
+========================= */
+
+.multi-marker {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  background: #16a085;
+
+  border: 3px solid white;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.35);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: bold;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+  .layout {
+    grid-template-columns: 1fr;
+
+    height: auto;
+  }
+
+  .sidebar {
+    height: 55vh;
+
+    border-right: 0;
+
+    border-bottom: 1px solid #ddd;
+  }
+
+  #map {
+    height: 55vh;
+  }
+
+  header h1 {
+    font-size: 22px;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-    <div class="header-inner">
-        <h1>🏃 Kalendarz Biegowy Polska 2026</h1>
-        <p>
-            Październik • Listopad • Grudzień 2026
-            — biegi uliczne, trail, maratony, półmaratony i ultra
-        </p>
-    </div>
+
+  <h1>🏃 Kalendarz Biegowy Polska 2026</h1>
+
+  <p>
+    Październik • Listopad • Grudzień
+  </p>
+
 </header>
 
 
+<!-- =========================
+     FILTRY
+========================= -->
+
 <div class="toolbar">
 
-    <select id="monthFilter">
-        <option value="all">📅 Wszystkie miesiące</option>
-        <option value="2026-10">Październik 2026</option>
-        <option value="2026-11">Listopad 2026</option>
-        <option value="2026-12">Grudzień 2026</option>
-    </select>
+  <select id="monthFilter">
 
-    <select id="provinceFilter">
-        <option value="all">🇵🇱 Wszystkie województwa</option>
-    </select>
+    <option value="all">
+      Wszystkie miesiące
+    </option>
 
-    <input
-        id="searchInput"
-        type="search"
-        placeholder="🔎 Szukaj biegu, miasta, województwa..."
-    >
+    <option value="2026-10">
+      Październik 2026
+    </option>
 
-    <button id="showAll">
-        🗺️ Pokaż wszystkie
-    </button>
+    <option value="2026-11">
+      Listopad 2026
+    </option>
+
+    <option value="2026-12">
+      Grudzień 2026
+    </option>
+
+  </select>
+
+
+  <select id="provinceFilter">
+
+    <option value="all">
+      Wszystkie województwa
+    </option>
+
+  </select>
+
+
+  <input
+    id="search"
+    type="search"
+    placeholder="🔎 Szukaj biegu, miasta..."
+  >
+
+
+  <button id="showAll">
+    Pokaż wszystkie
+  </button>
 
 </div>
 
 
+<!-- =========================
+     UKŁAD
+========================= -->
+
 <div class="layout">
 
-    <aside class="sidebar">
+  <aside class="sidebar">
 
-        <div class="summary">
-            <span>Wydarzenia</span>
-            <span
-                id="eventCount"
-                class="summary-count"
-            >
-                0
-            </span>
-        </div>
+    <div
+      id="summary"
+      class="summary"
+    ></div>
 
-        <div id="eventList"></div>
+    <div
+      id="eventList"
+    ></div>
 
-    </aside>
+  </aside>
 
-    <main id="map"></main>
+
+  <main id="map"></main>
+
+</div>
+
+
+<div class="legend">
+
+  <span class="legend-dot"></span>
+
+  Termin wydarzenia
 
 </div>
 
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+
 <script>
 
-/*
-==========================================================
-KALENDARZ BIEGOWY
-PAŹDZIERNIK - GRUDZIEŃ 2026
-==========================================================
-*/
+/* =========================================================
+   DANE BIEGÓW
+========================================================= */
 
 const events = [
 
-/* ======================================================
-   PAŹDZIERNIK
-====================================================== */
+  /* =========================
+     PAŹDZIERNIK
+  ========================= */
 
-{
+  {
     date: "2026-10-02",
-    name: "Silesia Marathon",
-    city: "Katowice / Chorzów / Mysłowice / Siemianowice Śląskie",
+    name: "Silesia 5K RUN",
+    city: "Katowice / Chorzów",
     province: "śląskie",
-    distance: "maraton / półmaraton / ultra",
+    distance: "5 km",
+    description:
+      "Bieg otwierający weekend Silesia Marathon. Krótki dystans rozgrywany dzień przed biegiem na 10 km.",
     lat: 50.2649,
     lng: 19.0238
-},
+  },
 
-{
+  {
     date: "2026-10-03",
     name: "ING Biegnij Warszawo",
     city: "Warszawa",
     province: "mazowieckie",
     distance: "10 km",
+    description:
+      "Duży uliczny bieg na dystansie 10 km rozgrywany w Warszawie.",
     lat: 52.2297,
     lng: 21.0122
-},
+  },
 
-{
+  {
     date: "2026-10-03",
-    name: "Bison Trail",
+    name: "Silesia 10K RUN",
+    city: "Katowice / Chorzów",
+    province: "śląskie",
+    distance: "10 km",
+    description:
+      "Bieg na dystansie 10 km rozgrywany w ramach weekendu Silesia Marathon.",
+    lat: 50.2649,
+    lng: 19.0238
+  },
+
+  {
+    date: "2026-10-03",
+    name: "Bison Ultra Trail",
     city: "Supraśl",
     province: "podlaskie",
-    distance: "50 / 70 / 100 km",
-    lat: 53.205,
-    lng: 23.339
-},
+    distance: "biegi trail / ultra",
+    description:
+      "Festiwal biegów terenowych w Puszczy Knyszyńskiej z wieloma dystansami.",
+    lat: 53.2056,
+    lng: 23.3386
+  },
 
-{
-    date: "2026-10-03",
-    name: "JuraRun",
-    city: "Podlesice",
+  {
+    date: "2026-10-04",
+    name: "Silesia Half Marathon",
+    city: "Katowice / Chorzów",
     province: "śląskie",
-    distance: "5 / 12 / 23 km",
-    lat: 50.564,
-    lng: 19.522
-},
+    distance: "21,1 km",
+    description:
+      "Półmaraton rozgrywany podczas głównego weekendu Silesia Marathon.",
+    lat: 50.2649,
+    lng: 19.0238
+  },
 
-{
-    date: "2026-10-03",
-    name: "DDKK Festiwal Biegowy",
-    city: "Kędzierzyn-Koźle",
-    province: "opolskie",
-    distance: "bieg",
-    lat: 50.3499,
-    lng: 18.2261
-},
-
-{
-    date: "2026-10-03",
-    name: "DDKK Rajza na kole",
-    city: "Kędzierzyn-Koźle",
-    province: "opolskie",
-    distance: "bieg",
-    lat: 50.3499,
-    lng: 18.2261
-},
-
-{
-    date: "2026-10-03",
-    name: "NightWave powered by Decathlon",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "10 km",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-10-03",
-    name: "PKO Olsztyn",
-    city: "Olsztyn",
-    province: "warmińsko-mazurskie",
-    distance: "5 km",
-    lat: 53.7784,
-    lng: 20.4801
-},
-
-{
-    date: "2026-10-03",
-    name: "9. Memoriał Janusza Nabrdalika",
-    city: "Sosnowiec",
+  {
+    date: "2026-10-04",
+    name: "Silesia Marathon",
+    city: "Katowice / Chorzów",
     province: "śląskie",
-    distance: "bieg",
-    lat: 50.2863,
-    lng: 19.1034
-},
+    distance: "42,2 km",
+    description:
+      "Główny maraton weekendu Silesia Marathon.",
+    lat: 50.2649,
+    lng: 19.0238
+  },
 
-{
+  {
+    date: "2026-10-04",
+    name: "Silesia Ultramarathon",
+    city: "Katowice / Chorzów",
+    province: "śląskie",
+    distance: "ultra",
+    description:
+      "Długi bieg rozgrywany w ramach weekendu Silesia Marathon.",
+    lat: 50.2649,
+    lng: 19.0238
+  },
+
+  {
+    date: "2026-10-04",
+    name: "LOTTO Poznań Maraton",
+    city: "Poznań",
+    province: "wielkopolskie",
+    distance: "42,2 km",
+    description:
+      "Poznański maraton uliczny z metą na terenie Międzynarodowych Targów Poznańskich.",
+    lat: 52.4064,
+    lng: 16.9252
+  },
+
+  {
     date: "2026-10-04",
     name: "PKO Olsztyn Półmaraton",
     city: "Olsztyn",
     province: "warmińsko-mazurskie",
     distance: "21,1 km",
+    description:
+      "Uliczny półmaraton w Olsztynie.",
     lat: 53.7784,
     lng: 20.4801
-},
+  },
 
-{
+  {
     date: "2026-10-04",
-    name: "Biegnij Warszawo",
-    city: "Warszawa",
-    province: "mazowieckie",
-    distance: "10 km",
-    lat: 52.2297,
-    lng: 21.0122
-},
+    name: "PKO Olsztyn 5K",
+    city: "Olsztyn",
+    province: "warmińsko-mazurskie",
+    distance: "5 km",
+    description:
+      "Bieg na 5 km rozgrywany tego samego dnia co olsztyński półmaraton.",
+    lat: 53.7784,
+    lng: 20.4801
+  },
 
-{
-    date: "2026-10-04",
-    name: "Poznań Maraton",
-    city: "Poznań",
-    province: "wielkopolskie",
-    distance: "42,195 km",
-    lat: 52.4064,
-    lng: 16.9252
-},
-
-{
-    date: "2026-10-04",
-    name: "Wild Run",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-10-04",
-    name: "14. Półmaraton im. Janusza Kusocińskiego",
-    city: "Błonie",
-    province: "mazowieckie",
-    distance: "21,1 km",
-    lat: 52.1989,
-    lng: 20.617
-},
-
-{
-    date: "2026-10-04",
-    name: "9. Ostrowiecki Półmaraton Leśny",
-    city: "Ostrowiec Świętokrzyski",
-    province: "świętokrzyskie",
-    distance: "21,1 km",
-    lat: 50.9294,
-    lng: 21.3853
-},
-
-{
+  {
     date: "2026-10-10",
     name: "II Korczyński Półmaraton Górski",
-    city: "Korczyna / Czarnorzeki",
+    city: "Korczyna",
     province: "podkarpackie",
-    distance: "6 / 21 km",
-    lat: 49.717,
-    lng: 21.809
-},
-
-{
-    date: "2026-10-10",
-    name: "Zaczerska Dycha",
-    city: "Trzebownisko",
-    province: "podkarpackie",
-    distance: "10 km",
-    lat: 50.099,
-    lng: 22.036
-},
-
-{
-    date: "2026-10-10",
-    name: "Zębowicki strzał w 10-tkę",
-    city: "Zębowice",
-    province: "opolskie",
-    distance: "10 km",
-    lat: 50.762,
-    lng: 18.347
-},
-
-{
-    date: "2026-10-10",
-    name: "Lasy nad Utratą",
-    city: "Michałowice",
-    province: "mazowieckie",
-    distance: "bieg",
-    lat: 52.174,
-    lng: 20.879
-},
-
-{
-    date: "2026-10-10",
-    name: "UltraKotlina",
-    city: "Szklarska Poręba",
-    province: "dolnośląskie",
-    distance: "15 / 30 / 50+ km",
-    lat: 50.827,
-    lng: 15.523
-},
-
-{
-    date: "2026-10-10",
-    name: "Walimskie Biegi Górskie",
-    city: "Walim",
-    province: "dolnośląskie",
-    distance: "22 / 51 km",
-    lat: 50.697,
-    lng: 16.444
-},
-
-{
-    date: "2026-10-10",
-    name: "33. Bieg Solidarności – Lubelski Lipiec 1980",
-    city: "Lublin",
-    province: "lubelskie",
-    distance: "bieg",
-    lat: 51.2465,
-    lng: 22.5684
-},
-
-{
-    date: "2026-10-11",
-    name: "12. PKO Cracovia Półmaraton Królewski",
-    city: "Kraków",
-    province: "małopolskie",
     distance: "21,1 km",
-    lat: 50.0647,
-    lng: 19.945
-},
+    description:
+      "Górski półmaraton w rejonie Korczyny.",
+    lat: 49.7167,
+    lng: 21.8167
+  },
 
-{
-    date: "2026-10-11",
-    name: "Run For IT",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-10-11",
-    name: "Czaniecka Piątka",
-    city: "Kraków",
-    province: "małopolskie",
-    distance: "5 km",
-    lat: 50.0647,
-    lng: 19.945
-},
-
-{
-    date: "2026-10-11",
-    name: "Siódemka w Hrubieszowie",
-    city: "Hrubieszów",
-    province: "lubelskie",
-    distance: "7 km",
-    lat: 50.805,
-    lng: 23.8925
-},
-
-{
-    date: "2026-10-11",
-    name: "Festiwal Strażacki 998 – Bieg 5 KM",
-    city: "Jordanów",
-    province: "małopolskie",
-    distance: "5 km",
-    lat: 49.649,
-    lng: 19.829
-},
-
-{
-    date: "2026-10-11",
-    name: "Wzgórzowa Trzynastka",
-    city: "Proszków",
-    province: "opolskie",
-    distance: "13 km",
-    lat: 50.458,
-    lng: 18.051
-},
-
-{
-    date: "2026-10-11",
-    name: "XXV Bieg Sobiborski",
-    city: "Włodawa",
-    province: "lubelskie",
-    distance: "bieg",
-    lat: 51.55,
-    lng: 23.55
-},
-
-{
-    date: "2026-10-11",
-    name: "XXXVIII Bieg po Ziemi Biłgorajskiej",
-    city: "Biłgoraj",
-    province: "lubelskie",
-    distance: "bieg",
-    lat: 50.541,
-    lng: 22.722
-},
-
-{
-    date: "2026-10-11",
-    name: "Botaniczna Piątka – edycja jesienna",
-    city: "Lublin",
-    province: "lubelskie",
-    distance: "5 km",
-    lat: 51.2465,
-    lng: 22.5684
-},
-
-{
-    date: "2026-10-17",
-    name: "35. Tarnowski Bieg Leliwitów",
-    city: "Tarnów",
-    province: "małopolskie",
-    distance: "bieg",
-    lat: 50.0121,
-    lng: 20.9858
-},
-
-{
-    date: "2026-10-17",
-    name: "IV Wilczy Półmaraton",
-    city: "Wilcza",
-    province: "śląskie",
-    distance: "21,1 km",
-    lat: 50.194,
-    lng: 18.59
-},
-
-{
+  {
     date: "2026-10-17",
     name: "Dębowiec Nocna Pętla",
     city: "Bielsko-Biała",
     province: "śląskie",
-    distance: "bieg",
+    distance: "bieg terenowy",
+    description:
+      "Jesienny bieg terenowy rozgrywany po zmroku.",
     lat: 49.8224,
     lng: 19.0444
-},
+  },
 
-{
-    date: "2026-10-17",
-    name: "Bieg Herbowy",
-    city: "Dębowa",
-    province: "opolskie",
-    distance: "bieg",
-    lat: 50.255,
-    lng: 18.166
-},
-
-{
-    date: "2026-10-17",
-    name: "Łemkowyna Ultra-Trail",
-    city: "Krynica-Zdrój / Komańcza",
-    province: "małopolskie",
-    distance: "ultra",
-    lat: 49.421,
-    lng: 20.959
-},
-
-{
+  {
     date: "2026-10-18",
     name: "52. Maraton Dębno",
     city: "Dębno",
     province: "zachodniopomorskie",
-    distance: "42,195 km",
-    lat: 52.739,
-    lng: 14.702
-},
+    distance: "42,2 km",
+    description:
+      "Jeden z najbardziej znanych polskich maratonów ulicznych.",
+    lat: 52.7392,
+    lng: 14.6985
+  },
 
-{
+  {
     date: "2026-10-18",
-    name: "43. Toruń Maraton",
-    city: "Toruń",
-    province: "kujawsko-pomorskie",
-    distance: "42,195 km",
-    lat: 53.0138,
-    lng: 18.5984
-},
+    name: "Maratońska Dziesiątka",
+    city: "Dębno",
+    province: "zachodniopomorskie",
+    distance: "10 km",
+    description:
+      "Towarzyszący bieg na dystansie 10 km podczas weekendu Maratonu Dębno.",
+    lat: 52.7392,
+    lng: 14.6985
+  },
 
-{
+  {
     date: "2026-10-18",
     name: "STOKROTKA 10. Półmaraton Lubelski",
     city: "Lublin",
     province: "lubelskie",
     distance: "21,1 km",
+    description:
+      "Jubileuszowa edycja Półmaratonu Lubelskiego. Start i meta znajdują się na Stadionie Lekkoatletycznym w Lublinie.",
     lat: 51.2465,
     lng: 22.5684
-},
+  },
 
-{
-    date: "2026-10-18",
-    name: "7. Radzymiński Trail",
-    city: "Radzymin",
-    province: "mazowieckie",
-    distance: "trail",
-    lat: 52.4144,
-    lng: 21.1816
-},
-
-{
-    date: "2026-10-18",
-    name: "III Bieg Napoleona",
-    city: "Rodrysin",
-    province: "mazowieckie",
-    distance: "bieg",
-    lat: 52.055,
-    lng: 20.583
-},
-
-{
-    date: "2026-10-18",
-    name: "Wartko",
-    city: "Gaszowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.108,
-    lng: 18.43
-},
-
-{
-    date: "2026-10-18",
-    name: "Panewnicki Bieg Dzika",
-    city: "Katowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.244,
-    lng: 18.957
-},
-
-{
-    date: "2026-10-18",
-    name: "PKO Półmaraton Gliwicki",
-    city: "Gliwice",
-    province: "śląskie",
-    distance: "21,1 / 10 km",
-    lat: 50.2945,
-    lng: 18.6714
-},
-
-{
-    date: "2026-10-18",
-    name: "V Bieg Golejowskim Szlakiem",
-    city: "Staszów",
-    province: "świętokrzyskie",
-    distance: "5 / 10 km",
-    lat: 50.563,
-    lng: 21.166
-},
-
-{
-    date: "2026-10-18",
-    name: "Prusice Biegają – etap 4",
-    city: "Prusice",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.371,
-    lng: 16.96
-},
-
-{
+  {
     date: "2026-10-24",
-    name: "Sowiogórski Festiwal Biegowy",
-    city: "Pieszyce",
-    province: "dolnośląskie",
-    distance: "30 / 55 / 84 km",
-    lat: 50.712,
-    lng: 16.58
-},
-
-{
-    date: "2026-10-24",
-    name: "Grand Prix CITY TRAIL – Wrocław",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "trail",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-10-24",
-    name: "Ochotnica Uphill",
-    city: "Ochotnica Górna",
-    province: "małopolskie",
-    distance: "uphill",
-    lat: 49.526,
-    lng: 20.328
-},
-
-{
-    date: "2026-10-24",
-    name: "IV Jesienny Festiwal Szakala",
-    city: "Łódź",
-    province: "łódzkie",
-    distance: "festiwal",
-    lat: 51.7592,
-    lng: 19.456
-},
-
-{
-    date: "2026-10-24",
-    name: "IV Ultra Szakal",
-    city: "Łódź",
-    province: "łódzkie",
-    distance: "ultra",
-    lat: 51.7592,
-    lng: 19.456
-},
-
-{
-    date: "2026-10-24",
-    name: "Cross Rosłon Kabaty",
-    city: "Warszawa",
-    province: "mazowieckie",
-    distance: "cross",
-    lat: 52.13,
-    lng: 21.05
-},
-
-{
-    date: "2026-10-24",
-    name: "IX Bieg RUNbertów",
-    city: "Warszawa",
-    province: "mazowieckie",
-    distance: "bieg",
-    lat: 52.29,
-    lng: 21.15
-},
-
-{
-    date: "2026-10-24",
-    name: "Smok Ultra Race",
-    city: "Brandysówka",
-    province: "małopolskie",
-    distance: "21 / 30 / 50+ km",
-    lat: 50.242,
-    lng: 19.735
-},
-
-{
-    date: "2026-10-24",
-    name: "Duch Lasu – Szybka 5",
-    city: "Winne Podbukowina",
-    province: "podkarpackie",
+    name: "Botaniczna Piątka – jesień",
+    city: "Poznań",
+    province: "wielkopolskie",
     distance: "5 km",
-    lat: 49.95,
-    lng: 22.28
-},
+    description:
+      "Jesienna odsłona biegu Botaniczna Piątka.",
+    lat: 52.4186,
+    lng: 16.8917
+  },
 
-{
+  {
     date: "2026-10-25",
     name: "34. Memoriał Jerzego Chromika",
     city: "Mysłowice",
     province: "śląskie",
-    distance: "15 km",
-    lat: 50.2075,
-    lng: 19.1667
-},
+    distance: "bieg uliczny",
+    description:
+      "Tradycyjny jesienny bieg memoriałowy w Mysłowicach.",
+    lat: 50.2080,
+    lng: 19.1668
+  },
 
-{
+  {
     date: "2026-10-25",
-    name: "XVI Półmaraton Szakala Dookoła Lasu Łagiewnickiego",
-    city: "Łódź",
-    province: "łódzkie",
-    distance: "21,1 km",
-    lat: 51.825,
-    lng: 19.488
-},
-
-{
-    date: "2026-10-25",
-    name: "V Cross Szakala",
-    city: "Łódź",
-    province: "łódzkie",
-    distance: "cross",
-    lat: 51.825,
-    lng: 19.488
-},
-
-{
-    date: "2026-10-25",
-    name: "Przehyba Uphill",
-    city: "Gaboń",
-    province: "małopolskie",
-    distance: "uphill",
-    lat: 49.505,
-    lng: 20.62
-},
-
-{
-    date: "2026-10-25",
-    name: "XLIV Perła Paprocan",
-    city: "Tychy",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.131,
-    lng: 18.999
-},
-
-{
-    date: "2026-10-25",
-    name: "Botaniczna Piątka – jesień",
-    city: "Stradomia Dolna",
-    province: "dolnośląskie",
-    distance: "5 km",
-    lat: 51.18,
-    lng: 17.65
-},
-
-{
-    date: "2026-10-25",
-    name: "Bieg Halloween",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-10-25",
-    name: "63. Bieg Republiki Ostrowskiej",
-    city: "Ostrów Wielkopolski",
-    province: "wielkopolskie",
-    distance: "bieg",
-    lat: 51.655,
-    lng: 17.806
-},
-
-{
-    date: "2026-10-25",
-    name: "Chwałowicki Maraton Napoleoński",
-    city: "Chwałowice",
-    province: "dolnośląskie",
-    distance: "maraton",
-    lat: 51.5,
-    lng: 17.12
-},
-
-{
-    date: "2026-10-25",
-    name: "Sopot Półmaraton",
-    city: "Sopot",
-    province: "pomorskie",
-    distance: "21,1 km",
-    lat: 54.4416,
-    lng: 18.5601
-},
-
-{
-    date: "2026-10-30",
-    name: "Bieg Szwoleżera",
-    city: "Leźnica Wielka",
-    province: "łódzkie",
-    distance: "bieg",
-    lat: 51.47,
-    lng: 19.18
-},
-
-{
-    date: "2026-10-31",
-    name: "Nocny Patrol",
-    city: "Kielce",
-    province: "świętokrzyskie",
-    distance: "17 / 35 km",
-    lat: 50.8661,
-    lng: 20.6286
-},
-
-{
-    date: "2026-10-31",
-    name: "Diabelskie Koło Gór Suchych",
-    city: "Mieroszów",
-    province: "dolnośląskie",
-    distance: "trail",
-    lat: 50.665,
-    lng: 16.188
-},
-
-{
-    date: "2026-10-31",
-    name: "Gliwicka Prowokacja",
-    city: "Gliwice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.2945,
-    lng: 18.6714
-},
+    name: "Toruń Maraton",
+    city: "Toruń",
+    province: "kujawsko-pomorskie",
+    distance: "42,2 km",
+    description:
+      "Jesienny maraton uliczny w Toruniu.",
+    lat: 53.0138,
+    lng: 18.5984
+  },
 
 
-/* ======================================================
-   LISTOPAD
-====================================================== */
+  /* =========================
+     LISTOPAD
+  ========================= */
 
-{
-    date: "2026-11-01",
-    name: "Maraton Komandosa",
-    city: "Lubliniec",
-    province: "śląskie",
-    distance: "42 km",
-    lat: 50.668,
-    lng: 18.684
-},
-
-{
+  {
     date: "2026-11-07",
     name: "11. RST Półmaraton Świdnicki",
     city: "Świdnica",
     province: "dolnośląskie",
     distance: "21,1 km",
+    description:
+      "Półmaraton ze startem w Świdnicy i trasą prowadzącą również przez okolice miasta.",
     lat: 50.8437,
-    lng: 16.4886
-},
+    lng: 16.4870
+  },
 
-{
+  {
     date: "2026-11-07",
-    name: "11. Rogoziński Półmaraton Przemysła II",
-    city: "Rogoźno",
-    province: "wielkopolskie",
-    distance: "21,1 km",
-    lat: 52.752,
-    lng: 16.99
-},
+    name: "RST Dzika Piątka",
+    city: "Świdnica",
+    province: "dolnośląskie",
+    distance: "5 km",
+    description:
+      "Bieg na 5 km towarzyszący Półmaratonowi Świdnickiemu.",
+    lat: 50.8437,
+    lng: 16.4870
+  },
 
-{
-    date: "2026-11-07",
-    name: "3. Piona dla Niepodległej",
-    city: "Jarosław",
-    province: "podkarpackie",
-    distance: "bieg",
-    lat: 50.016,
-    lng: 22.677
-},
-
-{
-    date: "2026-11-07",
-    name: "Bieg Niepodległości – Nowosarzyńska Jedenastka",
-    city: "Nowa Sarzyna",
-    province: "podkarpackie",
-    distance: "11 km",
-    lat: 50.32,
-    lng: 22.344
-},
-
-{
-    date: "2026-11-07",
-    name: "13. Jesienny Bieg Potrójnej",
-    city: "Rzyki / Andrychów",
-    province: "małopolskie",
-    distance: "15 km",
-    lat: 49.714,
-    lng: 19.4
-},
-
-{
-    date: "2026-11-08",
-    name: "7. Bieg Niepodległości",
-    city: "Mielec",
-    province: "podkarpackie",
-    distance: "bieg",
-    lat: 50.2871,
-    lng: 21.4239
-},
-
-{
-    date: "2026-11-08",
-    name: "I Gminny Bieg Niepodległości",
-    city: "Zarzecze",
-    province: "podkarpackie",
-    distance: "bieg",
-    lat: 49.997,
-    lng: 22.533
-},
-
-{
-    date: "2026-11-08",
-    name: "Międzygminny Bieg Żbika dla Niepodległej",
-    city: "Pruszków / Michałowice",
-    province: "mazowieckie",
-    distance: "bieg",
-    lat: 52.17,
-    lng: 20.812
-},
-
-{
+  {
     date: "2026-11-08",
     name: "Marceliński Bieg Jesienny",
     city: "Poznań",
     province: "wielkopolskie",
     distance: "5 / 10 km",
-    lat: 52.4064,
-    lng: 16.9252
-},
+    description:
+      "Jesienny bieg w zielonej części Poznania.",
+    lat: 52.3985,
+    lng: 16.8246
+  },
 
-{
-    date: "2026-11-10",
-    name: "Legnicki Bieg Niepodległości",
-    city: "Legnica",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.207,
-    lng: 16.155
-},
-
-{
-    date: "2026-11-11",
-    name: "14. PKO Bieg Niepodległości w Rzeszowie",
-    city: "Rzeszów",
-    province: "podkarpackie",
-    distance: "10 km",
-    lat: 50.0412,
-    lng: 21.9991
-},
-
-{
+  {
     date: "2026-11-11",
     name: "36. Bieg Niepodległości",
     city: "Warszawa",
     province: "mazowieckie",
     distance: "10 km",
+    description:
+      "Uliczny bieg organizowany w Warszawie z okazji Święta Niepodległości.",
     lat: 52.2297,
     lng: 21.0122
-},
+  },
 
-{
+  {
     date: "2026-11-11",
-    name: "Bieg Niepodległości RunPoland",
+    name: "PKO Bieg Niepodległości",
+    city: "Rzeszów",
+    province: "podkarpackie",
+    distance: "10 km",
+    description:
+      "Rzeszowski bieg uliczny organizowany 11 listopada.",
+    lat: 50.0412,
+    lng: 21.9991
+  },
+
+  {
+    date: "2026-11-11",
+    name: "Bieg Niepodległości RUNPOLAND",
     city: "Poznań",
     province: "wielkopolskie",
     distance: "10 km",
+    description:
+      "Poznański bieg uliczny na dystansie 10 km. Start zaplanowano na 11:11.",
     lat: 52.4064,
     lng: 16.9252
-},
+  },
 
-{
-    date: "2026-11-11",
-    name: "10. Hasco-Lek Bieg Niepodległości z wąsem",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "10 km",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-11-11",
-    name: "XXXIII Biegi Niepodległości",
-    city: "Ruda Śląska",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.255,
-    lng: 18.855
-},
-
-{
-    date: "2026-11-11",
-    name: "XXXIII Bieg Niepodległości",
-    city: "Czechowice-Dziedzice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 49.913,
-    lng: 19.006
-},
-
-{
-    date: "2026-11-11",
-    name: "XXXVIII Goleniowska Mila Niepodległości",
-    city: "Goleniów",
-    province: "zachodniopomorskie",
-    distance: "1 mila / 10 km",
-    lat: 53.563,
-    lng: 14.828
-},
-
-{
-    date: "2026-11-11",
-    name: "Bieg Niepodległości z Portem Gdańsk",
-    city: "Gdańsk",
-    province: "pomorskie",
-    distance: "bieg",
-    lat: 54.352,
-    lng: 18.6466
-},
-
-{
+  {
     date: "2026-11-11",
     name: "Gdyński Bieg Niepodległości",
     city: "Gdynia",
     province: "pomorskie",
     distance: "10 km",
+    description:
+      "Dziesięciokilometrowy bieg uliczny w Gdyni.",
     lat: 54.5189,
     lng: 18.5305
-},
+  },
 
-{
+  {
     date: "2026-11-11",
     name: "Sopocki Bieg Niepodległości",
     city: "Sopot",
     province: "pomorskie",
     distance: "5 km",
+    description:
+      "Bieg organizowany w Sopocie w Święto Niepodległości.",
     lat: 54.4416,
     lng: 18.5601
-},
+  },
 
-{
+  {
     date: "2026-11-11",
     name: "Krakowski Bieg Niepodległości",
     city: "Kraków",
     province: "małopolskie",
-    distance: "bieg",
-    lat: 50.0647,
-    lng: 19.945
-},
-
-{
-    date: "2026-11-11",
-    name: "XIII Bieg Niepodległości Skawina–Mogilany",
-    city: "Skawina / Mogilany",
-    province: "małopolskie",
-    distance: "bieg",
-    lat: 49.975,
-    lng: 19.828
-},
-
-{
-    date: "2026-11-11",
-    name: "Górski Bieg Niepodległości",
-    city: "Bielsko-Biała",
-    province: "śląskie",
-    distance: "21 km",
-    lat: 49.8224,
-    lng: 19.0444
-},
-
-{
-    date: "2026-11-11",
-    name: "14. Górski Bieg Niepodległości",
-    city: "Świerki",
-    province: "dolnośląskie",
     distance: "10 km",
-    lat: 50.626,
-    lng: 16.427
-},
+    description:
+      "Krakowski bieg uliczny organizowany 11 listopada.",
+    lat: 50.0614,
+    lng: 19.9383
+  },
 
-{
+  {
     date: "2026-11-11",
-    name: "XV Bieg Niepodległościowa Jedenastka",
-    city: "Biały Kościół",
-    province: "małopolskie",
-    distance: "11 km",
-    lat: 50.166,
-    lng: 19.785
-},
+    name: "Bieg Niepodległości Czechowice-Dziedzice",
+    city: "Czechowice-Dziedzice",
+    province: "śląskie",
+    distance: "10 km",
+    description:
+      "Bieg uliczny organizowany w Święto Niepodległości.",
+    lat: 49.9132,
+    lng: 19.0048
+  },
 
-{
+  {
     date: "2026-11-11",
-    name: "XXXIII Ogólnopolski Bieg Niepodległości",
-    city: "Góra",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.668,
-    lng: 16.534
-},
+    name: "XXXIII Biegi Niepodległości",
+    city: "Ruda Śląska",
+    province: "śląskie",
+    distance: "bieg uliczny",
+    description:
+      "Tradycyjne biegi niepodległościowe w Rudzie Śląskiej.",
+    lat: 50.2558,
+    lng: 18.8556
+  },
 
-{
+  {
     date: "2026-11-11",
-    name: "13. Wolsztyński Bieg Niepodległości",
+    name: "Wolsztyński Bieg Niepodległości",
     city: "Wolsztyn",
     province: "wielkopolskie",
-    distance: "bieg",
-    lat: 52.12,
-    lng: 16.117
-},
+    distance: "bieg uliczny",
+    description:
+      "Lokalny bieg organizowany w Wolsztynie 11 listopada.",
+    lat: 52.1212,
+    lng: 16.3655
+  },
 
-{
-    date: "2026-11-11",
-    name: "12. Gnieźnieński Bieg Niepodległości",
-    city: "Gniezno",
-    province: "wielkopolskie",
-    distance: "10 km",
-    lat: 52.5348,
-    lng: 17.5826
-},
-
-{
-    date: "2026-11-11",
-    name: "XXXIV Bieg Niepodległości",
-    city: "Skierniewice",
-    province: "łódzkie",
-    distance: "bieg",
-    lat: 51.954,
-    lng: 20.158
-},
-
-{
-    date: "2026-11-11",
-    name: "Chełmski Nocny Półmaraton z Duchem Bieluchem",
-    city: "Chełm",
-    province: "lubelskie",
-    distance: "21,1 km",
-    lat: 51.1431,
-    lng: 23.4716
-},
-
-{
-    date: "2026-11-13",
-    name: "Nocny Jelczański Bieg Towarzyski 4",
-    city: "Jelcz-Laskowice",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.033,
-    lng: 17.347
-},
-
-{
+  {
     date: "2026-11-20",
     name: "Piekło Czantorii",
     city: "Ustroń",
     province: "śląskie",
-    distance: "trail",
-    lat: 49.721,
-    lng: 18.81
-},
+    distance: "bieg górski",
+    description:
+      "Górskie wydarzenie biegowe w rejonie Czantorii.",
+    lat: 49.7217,
+    lng: 18.8100
+  },
 
-{
+  {
     date: "2026-11-21",
     name: "Nocny Telegraf Trail",
     city: "Kielce",
     province: "świętokrzyskie",
     distance: "trail",
+    description:
+      "Nocny bieg terenowy na stokach Telegrafu w Kielcach.",
     lat: 50.8661,
     lng: 20.6286
-},
+  },
 
-{
-    date: "2026-11-21",
-    name: "Pierwszy Śnieg",
-    city: "Katowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.2649,
-    lng: 19.0238
-},
-
-{
+  {
     date: "2026-11-21",
     name: "Koszęcińska Dycha",
     city: "Koszęcin",
     province: "śląskie",
     distance: "10 km",
-    lat: 50.635,
-    lng: 18.841
-},
+    description:
+      "Jesienny bieg na dystansie 10 km w Koszęcinie.",
+    lat: 50.6351,
+    lng: 18.8411
+  },
 
-{
+  {
     date: "2026-11-21",
-    name: "7. Półmaraton Górski Orzeł",
-    city: "Sokolec",
+    name: "Półmaraton Górski Orzeł",
+    city: "Świeradów-Zdrój",
     province: "dolnośląskie",
     distance: "21,1 km",
-    lat: 50.679,
-    lng: 16.445
-},
+    description:
+      "Górski półmaraton prowadzący po terenach Gór Izerskich.",
+    lat: 50.9092,
+    lng: 15.3430
+  },
 
-{
-    date: "2026-11-21",
-    name: "2. Górska Trzynastka",
-    city: "Sokolec",
-    province: "dolnośląskie",
-    distance: "13 km",
-    lat: 50.679,
-    lng: 16.445
-},
-
-{
-    date: "2026-11-21",
-    name: "6. Półmaraton Kocich Gór KOCUR",
-    city: "Oborniki Śląskie",
-    province: "dolnośląskie",
-    distance: "21,1 km",
-    lat: 51.301,
-    lng: 16.914
-},
-
-{
-    date: "2026-11-22",
-    name: "Panewnicki Bieg Dzika",
-    city: "Katowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.244,
-    lng: 18.957
-},
-
-{
-    date: "2026-11-22",
-    name: "29. Bełchatowska Piętnastka",
-    city: "Bełchatów",
-    province: "łódzkie",
-    distance: "15 km",
-    lat: 51.368,
-    lng: 19.356
-},
-
-{
-    date: "2026-11-22",
-    name: "X Bieg Tarnowski",
-    city: "Tarnów Opolski",
-    province: "opolskie",
-    distance: "bieg",
-    lat: 50.595,
-    lng: 18.084
-},
-
-{
+  {
     date: "2026-11-28",
     name: "XXIII Maraton Komandosa",
     city: "Lubliniec",
     province: "śląskie",
     distance: "maraton",
-    lat: 50.668,
-    lng: 18.684
-},
+    description:
+      "Bieg o charakterze wojskowym organizowany w Lublińcu.",
+    lat: 50.6680,
+    lng: 18.6840
+  },
 
-{
-    date: "2026-11-28",
-    name: "Gliwicka Prowokacja",
-    city: "Gliwice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.2945,
-    lng: 18.6714
-},
-
-{
-    date: "2026-11-28",
-    name: "Jesienny Ultra Świr",
-    city: "Gołkowice Dolne",
-    province: "małopolskie",
-    distance: "15 / 24 km",
-    lat: 49.555,
-    lng: 20.667
-},
-
-{
-    date: "2026-11-29",
-    name: "9. Żorski Półmaraton Leśny",
-    city: "Żory",
-    province: "śląskie",
-    distance: "21,1 km",
-    lat: 50.045,
-    lng: 18.7
-},
-
-{
-    date: "2026-11-29",
-    name: "Chęć na pięć – Szybka Piątka",
-    city: "Lublin",
-    province: "lubelskie",
-    distance: "5 km",
-    lat: 51.2465,
-    lng: 22.5684
-},
-
-{
+  {
     date: "2026-11-29",
     name: "Bieg po Ciacho",
     city: "Puszczykowo",
     province: "wielkopolskie",
-    distance: "10 km",
-    lat: 52.285,
-    lng: 16.849
-},
+    distance: "bieg terenowy",
+    description:
+      "Jesienny bieg o charakterze rekreacyjnym i terenowym.",
+    lat: 52.2850,
+    lng: 16.8490
+  },
 
 
-/* ======================================================
-   GRUDZIEŃ
-====================================================== */
+  /* =========================
+     GRUDZIEŃ
+  ========================= */
 
-{
-    date: "2026-12-04",
-    name: "Szczyt Wytrzymałości Mikołajki – 12H Everest",
-    city: "Ustroń",
-    province: "śląskie",
-    distance: "ultra",
-    lat: 49.721,
-    lng: 18.81
-},
-
-{
-    date: "2026-12-05",
-    name: "Grand Prix CITY TRAIL – Wrocław",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "trail",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-12-05",
-    name: "XVII Grand Prix Mysłowic",
-    city: "Mysłowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.2075,
-    lng: 19.1667
-},
-
-{
-    date: "2026-12-05",
-    name: "Szansa na 5 – Trzeźwo, Zdrowo, Sportowo",
-    city: "Radomsko",
-    province: "łódzkie",
-    distance: "5 km",
-    lat: 51.067,
-    lng: 19.444
-},
-
-{
+  {
     date: "2026-12-05",
     name: "VI Nocny Mikołajkowy Bieg Nyski",
     city: "Nysa",
     province: "opolskie",
-    distance: "bieg",
+    distance: "bieg uliczny",
+    description:
+      "Mikołajkowy bieg uliczny rozgrywany po zmroku.",
     lat: 50.4738,
     lng: 17.3344
-},
+  },
 
-{
-    date: "2026-12-05",
-    name: "Garmin Ultra Race Gdańsk",
-    city: "Gdańsk",
-    province: "pomorskie",
-    distance: "27 / 53 / 101 km",
-    lat: 54.352,
-    lng: 18.6466
-},
-
-{
-    date: "2026-12-06",
-    name: "Festiwal Biegów Świętych Mikołajów",
-    city: "Toruń",
-    province: "kujawsko-pomorskie",
-    distance: "21,1 km",
-    lat: 53.0138,
-    lng: 18.5984
-},
-
-{
+  {
     date: "2026-12-06",
     name: "22. Bieg Barbórkowy",
     city: "Rybnik",
     province: "śląskie",
     distance: "10 km",
-    lat: 50.1022,
-    lng: 18.5463
-},
+    description:
+      "Bieg uliczny na dystansie 10 km organizowany w Rybniku.",
+    lat: 50.0971,
+    lng: 18.5418
+  },
 
-{
+  {
     date: "2026-12-06",
     name: "Turbacz Trail – Podhalański Bieg Mikołajkowy",
     city: "Nowy Targ",
     province: "małopolskie",
-    distance: "9 km",
-    lat: 49.477,
-    lng: 20.032
-},
-
-{
-    date: "2026-12-06",
-    name: "W pogoni za św. Mikołajem",
-    city: "Wrocław",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.1079,
-    lng: 17.0385
-},
-
-{
-    date: "2026-12-06",
-    name: "Mikołajkowy Towarzyski Jelczański Bieg",
-    city: "Jelcz-Laskowice",
-    province: "dolnośląskie",
-    distance: "bieg",
-    lat: 51.033,
-    lng: 17.347
-},
-
-{
-    date: "2026-12-06",
-    name: "Grand Prix CITY TRAIL – Katowice",
-    city: "Katowice",
-    province: "śląskie",
     distance: "trail",
-    lat: 50.2649,
-    lng: 19.0238
-},
+    description:
+      "Mikołajkowe wydarzenie trailowe w rejonie Gorców.",
+    lat: 49.4775,
+    lng: 20.0320
+  },
 
-{
+  {
     date: "2026-12-12",
     name: "Winter Trail Małopolska",
     city: "Mszana Dolna",
     province: "małopolskie",
-    distance: "16 / 45 / 64+ km",
-    lat: 49.674,
-    lng: 20.079
-},
+    distance: "13–145 km",
+    description:
+      "Zimowy festiwal biegów górskich w Beskidzie Wyspowym z kilkoma dystansami.",
+    lat: 49.6747,
+    lng: 20.0790
+  },
 
-{
+  {
     date: "2026-12-12",
-    name: "Gliwicka Prowokacja",
-    city: "Gliwice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.2945,
-    lng: 18.6714
-},
+    name: "WTM 64",
+    city: "Mszana Dolna",
+    province: "małopolskie",
+    distance: "ok. 67 km",
+    description:
+      "Jeden z dłuższych biegów Winter Trail Małopolska.",
+    lat: 49.6747,
+    lng: 20.0790
+  },
 
-{
+  {
     date: "2026-12-12",
-    name: "9. Bieg Śladami Żubra",
-    city: "Studzienice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.005,
-    lng: 18.992
-},
+    name: "WTM 140",
+    city: "Mszana Dolna",
+    province: "małopolskie",
+    distance: "ok. 145 km",
+    description:
+      "Najdłuższy dystans Winter Trail Małopolska.",
+    lat: 49.6747,
+    lng: 20.0790
+  },
 
-{
-    date: "2026-12-13",
-    name: "Panewnicki Bieg Dzika",
-    city: "Katowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.244,
-    lng: 18.957
-},
-
-{
-    date: "2026-12-19",
-    name: "Bieg po moczkę i makówki",
-    city: "Stanowice",
-    province: "śląskie",
-    distance: "bieg",
-    lat: 50.123,
-    lng: 18.527
-},
-
-{
-    date: "2026-12-19",
-    name: "Zimna Połówka",
-    city: "Niegowonice",
-    province: "śląskie",
-    distance: "21,1 km",
-    lat: 50.368,
-    lng: 19.369
-},
-
-{
+  {
     date: "2026-12-20",
-    name: "Bieg Charytatywny",
+    name: "Bieg Charytatywny – Oława",
     city: "Oława",
     province: "dolnośląskie",
     distance: "bieg",
+    description:
+      "Grudniowy bieg charytatywny organizowany w Oławie.",
     lat: 50.9466,
     lng: 17.2926
-}
+  },
+
+
+  /* =========================
+     LUBLIN — DODATKOWE BIEGI
+  ========================= */
+
+  {
+    date: "2026-11-29",
+    name: "Chęć na pięć – Szybka Piątka",
+    city: "Lublin",
+    province: "lubelskie",
+    distance: "5 km",
+    description:
+      "Szybki bieg uliczny na dystansie 5 km w Lublinie.",
+    lat: 51.2465,
+    lng: 22.5684
+  }
 
 ];
 
 
-/* ======================================================
+/* =========================================================
    MAPA
-====================================================== */
+========================================================= */
 
 const map = L.map("map", {
-    zoomControl: true
-}).setView([52.05, 19.25], 6);
+
+  zoomControl: true
+
+}).setView(
+
+  [52.1, 19.4],
+
+  6
+
+);
+
 
 L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-        attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }
+
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+  {
+
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+  }
+
 ).addTo(map);
 
 
-/* ======================================================
-   FILTRY
-====================================================== */
+/* Warstwa markerów */
 
-const monthFilter =
-    document.getElementById("monthFilter");
+const markerLayer =
+  L.layerGroup().addTo(map);
 
-const provinceFilter =
-    document.getElementById("provinceFilter");
 
-const searchInput =
-    document.getElementById("searchInput");
+/*
+   Przechowujemy marker dla każdego wydarzenia.
+
+   Dzięki temu kliknięcie karty na liście
+   zawsze znajdzie właściwy marker.
+*/
+
+const eventMarkers = new Map();
+
+
+/* =========================================================
+   ELEMENTY
+========================================================= */
 
 const eventList =
-    document.getElementById("eventList");
+  document.getElementById("eventList");
 
-const eventCount =
-    document.getElementById("eventCount");
+const summary =
+  document.getElementById("summary");
+
+const monthFilter =
+  document.getElementById("monthFilter");
+
+const provinceFilter =
+  document.getElementById("provinceFilter");
+
+const search =
+  document.getElementById("search");
 
 const showAll =
-    document.getElementById("showAll");
+  document.getElementById("showAll");
 
 
-/* wszystkie województwa */
+/* =========================================================
+   WOJEWÓDZTWA
+========================================================= */
 
 const provinces = [
-    "dolnośląskie",
-    "kujawsko-pomorskie",
-    "lubelskie",
-    "lubuskie",
-    "łódzkie",
-    "małopolskie",
-    "mazowieckie",
-    "opolskie",
-    "podkarpackie",
-    "podlaskie",
-    "pomorskie",
-    "śląskie",
-    "świętokrzyskie",
-    "warmińsko-mazurskie",
-    "wielkopolskie",
-    "zachodniopomorskie"
-];
+
+  ...new Set(
+
+    events.map(
+      event => event.province
+    )
+
+  )
+
+].sort(
+
+  (a, b) =>
+    a.localeCompare(b, "pl")
+
+);
+
 
 provinces.forEach(province => {
 
-    const option =
-        document.createElement("option");
+  const option =
+    document.createElement("option");
 
-    option.value = province;
+  option.value = province;
 
-    option.textContent =
-        province.charAt(0).toUpperCase()
-        + province.slice(1);
+  option.textContent =
+    province.charAt(0).toUpperCase()
+    + province.slice(1);
 
-    provinceFilter.appendChild(option);
+  provinceFilter.appendChild(option);
+
 });
 
 
-/* ======================================================
-   MARKERY
-====================================================== */
-
-let markerLayer =
-    L.layerGroup().addTo(map);
-
-let markers = [];
-
-
-/* ======================================================
+/* =========================================================
    FORMAT DATY
-====================================================== */
+========================================================= */
 
 function formatDate(dateString) {
 
-    const date =
-        new Date(dateString + "T12:00:00");
-
-    return date.toLocaleDateString(
-        "pl-PL",
-        {
-            weekday: "short",
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
+  const date =
+    new Date(
+      dateString + "T12:00:00"
     );
+
+  return date.toLocaleDateString(
+
+    "pl-PL",
+
+    {
+
+      weekday: "long",
+
+      day: "numeric",
+
+      month: "long",
+
+      year: "numeric"
+
+    }
+
+  );
+
 }
 
 
-/* ======================================================
-   FILTROWANIE
-====================================================== */
+/* =========================================================
+   POBIERANIE PRZEFILTROWANYCH WYDARZEŃ
+========================================================= */
 
 function getFilteredEvents() {
 
-    const month =
-        monthFilter.value;
+  const month =
+    monthFilter.value;
 
-    const province =
-        provinceFilter.value;
+  const province =
+    provinceFilter.value;
 
-    const search =
-        searchInput.value
-        .trim()
-        .toLowerCase();
+  const phrase =
+    search.value
+      .trim()
+      .toLowerCase();
 
 
-    return events
-        .filter(event => {
+  return events
 
-            const monthOK =
-                month === "all"
-                || event.date.startsWith(month);
+    .filter(event => {
 
-            const provinceOK =
-                province === "all"
-                || event.province === province;
+      const monthOK =
 
-            const text =
-                (
-                    event.name
-                    + " "
-                    + event.city
-                    + " "
-                    + event.province
-                    + " "
-                    + event.distance
-                ).toLowerCase();
+        month === "all"
+        ||
+        event.date.startsWith(month);
 
-            const searchOK =
-                !search
-                || text.includes(search);
 
-            return (
-                monthOK
-                && provinceOK
-                && searchOK
-            );
-        })
-        .sort((a,b) => {
+      const provinceOK =
 
-            if (a.date !== b.date) {
-                return a.date.localeCompare(b.date);
-            }
+        province === "all"
+        ||
+        event.province === province;
 
-            return a.city.localeCompare(
-                b.city,
-                "pl"
-            );
-        });
+
+      const searchOK =
+
+        !phrase
+        ||
+        event.name
+          .toLowerCase()
+          .includes(phrase)
+        ||
+        event.city
+          .toLowerCase()
+          .includes(phrase)
+        ||
+        event.province
+          .toLowerCase()
+          .includes(phrase)
+        ||
+        event.distance
+          .toLowerCase()
+          .includes(phrase);
+
+
+      return (
+
+        monthOK
+        &&
+        provinceOK
+        &&
+        searchOK
+
+      );
+
+    })
+
+    .sort(
+
+      (a, b) =>
+        a.date.localeCompare(b.date)
+
+    );
+
 }
 
 
-/* ======================================================
-   RENDER
-====================================================== */
+/* =========================================================
+   KLUCZ LOKALIZACJI
+========================================================= */
 
-function render() {
+/*
+   Wydarzenia mające identyczne współrzędne
+   traktujemy jako znajdujące się w tej samej lokalizacji.
+*/
 
-    const filtered =
-        getFilteredEvents();
+function locationKey(event) {
 
+  return (
 
-    /* wyczyść */
+    `${event.lat.toFixed(5)},`
+    +
+    `${event.lng.toFixed(5)}`
 
-    markerLayer.clearLayers();
+  );
 
-    markers = [];
-
-    eventList.innerHTML = "";
-
-
-    eventCount.textContent =
-        filtered.length;
-
-
-    if (filtered.length === 0) {
-
-        eventList.innerHTML = `
-            <div class="empty">
-                <strong>Brak wydarzeń</strong>
-                <br><br>
-                Zmień miesiąc, województwo
-                lub wyszukiwaną frazę.
-            </div>
-        `;
-
-        return;
-    }
+}
 
 
-    const bounds = [];
+/* =========================================================
+   TWORZENIE WŁASNEJ IKONY
+========================================================= */
 
+function createMarkerIcon(number, multiple) {
 
-    filtered.forEach((event, index) => {
+  if (!multiple) {
 
-        /* marker */
+    return L.divIcon({
 
-        const marker =
-            L.marker([
-                event.lat,
-                event.lng
-            ]);
+      className: "",
 
+      html: `
+        <div
+          style="
+            width:24px;
+            height:24px;
+            border-radius:50%;
+            background:#16a085;
+            border:3px solid white;
+            box-shadow:0 2px 7px rgba(0,0,0,.35);
+          "
+        ></div>
+      `,
 
-        marker.bindPopup(`
-            <div class="popup-title">
-                ${event.name}
-            </div>
+      iconSize: [24, 24],
 
-            <div class="popup-line">
-                📅 ${formatDate(event.date)}
-            </div>
+      iconAnchor: [12, 12],
 
-            <div class="popup-line">
-                📍 ${event.city}
-            </div>
-
-            <div class="popup-line">
-                🏃 ${event.distance}
-            </div>
-
-            <div class="popup-line">
-                🇵🇱 ${event.province}
-            </div>
-        `);
-
-
-        marker.addTo(markerLayer);
-
-        markers.push(marker);
-
-
-        bounds.push([
-            event.lat,
-            event.lng
-        ]);
-
-
-        /* karta */
-
-        const card =
-            document.createElement("article");
-
-        card.className =
-            "event-card";
-
-
-        card.innerHTML = `
-
-            <div class="event-date">
-                ${formatDate(event.date)}
-            </div>
-
-            <div class="event-name">
-                ${event.name}
-            </div>
-
-            <div class="event-location">
-                📍 ${event.city}
-            </div>
-
-            <div class="event-bottom">
-
-                <span class="badge">
-                    ${event.distance}
-                </span>
-
-                <span class="badge province">
-                    ${event.province}
-                </span>
-
-            </div>
-        `;
-
-
-        card.addEventListener(
-            "click",
-            () => {
-
-                map.setView(
-                    [
-                        event.lat,
-                        event.lng
-                    ],
-                    13,
-                    {
-                        animate: true
-                    }
-                );
-
-                marker.openPopup();
-
-            }
-        );
-
-
-        eventList.appendChild(card);
+      popupAnchor: [0, -12]
 
     });
 
+  }
 
-    /* dopasuj mapę */
 
-    if (bounds.length === 1) {
+  return L.divIcon({
 
-        map.setView(
-            bounds[0],
-            13
-        );
+    className: "",
 
-    } else {
+    html: `
 
-        map.fitBounds(
-            bounds,
-            {
-                padding: [
-                    40,
-                    40
-                ],
-                maxZoom: 10
-            }
-        );
+      <div class="multi-marker">
 
-    }
+        ${number}
+
+      </div>
+
+    `,
+
+    iconSize: [34, 34],
+
+    iconAnchor: [17, 17],
+
+    popupAnchor: [0, -17]
+
+  });
+
 }
 
 
-/* ======================================================
-   EVENT LISTENERS
-====================================================== */
+/* =========================================================
+   WYLICZANIE POZYCJI MARKERA
+========================================================= */
 
-monthFilter.addEventListener(
-    "change",
-    render
-);
+/*
+   Jeżeli w jednym miejscu są np. 2 wydarzenia:
 
-provinceFilter.addEventListener(
-    "change",
-    render
-);
+      ●       ●
 
-searchInput.addEventListener(
-    "input",
-    render
-);
+   zamiast:
 
-showAll.addEventListener(
-    "click",
-    () => {
+      ●
+      ●
 
-        monthFilter.value = "all";
-        provinceFilter.value = "all";
-        searchInput.value = "";
+   Jeżeli jest ich więcej:
 
-        render();
+          ●
+
+      ●       ●
+
+          ●
+
+   Dzięki temu żaden marker nie zasłania drugiego.
+*/
+
+function getMarkerPosition(event, index, count) {
+
+  if (count <= 1) {
+
+    return [
+      event.lat,
+      event.lng
+    ];
+
+  }
+
+
+  /*
+     Promień przesunięcia.
+
+     0.0015 stopnia to około 150–170 metrów,
+     więc markery są widoczne, ale nadal pozostają
+     blisko właściwej lokalizacji.
+  */
+
+  const radius = 0.0015;
+
+
+  /*
+     Dla dwóch markerów ustawiamy je poziomo.
+  */
+
+  if (count === 2) {
+
+    const positions = [
+
+      [0, -radius],
+
+      [0, radius]
+
+    ];
+
+    return [
+
+      event.lat + positions[index][0],
+
+      event.lng + positions[index][1]
+
+    ];
+
+  }
+
+
+  /*
+     Dla większej liczby markerów
+     używamy okręgu.
+  */
+
+  const angle =
+
+    (2 * Math.PI * index / count)
+    -
+    Math.PI / 2;
+
+
+  return [
+
+    event.lat
+      +
+      Math.sin(angle) * radius,
+
+    event.lng
+      +
+      Math.cos(angle) * radius
+
+  ];
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render() {
+
+  const filtered =
+    getFilteredEvents();
+
+
+  /*
+     Czyścimy listę
+  */
+
+  eventList.innerHTML = "";
+
+
+  /*
+     Czyścimy markery
+  */
+
+  markerLayer.clearLayers();
+
+
+  /*
+     Czyścimy mapę markerów
+  */
+
+  eventMarkers.clear();
+
+
+  /*
+     Liczba wydarzeń
+  */
+
+  summary.innerHTML = `
+
+    <strong>
+      ${filtered.length}
+    </strong>
+
+    ${
+      filtered.length === 1
+        ? "wydarzenie"
+        : "wydarzeń"
+    }
+
+    na mapie
+
+  `;
+
+
+  /*
+     Brak wyników
+  */
+
+  if (!filtered.length) {
+
+    eventList.innerHTML = `
+
+      <div
+        style="
+          padding:25px;
+          text-align:center;
+          color:#68737a;
+        "
+      >
+
+        Brak wydarzeń
+        spełniających
+        wybrane kryteria.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+     Grupujemy wydarzenia
+     według lokalizacji.
+  */
+
+  const groups = {};
+
+
+  filtered.forEach(event => {
+
+    const key =
+      locationKey(event);
+
+
+    if (!groups[key]) {
+
+      groups[key] = [];
 
     }
+
+
+    groups[key].push(event);
+
+  });
+
+
+  /*
+     Lista wszystkich współrzędnych
+     do dopasowania mapy.
+  */
+
+  const bounds = [];
+
+
+  /* =======================================================
+     RYSOWANIE
+  ======================================================= */
+
+  filtered.forEach(event => {
+
+    const key =
+      locationKey(event);
+
+    const group =
+      groups[key];
+
+    const index =
+      group.indexOf(event);
+
+    const count =
+      group.length;
+
+
+    /*
+       Obliczamy pozycję markera.
+    */
+
+    const position =
+      getMarkerPosition(
+
+        event,
+
+        index,
+
+        count
+
+      );
+
+
+    bounds.push(position);
+
+
+    /* =====================================================
+       KARTA
+    ===================================================== */
+
+    const card =
+      document.createElement("article");
+
+
+    card.className =
+      "event";
+
+
+    card.dataset.event =
+      event.name
+      + event.date
+      + event.city;
+
+
+    card.innerHTML = `
+
+      <div class="event-date">
+
+        ${formatDate(event.date)}
+
+      </div>
+
+
+      <div class="event-name">
+
+        ${event.name}
+
+      </div>
+
+
+      <div class="event-location">
+
+        📍 ${event.city}
+
+        · ${event.province}
+
+        · ${event.distance}
+
+      </div>
+
+
+      <div class="event-description">
+
+        ${event.description}
+
+      </div>
+
+
+      <div class="badge">
+
+        ✓ termin potwierdzony
+
+      </div>
+
+    `;
+
+
+    eventList.appendChild(card);
+
+
+    /* =====================================================
+       MARKER
+    ===================================================== */
+
+    const marker =
+      L.marker(
+
+        position,
+
+        {
+
+          icon:
+            createMarkerIcon(
+
+              index + 1,
+
+              count > 1
+
+            )
+
+        }
+
+      );
+
+
+    /*
+       Popup
+    */
+
+    marker.bindPopup(`
+
+      <div class="popup-title">
+
+        ${event.name}
+
+      </div>
+
+
+      <div class="popup-date">
+
+        ${formatDate(event.date)}
+
+      </div>
+
+
+      <div>
+
+        📍 ${event.city}
+
+        <br>
+
+        🏃 ${event.distance}
+
+      </div>
+
+
+      <div class="popup-description">
+
+        ${event.description}
+
+      </div>
+
+    `);
+
+
+    marker.addTo(markerLayer);
+
+
+    /*
+       Zapamiętujemy marker.
+    */
+
+    eventMarkers.set(
+
+      event,
+
+      marker
+
+    );
+
+
+    /* =====================================================
+       KLIKNIĘCIE KARTY
+    ===================================================== */
+
+    card.addEventListener(
+
+      "click",
+
+      () => {
+
+        /*
+           Usuwamy zaznaczenie
+           z innych kart.
+        */
+
+        document
+
+          .querySelectorAll(".event.active")
+
+          .forEach(
+
+            element =>
+              element.classList.remove("active")
+
+          );
+
+
+        /*
+           Zaznaczamy aktualną.
+        */
+
+        card.classList.add("active");
+
+
+        /*
+           Pobieramy właściwy marker.
+        */
+
+        const selectedMarker =
+          eventMarkers.get(event);
+
+
+        /*
+           Przybliżamy mapę.
+        */
+
+        map.setView(
+
+          position,
+
+          Math.max(
+            map.getZoom(),
+            13
+          ),
+
+          {
+
+            animate: true
+
+          }
+
+        );
+
+
+        /*
+           Otwieramy właściwy popup.
+        */
+
+        selectedMarker.openPopup();
+
+      }
+
+    );
+
+  });
+
+
+  /*
+     Automatyczne dopasowanie mapy.
+  */
+
+  if (bounds.length === 1) {
+
+    map.setView(
+
+      bounds[0],
+
+      12
+
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   POKAŻ WSZYSTKIE
+========================================================= */
+
+showAll.addEventListener(
+
+  "click",
+
+  () => {
+
+    monthFilter.value = "all";
+
+    provinceFilter.value = "all";
+
+    search.value = "";
+
+    render();
+
+
+    /*
+       Wszystkie lokalizacje.
+    */
+
+    const allPositions =
+
+      events.map(event => [
+
+        event.lat,
+
+        event.lng
+
+      ]);
+
+
+    if (allPositions.length) {
+
+      map.fitBounds(
+
+        allPositions,
+
+        {
+
+          padding: [40, 40]
+
+        }
+
+      );
+
+    }
+
+  }
+
 );
 
 
-/* ======================================================
+/* =========================================================
+   FILTRY
+========================================================= */
+
+monthFilter.addEventListener(
+
+  "change",
+
+  render
+
+);
+
+
+provinceFilter.addEventListener(
+
+  "change",
+
+  render
+
+);
+
+
+search.addEventListener(
+
+  "input",
+
+  render
+
+);
+
+
+/* =========================================================
    START
-====================================================== */
+========================================================= */
 
 render();
+
+
+/*
+   Mała poprawka po załadowaniu strony.
+*/
+
+setTimeout(
+
+  () => {
+
+    map.invalidateSize();
+
+  },
+
+  300
+
+);
 
 </script>
 
