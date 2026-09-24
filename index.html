@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interaktywna Mapa Biegów - Lubelskie Październik 2026</title>
     
-    <!-- Wbudowane podstawowe style mapy w plik, aby uniknąć zewnętrznych blokad -->
     <style>
         * {
             box-sizing: border-box;
@@ -96,20 +95,21 @@
             margin-top: 15px;
         }
 
-        /* Style wymagane przez dymki informacyjne mapy */
+        /* Wbudowane style okienek informacyjnych */
         .leaflet-popup { position: absolute; text-align: center; pointer-events: none; }
-        .leaflet-popup-content-wrapper { padding: 1px; text-align: left; border-radius: 12px; background: white; box-shadow: 0 3px 14px rgba(0,0,0,0.4); }
-        .leaflet-popup-content { margin: 13px 19px; line-height: 1.4; font-size: 13px; min-width: 150px; }
-        .leaflet-popup-tip-container { width: 40px; height: 20px; position: absolute; left: 50%; margin-left: -20px; overflow: hidden; pointer-events: none; }
-        .leaflet-popup-tip { width: 17px; height: 17px; padding: 1px; margin: -10px auto 0; transform: rotate(45deg); background: white; box-shadow: 0 3px 14px rgba(0,0,0,0.4); }
+        .leaflet-popup-content-wrapper { padding: 1px; text-align: left; border-radius: 8px; background: white; box-shadow: 0 3px 14px rgba(0,0,0,0.3); }
+        .leaflet-popup-content { margin: 14px; line-height: 1.4; font-size: 13px; }
+        .leaflet-popup-tip-container { width: 40px; height: 20px; position: absolute; left: 50%; margin-left: -20px; overflow: hidden; }
+        .leaflet-popup-tip { width: 17px; height: 17px; padding: 1px; margin: -10px auto 0; transform: rotate(45deg); background: white; }
         
-        .popup-info h3 { margin-bottom: 6px; color: #1e3c72; font-size: 14px; }
-        .popup-info p { margin: 3px 0; font-size: 12px; color: #555; }
-        .popup-badge { display: inline-block; background: #27ae60; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-top: 5px; font-weight: bold; }
+        .popup-info h3 { margin-bottom: 4px; color: #1e3c72; font-size: 14px; }
+        .popup-info p { margin: 2px 0; font-size: 12px; color: #555; }
+        .popup-badge { display: inline-block; background: #e67e22; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-top: 4px; font-weight: bold; }
     </style>
     
-    <!-- Pobieranie skryptu za pomocą protokołu HTTPS i mechanizmu odroczonego ładowania (defer) -->
-    <script defer src="https://cloudflare.com"></script>
+    <!-- Pobieranie darmowego silnika map ze sprawdzonych serwerów Cloudflare -->
+    <link rel="stylesheet" href="https://cloudflare.com" />
+    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
@@ -123,7 +123,6 @@
             <div class="scrollable-content">
                 <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
                 <div id="events-list">
-                    <!-- Statyczna lista generowana bez JS jako zabezpieczenie -->
                     <div class="run-item" onclick="focusCity([51.6394, 22.4439], 1)">
                         <span class="date-badge">03.10</span> <strong>Biegi gen. Kleeberga</strong><br>📍 Kock | Uliczny / Patriotyczny
                     </div>
@@ -165,48 +164,51 @@
             { id: 1, name: "Ogólnopolskie Biegi Uliczne Pamięci Gen. Kleeberga", city: "Kock", coords: [51.6394, 22.4439], date: "03.10.2026", dist: "Uliczny / Patriotyczny" },
             { id: 2, name: "Duathlon Olimpijski", city: "Adamów", coords: [51.7472, 22.2514], date: "03.10.2026", dist: "Bieg + Rower" },
             { id: 3, name: "XXV Bieg Sobiborski", city: "Włodawa", coords: [51.5458, 23.5512], date: "10.10.2026", dist: "21,1 km (Półmaraton)" },
-            { id: 4, name: "Botaniczna Piątka – Edycja Jesienna", city: "Lublin", coords: [51.2640, 22.5130], date: "11.10.2026", dist: "5 km (Ogród Botaniczny)" },
+            { id: 4, name: "Botaniczna Piątka – Edycja Jesienna", city: "Lublin", coords: [51.2640, 22.5130], date: "11.10.2026", dist: "5 km" },
             { id: 5, name: "Listtowie – Siódemka w Hrubieszowie", city: "Hrubieszów", coords: [50.8049, 23.8916], date: "11.10.2026", dist: "7 km (Uliczny)" },
-            { id: 6, name: "STOKROTKA 10. Półmaraton Lubelski", city: "Lublin", coords: [51.2415, 22.5690], date: "18.10.2026", dist: "21,0975 km (Uliczny)" },
-            { id: 7, name: "Biegam, bo lubię lasy", city: "Lubartów", coords: [51.4622, 22.6074], date: "Październik 2026", dist: "10 km (Trail leśny)" }
+            { id: 6, name: "STOKROTKA 10. Półmaraton Lubelski", city: "Lublin", coords: [51.2415, 22.5690], date: "18.10.2026", dist: "21,1 km (Uliczny)" },
+            { id: 7, name: "Biegam, bo lubię lasy", city: "Lubartów", coords: [51.4622, 22.6074], date: "Październik 2026", dist: "10 km (Trail)" }
         ];
 
-        // Wywołanie startowe odporne na kolejność ładowania skryptów zewnętrznych
-        document.addEventListener("DOMContentLoaded", function() {
-            setTimeout(initMap, 500); // Kontrolowane opóźnienie dla przeglądarki Opera
-        });
-
-        function initMap() {
-            if (typeof L === 'undefined') {
-                setTimeout(initMap, 300);
-                return;
-            }
-
+        window.onload = function() {
+            // Inicjalizacja mapy z darmowymi podkładami cyfrowymi
             map = L.map('map').setView([51.2465, 22.5622], 8);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap'
             }).addTo(map);
 
+            // Nanoszenie niezależnych, okrągłych punktów (kod rysuje je sam, brak blokad obrazków)
             runData.forEach(run => {
                 const popupContent = `
                     <div class="popup-info">
                         <h3>${run.name}</h3>
-                        <p><strong>Miejscowość:</strong> ${run.city}</p>
-                        <p><strong>Data:</strong> ${run.date}</p>
+                        <p><strong>📍 Miejscowość:</strong> ${run.city}</p>
+                        <p><strong>📅 Data:</strong> ${run.date}</p>
                         <span class="popup-badge">${run.dist}</span>
                     </div>
                 `;
 
-                const marker = L.marker(run.coords).addTo(map).bindPopup(popupContent);
+                // Rysowanie stylowego sportowego okręgu zamiast standardowej pineski-obrazka
+                const marker = L.circleMarker(run.coords, {
+                    radius: 10,
+                    fillColor: "#1e3c72",
+                    color: "#fff",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.9
+                }).addTo(map).bindPopup(popupContent);
+
                 markers[run.id] = marker;
 
+                // Pokazywanie informacji po najechaniu myszką
                 marker.on('mouseover', function () {
                     this.openPopup();
                 });
             });
-        }
+        };
 
+        // Funkcja kliknięcia z panelu bocznego
         function focusCity(coords, id) {
             if (map && markers[id]) {
                 map.setView(coords, 11);
