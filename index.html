@@ -36,7 +36,7 @@
             height: calc(100vh - 75px);
         }
         
-        /* Panel boczny z listą biegów */
+        /* Panel boczny */
         .sidebar {
             width: 350px;
             background: white;
@@ -62,10 +62,6 @@
             border-bottom: 1px solid #eee;
             font-size: 13px;
             line-height: 1.5;
-            transition: background 0.2s;
-        }
-        .run-item:hover {
-            background: #f8fafc;
         }
         .run-item strong { color: #2a5298; }
         .date-badge {
@@ -77,7 +73,6 @@
             font-weight: bold;
         }
         
-        /* Linki do oficjalnych zapisów w panelu bocznym */
         .btn-link {
             display: inline-block;
             margin-top: 6px;
@@ -85,12 +80,13 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 12px;
+            cursor: pointer;
         }
         .btn-link:hover {
             text-decoration: underline;
         }
 
-        /* Kontener na oryginalną mapę Google */
+        /* Kontener mapy */
         .map-container {
             flex: 1;
             height: 100%;
@@ -127,40 +123,48 @@
             <div class="scrollable-content">
                 <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
                 <div id="events-list">
+                    <!-- Kliknięcie w link "Pokaż na mapie" bezpiecznie zmienia lokalizację w ramce iframe -->
                     <div class="run-item">
                         <span class="date-badge">03.10</span> <strong>Biegi gen. Kleeberga</strong><br>
                         📍 Kock | Uliczny / Patriotyczny<br>
-                        <a class="btn-link" href="https://kock.pl" target="_blank">🎟️ Oficjalna strona biegów</a>
+                        <span class="btn-link" onclick="changeLocation('Kock, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="https://kock.pl" target="_blank">🎟️ Zapisy</a>
                     </div>
                     <div class="run-item">
                         <span class="date-badge">03.10</span> <strong>Duathlon Olimpijski</strong><br>
                         📍 Adamów | Bieg + Rower<br>
-                        <a class="btn-link" href="https://gminaadamow.pl" target="_blank">🎟️ Strona organizatora</a>
+                        <span class="btn-link" onclick="changeLocation('Adamów, łukowski, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="https://gminaadamow.pl" target="_blank">🎟️ Zapisy</a>
                     </div>
                     <div class="run-item">
                         <span class="date-badge">10.10</span> <strong>XXV Bieg Sobiborski</strong><br>
                         📍 Włodawa | 21,1 km (Półmaraton)<br>
-                        <a class="btn-link" href="http://wlodawa.eu" target="_blank">🎟️ Zapisy MOSiR Włodawa</a>
+                        <span class="btn-link" onclick="changeLocation('Włodawa, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="http://wlodawa.eu" target="_blank">🎟️ Zapisy</a>
                     </div>
                     <div class="run-item">
                         <span class="date-badge">11.10</span> <strong>Botaniczna Piątka</strong><br>
                         📍 Lublin | 5 km (Ogród Botaniczny)<br>
-                        <a class="btn-link" href="https://botaniczna5.pl" target="_blank">🎟️ Rejestracja online</a>
+                        <span class="btn-link" onclick="changeLocation('Ogród Botaniczny UMCS, Lublin, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="https://botaniczna5.pl" target="_blank">🎟️ Zapisy</a>
                     </div>
                     <div class="run-item">
                         <span class="date-badge">11.10</span> <strong>Siódemka w Hrubieszowie</strong><br>
                         📍 Hrubieszów | 7 km (Uliczny)<br>
-                        <a class="btn-link" href="https://frslublin.pl" target="_blank">🎟️ Panel zapisów FRS</a>
+                        <span class="btn-link" onclick="changeLocation('Hrubieszów, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="https://frslublin.pl" target="_blank">🎟️ Zapisy</a>
                     </div>
                     <div class="run-item">
                         <span class="date-badge">18.10</span> <strong>10. Półmaraton Lubelski</strong><br>
                         📍 Lublin | 21,1 km (Uliczny)<br>
-                        <a class="btn-link" href="https://lublin.eu" target="_blank">🎟️ Zapisy Maraton Lubelski</a>
+                        <span class="btn-link" onclick="changeLocation('Stadion Lekkoatletyczny, Piłsudskiego, Lublin, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="https://lublin.eu" target="_blank">🎟️ Zapisy</a>
                     </div>
                     <div class="run-item">
                         <span class="date-badge">TBD</span> <strong>Biegam, bo lubię lasy</strong><br>
                         📍 Lubartów | 10 km (Trail leśny)<br>
-                        <a class="btn-link" href="https://lasy.gov.pl" target="_blank">🎟️ Strona wydarzenia</a>
+                        <span class="btn-link" onclick="changeLocation('Lubartów, Poland')">📍 Pokaż na mapie</span> | 
+                        <a class="btn-link" href="https://lasy.gov.pl" target="_blank">🎟️ Zapisy</a>
                     </div>
                 </div>
             </div>
@@ -171,15 +175,25 @@
             </div>
         </div>
         
-        <!-- Profesjonalna mapa Google Maps z naniesionymi punktami biegów -->
+        <!-- Otwarta, darmowa i w 100% akceptowana przez Operę ramka Google Maps -->
         <div class="map-container">
             <iframe 
+                id="google-map"
                 src="https://google.com" 
                 allowfullscreen 
                 loading="lazy">
             </iframe>
         </div>
     </div>
+
+    <script>
+        // Funkcja JavaScript, która po kliknięciu "Pokaż na mapie" automatycznie centruje i przybliża mapę Google na wybrane miasto
+        function changeLocation(query) {
+            const encodedQuery = encodeURIComponent(query);
+            const newSrc = `https://google.com{encodedQuery}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+            document.getElementById('google-map').src = newSrc;
+        }
+    </script>
 
 </body>
 </html>
