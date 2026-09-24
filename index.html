@@ -36,7 +36,7 @@
             height: calc(100vh - 75px);
         }
         
-        /* Panel boczny */
+        /* Panel boczny z listą biegów */
         .sidebar {
             width: 350px;
             background: white;
@@ -62,6 +62,10 @@
             border-bottom: 1px solid #eee;
             font-size: 13px;
             line-height: 1.5;
+            transition: background 0.2s;
+        }
+        .run-item:hover {
+            background: #f8fafc;
         }
         .run-item strong { color: #2a5298; }
         .date-badge {
@@ -72,100 +76,33 @@
             font-size: 11px;
             font-weight: bold;
         }
+        
+        /* Linki do oficjalnych zapisów w panelu bocznym */
+        .btn-link {
+            display: inline-block;
+            margin-top: 6px;
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
 
-        /* Kontener na mapę-obrazek i nakładane punkty */
-        .map-wrapper {
+        /* Kontener na oryginalną mapę Google */
+        .map-container {
             flex: 1;
-            background-color: #f4f6f9;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            height: 100%;
+            background: #e5e9f0;
         }
-        .map-image {
-            max-width: 95%;
-            max-height: 95%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* Kontener na dymek informacyjny (tooltip) po najechaniu */
-        .pin-container {
-            position: absolute;
+        iframe {
             width: 100%;
             height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
+            border: none;
         }
 
-        /* Stylizacja etykiet biegowych bezpośrednio na obrazku */
-        .run-pin {
-            position: absolute;
-            background: #1e3c72;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-            border: 2px solid white;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            white-space: nowrap;
-            pointer-events: auto;
-        }
-        .run-pin:hover {
-            transform: scale(1.05);
-            background-color: #2a5298;
-        }
-        
-        .run-pin.capital {
-            background: #c0392b;
-        }
-        .run-pin.capital:hover {
-            background-color: #e74c3c;
-        }
-
-        /* Poprawione, precyzyjne pozycjonowanie miast pod Twoją mapę */
-        #pin-adamow { top: 38%; left: 47%; }
-        #pin-kock { top: 44%; left: 51%; }
-        #pin-lubartow { top: 51%; left: 54%; }
-        #pin-lublin { top: 60%; left: 53%; }
-        #pin-wlodawa { top: 46%; left: 69%; }
-        #pin-hrubieszow { top: 76%; left: 71%; }
-
-        /* Wbudowany system tooltipów (popover) linkujących */
-        .tooltip-box {
-            display: none;
-            position: absolute;
-            background: white;
-            color: #333;
-            padding: 10px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border: 1px solid #ccc;
-            z-index: 10;
-            width: 180px;
-            pointer-events: auto;
-        }
-        .tooltip-box h4 { font-size: 12px; margin-bottom: 4px; color: #1e3c72; }
-        .tooltip-box p { font-size: 11px; margin-bottom: 6px; color: #666; }
-        .btn-register {
-            display: block;
-            text-align: center;
-            background: #27ae60;
-            color: white;
-            text-decoration: none;
-            padding: 4px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .btn-register:hover { background: #219653; }
-
-        /* Miejsce na reklamę */
+        /* Sekcja reklamowa */
         .ad-box {
             background: #f9f9f9;
             border: 2px dashed #ccc;
@@ -182,7 +119,7 @@
 
     <header>
         <h1>🏃‍♂️ Kalendarz Biegowy - Województwo Lubelskie</h1>
-        <p>Interaktywna mapa biegów i wydarzeń sportowych – Październik 2026</p>
+        <p>Interaktywna mapa biegów i wydarzeń sportowych na bazie Google Maps – Październik 2026</p>
     </header>
 
     <div class="container">
@@ -191,25 +128,39 @@
                 <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
                 <div id="events-list">
                     <div class="run-item">
-                        <span class="date-badge">03.10</span> <strong>Biegi gen. Kleeberga</strong><br>📍 Kock | Uliczny / Patriotyczny
+                        <span class="date-badge">03.10</span> <strong>Biegi gen. Kleeberga</strong><br>
+                        📍 Kock | Uliczny / Patriotyczny<br>
+                        <a class="btn-link" href="https://kock.pl" target="_blank">🎟️ Oficjalna strona biegów</a>
                     </div>
                     <div class="run-item">
-                        <span class="date-badge">03.10</span> <strong>Duathlon Olimpijski</strong><br>📍 Adamów | Bieg + Rower
+                        <span class="date-badge">03.10</span> <strong>Duathlon Olimpijski</strong><br>
+                        📍 Adamów | Bieg + Rower<br>
+                        <a class="btn-link" href="https://gminaadamow.pl" target="_blank">🎟️ Strona organizatora</a>
                     </div>
                     <div class="run-item">
-                        <span class="date-badge">10.10</span> <strong>XXV Bieg Sobiborski</strong><br>📍 Włodawa | 21,1 km (Półmaraton)
+                        <span class="date-badge">10.10</span> <strong>XXV Bieg Sobiborski</strong><br>
+                        📍 Włodawa | 21,1 km (Półmaraton)<br>
+                        <a class="btn-link" href="http://wlodawa.eu" target="_blank">🎟️ Zapisy MOSiR Włodawa</a>
                     </div>
                     <div class="run-item">
-                        <span class="date-badge">11.10</span> <strong>Botaniczna Piątka</strong><br>📍 Lublin | 5 km (Ogród Botaniczny)
+                        <span class="date-badge">11.10</span> <strong>Botaniczna Piątka</strong><br>
+                        📍 Lublin | 5 km (Ogród Botaniczny)<br>
+                        <a class="btn-link" href="https://botaniczna5.pl" target="_blank">🎟️ Rejestracja online</a>
                     </div>
                     <div class="run-item">
-                        <span class="date-badge">11.10</span> <strong>Siódemka w Hrubieszowie</strong><br>📍 Hrubieszów | 7 km (Uliczny)
+                        <span class="date-badge">11.10</span> <strong>Siódemka w Hrubieszowie</strong><br>
+                        📍 Hrubieszów | 7 km (Uliczny)<br>
+                        <a class="btn-link" href="https://frslublin.pl" target="_blank">🎟️ Panel zapisów FRS</a>
                     </div>
                     <div class="run-item">
-                        <span class="date-badge">18.10</span> <strong>10. Półmaraton Lubelski</strong><br>📍 Lublin | 21,1 km (Uliczny)
+                        <span class="date-badge">18.10</span> <strong>10. Półmaraton Lubelski</strong><br>
+                        📍 Lublin | 21,1 km (Uliczny)<br>
+                        <a class="btn-link" href="https://lublin.eu" target="_blank">🎟️ Zapisy Maraton Lubelski</a>
                     </div>
                     <div class="run-item">
-                        <span class="date-badge">TBD</span> <strong>Biegam, bo lubię lasy</strong><br>📍 Lubartów | 10 km (Trail leśny)
+                        <span class="date-badge">TBD</span> <strong>Biegam, bo lubię lasy</strong><br>
+                        📍 Lubartów | 10 km (Trail leśny)<br>
+                        <a class="btn-link" href="https://lasy.gov.pl" target="_blank">🎟️ Strona wydarzenia</a>
                     </div>
                 </div>
             </div>
@@ -220,40 +171,15 @@
             </div>
         </div>
         
-        <!-- Sekcja z mapą i punktami w kontenerze -->
-        <div class="map-wrapper">
-            <img class="map-image" src="mapa.png" alt="Mapa Lubelskie">
-            
-            <div class="pin-container">
-                <!-- Punkty nałożone na mapę z datami -->
-                <div class="run-pin" id="pin-adamow" onmouseover="showTooltip(event, 'Duathlon Olimpijski', 'Gmina Adamów', 'https://gminaadamow.pl')" onmouseout="hideTooltip()">Adamów (03.10)</div>
-                <div class="run-pin" id="pin-kock" onmouseover="showTooltip(event, 'Biegi gen. Kleeberga', 'Bieg Miejski', 'https://kock.pl')" onmouseout="hideTooltip()">Kock (03.10)</div>
-                <div class="run-pin" id="pin-lubartow" onmouseover="showTooltip(event, 'Biegam, bo lubię lasy', 'Nadleśnictwo Lubartów', 'https://lasy.gov.pl')" onmouseout="hideTooltip()">Lubartów (TBD)</div>
-                <div class="run-pin capital" id="pin-lublin" onmouseover="showTooltip(event, 'Półmaraton Lubelski', 'Maraton Lubelski', 'https://lublin.eu')" onmouseout="hideTooltip()">Lublin (11 & 18.10)</div>
-                <div class="run-pin" id="pin-wlodawa" onmouseover="showTooltip(event, 'XXV Bieg Sobiborski', 'MOSiR Włodawa', 'http://wlodawa.eu')" onmouseout="hideTooltip()">Włodawa (10.10)</div>
-                <div class="run-pin" id="pin-hrubieszow" onmouseover="showTooltip(event, 'Siódemka w Hrubieszowie', 'Zapisy FRSLublin', 'https://frslublin.pl')" onmouseout="hideTooltip()">Hrubieszów (11.10)</div>
-            </div>
-
-            <!-- Blok dynamicznego okienka informacyjnego -->
-            <div id="tooltip" class="tooltip-box" onmouseover="cancelHide()" onmouseout="hideTooltip()">
-                <h4 id="tt-title">Nazwa Biegu</h4>
-                <p id="tt-org">Organizator</p>
-                <a id="tt-link" class="btn-register" href="#" target="_blank">🎟️ Zapisz się</a>
-            </div>
+        <!-- Profesjonalna mapa Google Maps z naniesionymi punktami biegów -->
+        <div class="map-container">
+            <iframe 
+                src="https://google.com" 
+                allowfullscreen 
+                loading="lazy">
+            </iframe>
         </div>
     </div>
 
-    <script>
-        const tooltip = document.getElementById('tooltip');
-        const ttTitle = document.getElementById('tt-title');
-        const ttOrg = document.getElementById('tt-org');
-        const ttLink = document.getElementById('tt-link');
-        let hideTimeout;
-
-        function showTooltip(e, title, organizer, linkUrl) {
-            clearTimeout(hideTimeout);
-            ttTitle.innerText = title;
-            ttOrg.innerText = "Organizator: " + organizer;
-            ttLink.href = linkUrl;
-            
-            // Pozycjonowanie dymka obok kursora myszy
+</body>
+</html>
