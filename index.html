@@ -4,10 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalendarz Biegowy - Lubelskie Październik 2026</title>
 
 ```
+<title>Kalendarz Biegowy - Lubelskie Październik 2026</title>
+
+<!-- Leaflet -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIINfQ3jMZ6bT0KxJQzQWZQfYQWZQfYQWZQ="
+    crossorigin=""
+>
+
 <style>
+
     * {
         box-sizing: border-box;
         margin: 0;
@@ -23,6 +33,10 @@
         height: 100vh;
         overflow: hidden;
     }
+
+    /* =========================
+       NAGŁÓWEK
+    ========================= */
 
     header {
         background: linear-gradient(135deg, #1e3c72, #2a5298);
@@ -43,6 +57,10 @@
         opacity: 0.9;
     }
 
+    /* =========================
+       GŁÓWNY KONTENER
+    ========================= */
+
     .container {
         display: flex;
         flex: 1;
@@ -50,15 +68,20 @@
         min-height: 0;
     }
 
-    /* PANEL BOCZNY */
+    /* =========================
+       PANEL BOCZNY
+    ========================= */
+
     .sidebar {
-        width: 350px;
+        width: 360px;
+        min-width: 300px;
         background: white;
         padding: 15px;
         box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+
         display: flex;
         flex-direction: column;
-        min-width: 280px;
+        min-height: 0;
     }
 
     .scrollable-content {
@@ -74,6 +97,10 @@
         border-bottom: 2px solid #2a5298;
         padding-bottom: 5px;
     }
+
+    /* =========================
+       WYDARZENIE
+    ========================= */
 
     .run-item {
         padding: 12px 5px;
@@ -95,16 +122,22 @@
         font-weight: bold;
     }
 
-    /* PRZYCISK MAPY */
+    /* =========================
+       PRZYCISKI
+    ========================= */
+
     .btn-link {
         display: inline-block;
         margin-top: 6px;
+
         color: #27ae60;
         background: none;
         border: none;
         padding: 0;
+
         font-weight: bold;
         font-size: 12px;
+
         cursor: pointer;
     }
 
@@ -112,7 +145,6 @@
         text-decoration: underline;
     }
 
-    /* LINKI */
     a.btn-link {
         text-decoration: none;
     }
@@ -121,38 +153,93 @@
         text-decoration: underline;
     }
 
-    /* MAPA */
+    /* =========================
+       MAPA
+    ========================= */
+
     .map-container {
         flex: 1;
-        height: 100%;
         min-width: 0;
+        min-height: 0;
         background: #e5e9f0;
     }
 
-    #google-map {
-        display: block;
+    #map {
         width: 100%;
         height: 100%;
-        border: none;
     }
 
-    /* REKLAMA */
+    /* =========================
+       POPUP MAPY
+    ========================= */
+
+    .popup-title {
+        font-size: 15px;
+        font-weight: bold;
+        color: #1e3c72;
+        margin-bottom: 5px;
+    }
+
+    .popup-date {
+        display: inline-block;
+        background: #e67e22;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .popup-info {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .popup-link {
+        display: inline-block;
+        background: #27ae60;
+        color: white !important;
+        text-decoration: none;
+        padding: 6px 9px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .popup-link:hover {
+        background: #219653;
+    }
+
+    /* =========================
+       REKLAMA
+    ========================= */
+
     .ad-box {
         background: #f9f9f9;
         border: 2px dashed #ccc;
         border-radius: 6px;
+
         padding: 15px;
         text-align: center;
+
         font-size: 12px;
         color: #777;
+
         margin-top: 15px;
         flex-shrink: 0;
     }
 
-    /* TELEFON */
+    /* =========================
+       MOBILE
+    ========================= */
+
     @media (max-width: 768px) {
+
         body {
             overflow: auto;
+            height: auto;
+            min-height: 100vh;
         }
 
         .container {
@@ -165,10 +252,19 @@
         }
 
         .map-container {
-            height: 50vh;
+            height: 55vh;
             min-height: 400px;
         }
+
+        h1 {
+            font-size: 18px;
+        }
+
+        header p {
+            font-size: 11px;
+        }
     }
+
 </style>
 ```
 
@@ -177,35 +273,60 @@
 <body>
 
 <header>
-    <h1>🏃‍♂️ Kalendarz Biegowy - Województwo Lubelskie</h1>
-    <p>
-        Interaktywna mapa biegów i wydarzeń sportowych –
-        Październik 2026
-    </p>
+
+```
+<h1>
+    🏃‍♂️ Kalendarz Biegowy - Województwo Lubelskie
+</h1>
+
+<p>
+    Interaktywna mapa biegów i wydarzeń sportowych –
+    Październik 2026
+</p>
+```
+
 </header>
 
 <div class="container">
 
 ```
-<!-- PANEL BOCZNY -->
-<div class="sidebar">
+<!-- =========================
+     PANEL BOCZNY
+========================= -->
+
+<aside class="sidebar">
 
     <div class="scrollable-content">
 
-        <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
+        <h2>
+            🗓️ Lista Wydarzeń
+        </h2>
 
         <div id="events-list">
 
+
+            <!-- KOCK -->
+
             <div class="run-item">
+
                 <span class="date-badge">03.10</span>
-                <strong>Biegi gen. Kleeberga</strong><br>
-                📍 Kock | Uliczny / Patriotyczny<br>
+
+                <strong>
+                    Biegi gen. Kleeberga
+                </strong>
+
+                <br>
+
+                📍 Kock | Uliczny / Patriotyczny
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Kock, Poland')">
+                    onclick="showEvent(0)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
@@ -213,21 +334,34 @@
                     href="https://kock.pl"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Organizator
                 </a>
+
             </div>
 
 
+            <!-- ADAMÓW -->
+
             <div class="run-item">
+
                 <span class="date-badge">03.10</span>
-                <strong>Duathlon Olimpijski</strong><br>
-                📍 Adamów | Bieg + Rower<br>
+
+                <strong>
+                    Duathlon Olimpijski
+                </strong>
+
+                <br>
+
+                📍 Adamów | Bieg + Rower
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Adamów, Łukowski, Poland')">
+                    onclick="showEvent(1)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
@@ -235,21 +369,34 @@
                     href="https://gminaadamow.pl"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Organizator
                 </a>
+
             </div>
 
 
+            <!-- WŁODAWA -->
+
             <div class="run-item">
+
                 <span class="date-badge">10.10</span>
-                <strong>XXV Bieg Sobiborski</strong><br>
-                📍 Włodawa | 21,1 km (Półmaraton)<br>
+
+                <strong>
+                    XXV Bieg Sobiborski
+                </strong>
+
+                <br>
+
+                📍 Włodawa | 21,1 km (Półmaraton)
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Włodawa, Poland')">
+                    onclick="showEvent(2)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
@@ -257,21 +404,34 @@
                     href="http://wlodawa.eu"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Organizator
                 </a>
+
             </div>
 
 
+            <!-- BOTANICZNA PIĄTKA -->
+
             <div class="run-item">
+
                 <span class="date-badge">11.10</span>
-                <strong>Botaniczna Piątka</strong><br>
-                📍 Lublin | 5 km (Ogród Botaniczny)<br>
+
+                <strong>
+                    Botaniczna Piątka
+                </strong>
+
+                <br>
+
+                📍 Lublin | 5 km (Ogród Botaniczny)
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Ogród Botaniczny UMCS, Lublin, Poland')">
+                    onclick="showEvent(3)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
@@ -279,21 +439,34 @@
                     href="https://botaniczna5.pl"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Organizator
                 </a>
+
             </div>
 
 
+            <!-- HRUBIESZÓW -->
+
             <div class="run-item">
+
                 <span class="date-badge">11.10</span>
-                <strong>Siódemka w Hrubieszowie</strong><br>
-                📍 Hrubieszów | 7 km (Uliczny)<br>
+
+                <strong>
+                    Siódemka w Hrubieszowie
+                </strong>
+
+                <br>
+
+                📍 Hrubieszów | 7 km (Uliczny)
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Hrubieszów, Poland')">
+                    onclick="showEvent(4)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
@@ -301,104 +474,371 @@
                     href="https://frslublin.pl"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Zapisy / organizator
                 </a>
+
             </div>
 
 
+            <!-- PÓŁMARATON LUBELSKI -->
+
             <div class="run-item">
+
                 <span class="date-badge">18.10</span>
-                <strong>10. Półmaraton Lubelski</strong><br>
-                📍 Lublin | 21,1 km (Uliczny)<br>
+
+                <strong>
+                    10. Półmaraton Lubelski
+                </strong>
+
+                <br>
+
+                📍 Lublin | 21,1 km (Uliczny)
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Stadion Lekkoatletyczny, Piłsudskiego, Lublin, Poland')">
+                    onclick="showEvent(5)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
                     class="btn-link"
-                    href="https://lublin.eu"
+                    href="https://frslublin.pl"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Zapisy / organizator
                 </a>
+
             </div>
 
+
+            <!-- BIEGAM BO LUBIĘ LASY -->
 
             <div class="run-item">
-                <span class="date-badge">TBD</span>
-                <strong>Biegam, bo lubię lasy</strong><br>
-                📍 Lubartów | 10 km (Trail leśny)<br>
+
+                <span class="date-badge">04.10</span>
+
+                <strong>
+                    Biegam, bo lubię lasy
+                </strong>
+
+                <br>
+
+                📍 Lubartów | 10 km (Trail leśny)
+
+                <br>
 
                 <button
                     class="btn-link"
-                    onclick="changeLocation('Lubartów, Poland')">
+                    onclick="showEvent(6)">
                     📍 Pokaż na mapie
                 </button>
+
                 |
 
                 <a
                     class="btn-link"
-                    href="https://lasy.gov.pl"
+                    href="https://lubartow.lublin.lasy.gov.pl"
                     target="_blank"
                     rel="noopener noreferrer">
-                    🎟️ Zapisy
+                    🎟️ Organizator
                 </a>
+
             </div>
+
 
         </div>
+
     </div>
 
 
     <div class="ad-box">
-        <p>📢 <strong>Miejsce na Twoją Reklamę</strong></p>
-        <p style="font-size: 11px; color:#aaa; margin-top:4px;">
+
+        <p>
+            📢 <strong>Miejsce na Twoją Reklamę</strong>
+        </p>
+
+        <p
+            style="font-size: 11px; color:#aaa; margin-top:4px;">
             Kontakt: reklama@twojadomena.pl
         </p>
+
     </div>
 
-</div>
+</aside>
 
 
-<!-- MAPA -->
-<div class="map-container">
+<!-- =========================
+     MAPA
+========================= -->
 
-    <iframe
-        id="google-map"
-        src="https://www.google.com/maps?q=Lublin%2C%20Poland&z=11&output=embed"
-        allowfullscreen
-        loading="lazy">
-    </iframe>
+<main class="map-container">
 
-</div>
+    <div id="map"></div>
+
+</main>
 ```
 
 </div>
 
+<!-- Leaflet JS -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="">
+</script>
+
 <script>
-    /**
-     * Zmiana lokalizacji mapy po kliknięciu wydarzenia.
+
+    /*
+     * ==========================================
+     * DANE WYDARZEŃ
+     * ==========================================
      */
-    function changeLocation(query) {
 
-        // Kodowanie adresu/lokalizacji
-        const encodedQuery = encodeURIComponent(query);
+    const events = [
 
-        // Budowanie poprawnego adresu Google Maps
-        const newSrc =
-            `https://www.google.com/maps?q=${encodedQuery}&z=13&output=embed`;
+        {
+            name: "Biegi gen. Kleeberga",
+            date: "03.10.2026",
+            city: "Kock",
+            type: "Uliczny / Patriotyczny",
 
-        // Pobranie iframe
-        const map = document.getElementById('google-map');
+            lat: 51.6398,
+            lng: 22.4438,
 
-        // Zmiana lokalizacji mapy
-        if (map) {
-            map.src = newSrc;
+            organizer:
+                "https://kock.pl"
+        },
+
+
+        {
+            name: "Duathlon Olimpijski",
+            date: "03.10.2026",
+            city: "Adamów",
+            type: "Bieg + Rower",
+
+            lat: 51.7430,
+            lng: 22.2640,
+
+            organizer:
+                "https://gminaadamow.pl"
+        },
+
+
+        {
+            name: "XXV Bieg Sobiborski",
+            date: "10.10.2026",
+            city: "Włodawa",
+            type: "21,1 km – Półmaraton",
+
+            lat: 51.5510,
+            lng: 23.5540,
+
+            organizer:
+                "http://wlodawa.eu"
+        },
+
+
+        {
+            name: "Botaniczna Piątka",
+            date: "11.10.2026",
+            city: "Lublin – Ogród Botaniczny UMCS",
+            type: "5 km",
+
+            lat: 51.2685,
+            lng: 22.5300,
+
+            organizer:
+                "https://botaniczna5.pl"
+        },
+
+
+        {
+            name: "Siódemka w Hrubieszowie",
+            date: "11.10.2026",
+            city: "Hrubieszów",
+            type: "7 km – Uliczny",
+
+            lat: 50.8050,
+            lng: 23.8925,
+
+            organizer:
+                "https://frslublin.pl"
+        },
+
+
+        {
+            name: "10. Półmaraton Lubelski",
+            date: "18.10.2026",
+            city: "Lublin – Stadion Lekkoatletyczny",
+            type: "21,1 km – Uliczny",
+
+            lat: 51.2470,
+            lng: 22.5545,
+
+            organizer:
+                "https://frslublin.pl"
+        },
+
+
+        {
+            name: "Biegam, bo lubię lasy",
+            date: "04.10.2026",
+            city: "Lubartów – Parking Leśny Kopanina",
+            type: "10 km – Trail leśny",
+
+            lat: 51.5050,
+            lng: 22.5700,
+
+            organizer:
+                "https://lubartow.lublin.lasy.gov.pl"
         }
+
+    ];
+
+
+    /*
+     * ==========================================
+     * UTWORZENIE MAPY
+     * ==========================================
+     */
+
+    const map = L.map('map');
+
+
+    /*
+     * MAPA OPENSTREETMAP
+     */
+
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+
+            attribution:
+                '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+
+    /*
+     * ==========================================
+     * MARKERY
+     * ==========================================
+     */
+
+    const markers = [];
+
+
+    events.forEach((event, index) => {
+
+        const marker = L.marker([
+            event.lat,
+            event.lng
+        ]).addTo(map);
+
+
+        /*
+         * Zawartość okna po kliknięciu pinezki
+         */
+
+        marker.bindPopup(`
+
+            <div>
+
+                <div class="popup-title">
+                    ${event.name}
+                </div>
+
+                <div class="popup-date">
+                    ${event.date}
+                </div>
+
+                <div class="popup-info">
+
+                    📍 ${event.city}
+
+                    <br>
+
+                    🏃 ${event.type}
+
+                </div>
+
+                <a
+                    class="popup-link"
+                    href="${event.organizer}"
+                    target="_blank"
+                    rel="noopener noreferrer">
+
+                    🎟️ Strona organizatora / zapisy
+
+                </a>
+
+            </div>
+
+        `);
+
+
+        markers.push(marker);
+
+    });
+
+
+    /*
+     * ==========================================
+     * AUTOMATYCZNE POKAZANIE WSZYSTKICH PINEZEK
+     * ==========================================
+     */
+
+    const group = L.featureGroup(markers);
+
+    map.fitBounds(
+        group.getBounds().pad(0.08)
+    );
+
+
+    /*
+     * ==========================================
+     * KLIKNIĘCIE "POKAŻ NA MAPIE"
+     * ==========================================
+     */
+
+    function showEvent(index) {
+
+        const event = events[index];
+
+        const marker = markers[index];
+
+
+        /*
+         * Przesunięcie mapy do wydarzenia
+         */
+
+        map.setView(
+            [
+                event.lat,
+                event.lng
+            ],
+            13,
+            {
+                animate: true
+            }
+        );
+
+
+        /*
+         * Otwarcie informacji
+         */
+
+        marker.openPopup();
+
     }
+
 </script>
 
 </body>
