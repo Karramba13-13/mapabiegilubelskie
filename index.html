@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interaktywna Mapa Biegów - Lubelskie Październik 2026</title>
     
-    <!-- Biblioteka Leaflet (Stylizacja i skrypty mapy) -->
+    <!-- Biblioteka Leaflet (Stylizacja mapy) -->
     <link rel="stylesheet" href="https://unpkg.com" />
-    <script src="https://unpkg.com"></script>
     
     <style>
         * {
@@ -46,7 +45,13 @@
             background: white;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .scrollable-content {
             overflow-y: auto;
+            flex: 1;
         }
         .sidebar h2 {
             font-size: 16px;
@@ -81,6 +86,18 @@
             height: 100%;
         }
 
+        /* Sekcja reklamowa na dole panelu */
+        .ad-box {
+            background: #f9f9f9;
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 15px;
+        }
+
         /* Wygląd okienka Popup po najechaniu */
         .popup-info h3 {
             margin-bottom: 6px;
@@ -113,68 +130,74 @@
 
     <div class="container">
         <div class="sidebar">
-            <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
-            <div id="events-list"></div>
+            <div class="scrollable-content">
+                <h2>🗓️ Lista Wydarzeń (Październik 2026)</h2>
+                <div id="events-list"></div>
+            </div>
+            
+            <!-- Przestrzeń pod reklamy (np. Google AdSense) -->
+            <div class="ad-box">
+                <p>📢 <strong>Miejsce na Twoją Reklamę</strong></p>
+                <p style="font-size: 11px; color:#aaa; margin-top:4px;">Kontakt: reklama@twojadomena.pl</p>
+            </div>
         </div>
+        
         <div id="map"></div>
     </div>
 
+    <!-- Biblioteka Leaflet JS wrzucona na koniec dla poprawnego ładowania -->
+    <script src="https://unpkg.com"></script>
     <script>
-        // Baza danych biegów w województwie lubelskim
-        const runData = [
-            { id: 1, name: "Ogólnopolskie Biegi Uliczne Pamięci Gen. Kleeberga", city: "Kock", coords: [51.6394, 22.4439], date: "03.10.2026", dist: "Uliczny / Patriotyczny" },
-            { id: 2, name: "Duathlon Olimpijski", city: "Adamów", coords: [51.7472, 22.2514], date: "03.10.2026", dist: "Bieg + Rower" },
-            { id: 3, name: "XXV Bieg Sobiborski", city: "Włodawa", coords: [51.5458, 23.5512], date: "10.10.2026", dist: "21,1 km (Półmaraton)" },
-            { id: 4, name: "Botaniczna Piątka – Edycja Jesienna", city: "Lublin", coords: [51.2640, 22.5130], date: "11.10.2026", dist: "5 km (Ogród Botaniczny)" },
-            { id: 5, name: "Listtowie – Siódemka w Hrubieszowie", city: "Hrubieszów", coords: [50.8049, 23.8916], date: "11.10.2026", dist: "7 km (Uliczny)" },
-            { id: 6, name: "STOKROTKA 10. Półmaraton Lubelski", city: "Lublin", coords: [51.2415, 22.5690], date: "18.10.2026", dist: "21,0975 km (Uliczny)" },
-            { id: 7, name: "Biegam, bo lubię lasy", city: "Lubartów", coords: [51.4622, 22.6074], date: "Październik 2026", dist: "10 km (Trail leśny)" }
-        ];
+        // Skrypt uruchomi się dopiero po pełnym załadowaniu struktury HTML
+        window.onload = function() {
+            const runData = [
+                { id: 1, name: "Ogólnopolskie Biegi Uliczne Pamięci Gen. Kleeberga", city: "Kock", coords: [51.6394, 22.4439], date: "03.10.2026", dist: "Uliczny / Patriotyczny" },
+                { id: 2, name: "Duathlon Olimpijski", city: "Adamów", coords: [51.7472, 22.2514], date: "03.10.2026", dist: "Bieg + Rower" },
+                { id: 3, name: "XXV Bieg Sobiborski", city: "Włodawa", coords: [51.5458, 23.5512], date: "10.10.2026", dist: "21,1 km (Półmaraton)" },
+                { id: 4, name: "Botaniczna Piątka – Edycja Jesienna", city: "Lublin", coords: [51.2640, 22.5130], date: "11.10.2026", dist: "5 km (Ogród Botaniczny)" },
+                { id: 5, name: "Listtowie – Siódemka w Hrubieszowie", city: "Hrubieszów", coords: [50.8049, 23.8916], date: "11.10.2026", dist: "7 km (Uliczny)" },
+                { id: 6, name: "STOKROTKA 10. Półmaraton Lubelski", city: "Lublin", coords: [51.2415, 22.5690], date: "18.10.2026", dist: "21,0975 km (Uliczny)" },
+                { id: 7, name: "Biegam, bo lubię lasy", city: "Lubartów", coords: [51.4622, 22.6074], date: "Październik 2026", dist: "10 km (Trail leśny)" }
+            ];
 
-        // Wyśrodkowanie mapy na województwo lubelskie
-        const map = L.map('map').setView([51.2465, 22.5622], 9);
+            const map = L.map('map').setView([51.2465, 22.5622], 9);
 
-        // Stylowa, nowoczesna warstwa mapy (Positron od CartoDB)
-        L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap &copy; CARTO'
-        }).addTo(map);
+            L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO'
+            }).addTo(map);
 
-        const sidebarList = document.getElementById('events-list');
+            const sidebarList = document.getElementById('events-list');
 
-        runData.forEach(run => {
-            // Tworzenie elementów listy bocznej
-            const item = document.createElement('div');
-            item.className = 'run-item';
-            item.innerHTML = `
-                <span class="date-badge">${run.date.substring(0,5)}</span> <strong>${run.name}</strong><br>
-                📍 ${run.city} | ${run.dist}
-            `;
-            sidebarList.appendChild(item);
+            runData.forEach(run => {
+                const item = document.createElement('div');
+                item.className = 'run-item';
+                item.innerHTML = `
+                    <span class="date-badge">${run.date.substring(0,5)}</span> <strong>${run.name}</strong><br>
+                    📍 ${run.city} | ${run.dist}
+                `;
+                sidebarList.appendChild(item);
 
-            // Zawartość dymka (Popup)
-            const popupContent = `
-                <div class="popup-info">
-                    <h3>${run.name}</h3>
-                    <p><strong>Miejscowość:</strong> ${run.city}</p>
-                    <p><strong>Data:</strong> ${run.date}</p>
-                    <span class="popup-badge">${run.dist}</span>
-                </div>
-            `;
+                const popupContent = `
+                    <div class="popup-info">
+                        <h3>${run.name}</h3>
+                        <p><strong>Miejscowość:</strong> ${run.city}</p>
+                        <p><strong>Data:</strong> ${run.date}</p>
+                        <span class="popup-badge">${run.dist}</span>
+                    </div>
+                `;
 
-            // Dodanie markera na mapie
-            const marker = L.marker(run.coords).addTo(map).bindPopup(popupContent);
+                const marker = L.marker(run.coords).addTo(map).bindPopup(popupContent);
 
-            // Interakcja HOVER: Otwórz dymek po najechaniu myszką
-            marker.on('mouseover', function () {
-                this.openPopup();
+                marker.on('mouseover', function () {
+                    this.openPopup();
+                });
+
+                item.addEventListener('click', () => {
+                    map.setView(run.coords, 12);
+                    marker.openPopup();
+                });
             });
-
-            // Interakcja KLIK na liście: Przybliż mapę do punktu i otwórz dymek
-            item.addEventListener('click', () => {
-                map.setView(run.coords, 12);
-                marker.openPopup();
-            });
-        });
+        };
     </script>
 </body>
 </html>
