@@ -152,6 +152,22 @@ button:hover {
 
 
 /* =========================================================
+   GRANICA WOJEWÓDZTWA
+========================================================= */
+
+.boundary-label {
+  background: rgba(255,255,255,.95);
+  border: 1px solid #c62828;
+  color: #9e2020;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 7px;
+  border-radius: 7px;
+  box-shadow: 0 1px 5px rgba(0,0,0,.15);
+}
+
+
+/* =========================================================
    KARTY TRAS
 ========================================================= */
 
@@ -244,6 +260,11 @@ button:hover {
   font-weight: 800;
 }
 
+.badge-fallback {
+  background: #fff2d8;
+  color: #9a6400;
+}
+
 
 /* =========================================================
    STATYSTYKI
@@ -303,6 +324,28 @@ button:hover {
   font-size: 12px;
 }
 
+.boundary-legend {
+  position: absolute;
+  bottom: 20px;
+  right: 14px;
+  z-index: 900;
+  background: rgba(255,255,255,.96);
+  border-radius: 10px;
+  padding: 9px 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.16);
+  font-size: 11px;
+  color: #435047;
+}
+
+.boundary-line {
+  display: inline-block;
+  width: 30px;
+  height: 0;
+  border-top: 4px solid #d62828;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
 
 /* =========================================================
    STRZAŁKI NA TRASIE
@@ -311,10 +354,6 @@ button:hover {
 .route-arrow {
   font-size: 19px;
   font-weight: 900;
-  color: #176b3a;
-  text-shadow:
-    0 0 2px white,
-    0 0 3px white;
   line-height: 1;
   transform-origin: center center;
 }
@@ -389,10 +428,6 @@ button:hover {
 <div class="app">
 
 
-<!-- =======================================================
-     PANEL
-======================================================= -->
-
 <aside class="sidebar">
 
 
@@ -409,10 +444,6 @@ po całym województwie lubelskim.
 </div>
 
 
-<!-- =====================================================
-     PLANER
-===================================================== -->
-
 <div class="section planner-box">
 
 <h2>
@@ -423,22 +454,23 @@ po całym województwie lubelskim.
 <p>
 
 Wybierz punkt startowy na mapie.
-Planer przygotuje pięć różnych
-pętli rowerowych:
+
+Planer przygotuje pięć wariantów
+pętli — około:
 
 <br><br>
 
 <strong>
-około 15 km → 30 km → 50 km
+15 km → 30 km → 50 km
 → 75 km → 100 km
 </strong>
 
 <br><br>
 
-Trasy są prowadzone z użyciem
-profilu rowerowego i unikają
-autostrad, dróg ekspresowych
-oraz dróg klasy trunk.
+Jeżeli nie da się znaleźć trasy
+o dokładnie takiej długości,
+planer automatycznie wybierze
+najbliższą dostępną pętlę.
 
 </p>
 
@@ -482,16 +514,8 @@ na mapie.
 </div>
 
 
-<!-- =====================================================
-     TRASY
-===================================================== -->
-
 <div id="routes"></div>
 
-
-<!-- =====================================================
-     STATYSTYKI
-===================================================== -->
 
 <div class="section">
 
@@ -510,7 +534,7 @@ na mapie.
 
 <div class="stat">
 <strong id="attractionCount">0</strong>
-<span>atrakcji</span>
+<span>miejsc</span>
 </div>
 
 
@@ -524,42 +548,55 @@ na mapie.
 </div>
 
 
-<!-- =====================================================
-     INFORMACJA
-===================================================== -->
-
 <div class="section">
 
 <h2>
-🚴 Bezpieczniejsze wyznaczanie
+🚴 Jak działa planer
 </h2>
 
 
 <p>
 
-Planer korzysta z routingu rowerowego.
-Wykluczane są drogi typu motorway
-i trunk.
+Każda propozycja jest zamkniętą
+pętlą:
 
-Dodatkowo system odrzuca bardzo
-krótkie i podobne warianty, aby
-proponowane pętle różniły się
-przebiegiem.
+<strong>
+START → punkty → START
+</strong>.
+
+Docelowe długości są orientacyjne.
+Najważniejsze jest znalezienie
+rzeczywistej pętli drogowej.
 
 </p>
 
 
 <h2>
-📍 Najważniejsze atrakcje
+🔴 Granica województwa
 </h2>
 
 
 <p>
 
-Na mapie pozostawiono tylko
-wybrane najważniejsze zabytki
-i charakterystyczne miejsca
-krajobrazowe województwa.
+Czerwona linia pokazuje granicę
+województwa lubelskiego na podstawie
+danych Państwowego Rejestru Granic.
+
+</p>
+
+
+<h2>
+🏛️ Zabytki i atrakcje
+</h2>
+
+
+<p>
+
+Na mapie pokazano więcej ważnych
+zabytków, zespołów pałacowych,
+historycznych miast, sanktuariów
+i charakterystycznych miejsc
+krajobrazowych.
 
 </p>
 
@@ -569,10 +606,6 @@ krajobrazowe województwa.
 
 </aside>
 
-
-<!-- =======================================================
-     MAPA
-======================================================= -->
 
 <main class="map-wrapper">
 
@@ -584,6 +617,14 @@ krajobrazowe województwa.
 
 🚴 Kliknij mapę,
 aby wybrać start
+
+</div>
+
+
+<div class="boundary-legend">
+
+<span class="boundary-line"></span>
+granica woj. lubelskiego
 
 </div>
 
@@ -603,7 +644,7 @@ src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 
 
 /* ==========================================================
-   MAPA WOJEWÓDZTWA
+   MAPA
 ========================================================== */
 
 const map =
@@ -643,6 +684,11 @@ const arrowLayer =
   .addTo(map);
 
 
+const boundaryLayer =
+  L.layerGroup()
+  .addTo(map);
+
+
 let startMarker =
   null;
 
@@ -656,14 +702,98 @@ let generatedRoutes =
 
 
 /* ==========================================================
-   NAJWAŻNIEJSZE ATRAKCJE
-==========================================================
+   GRANICA WOJEWÓDZTWA
+   OFICJALNY PRG / GEOPORTAL
+========================================================== */
 
-   Celowo NIE dodajemy tutaj dziesiątek
-   małych punktów.
+async function loadLubelskieBoundary() {
 
-   Pozostają tylko miejsca o dużym
-   znaczeniu turystycznym.
+  const url =
+    "https://mapy.geoportal.gov.pl/wss/ims/maps/PRG_gugik_wyszukiwarka/FeatureServer/2/query" +
+    "?where=teryt%3D%2706%27" +
+    "&outFields=nazwa%2Cteryt" +
+    "&returnGeometry=true" +
+    "&outSR=4326" +
+    "&f=geojson";
+
+
+  try {
+
+    const response =
+      await fetch(url);
+
+
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " + response.status
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.features ||
+      !data.features.length
+    ) {
+
+      throw new Error(
+        "Brak geometrii granicy"
+      );
+
+    }
+
+
+    const boundary =
+      L.geoJSON(
+        data,
+        {
+          style: {
+            color: "#d62828",
+            weight: 4,
+            opacity: .95,
+            fill: false
+          }
+        }
+      );
+
+
+    boundary.addTo(
+      boundaryLayer
+    );
+
+
+    boundary.bindPopup(
+      "<strong>Województwo lubelskie</strong><br>Granica administracyjna PRG"
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      "Nie udało się pobrać granicy PRG:",
+      error
+    );
+
+    /*
+      Nie rysujemy sztucznej granicy.
+      Jeżeli usługa Geoportalu chwilowo
+      nie odpowiada, mapa pozostaje
+      użyteczna.
+    */
+
+  }
+
+}
+
+
+loadLubelskieBoundary();
+
+
+/* ==========================================================
+   ATRAKCJE
 ========================================================== */
 
 const attractions = [
@@ -677,6 +807,23 @@ const attractions = [
       "Historyczne centrum Lublina i Zamek Lubelski."
   },
 
+  {
+    name: "Lublin – Kaplica Trójcy Świętej",
+    lat: 51.24860,
+    lon: 22.56890,
+    type: "zabytek",
+    description:
+      "Gotycka kaplica zamkowa ze słynnymi malowidłami rusko-bizantyjskimi."
+  },
+
+  {
+    name: "Lublin – Brama Krakowska",
+    lat: 51.24795,
+    lon: 22.56805,
+    type: "zabytek",
+    description:
+      "Jedna z najbardziej charakterystycznych budowli Starego Miasta."
+  },
 
   {
     name: "Kazimierz Dolny – Rynek",
@@ -684,9 +831,8 @@ const attractions = [
     lon: 21.94755,
     type: "zabytek",
     description:
-      "Historyczne miasto nad Wisłą."
+      "Historyczny rynek miasta nad Wisłą."
   },
-
 
   {
     name: "Kazimierz Dolny – Góra Trzech Krzyży",
@@ -694,9 +840,17 @@ const attractions = [
     lon: 21.95170,
     type: "widok",
     description:
-      "Jeden z najbardziej znanych punktów widokowych Kazimierza Dolnego."
+      "Popularny punkt widokowy nad Kazimierzem Dolnym."
   },
 
+  {
+    name: "Kazimierz Dolny – Kamienice Przybyłów",
+    lat: 51.32240,
+    lon: 21.94780,
+    type: "zabytek",
+    description:
+      "Jedne z najbardziej rozpoznawalnych renesansowych kamienic rynku."
+  },
 
   {
     name: "Janowiec – zamek",
@@ -704,9 +858,8 @@ const attractions = [
     lon: 21.88955,
     type: "zabytek",
     description:
-      "Ruiny zamku w Janowcu nad Wisłą."
+      "Ruiny renesansowego zamku w Janowcu."
   },
-
 
   {
     name: "Puławy – Pałac Czartoryskich",
@@ -717,16 +870,23 @@ const attractions = [
       "Zespół pałacowo-parkowy Czartoryskich."
   },
 
-
   {
     name: "Nałęczów – Park Zdrojowy",
     lat: 51.28510,
     lon: 22.21400,
     type: "krajobraz",
     description:
-      "Park zdrojowy i centrum uzdrowiska."
+      "Historyczny park uzdrowiskowy."
   },
 
+  {
+    name: "Wąwolnica – sanktuarium",
+    lat: 51.29480,
+    lon: 22.14670,
+    type: "zabytek",
+    description:
+      "Historyczne sanktuarium maryjne i zabudowa centrum Wąwolnicy."
+  },
 
   {
     name: "Kozłówka – pałac Zamoyskich",
@@ -737,116 +897,41 @@ const attractions = [
       "Zespół pałacowo-parkowy Muzeum Zamoyskich."
   },
 
-
   {
-    name: "Zamość – Stare Miasto",
-    lat: 50.71600,
-    lon: 23.25200,
+    name: "Lubartów – pałac Sanguszków",
+    lat: 51.46000,
+    lon: 22.61000,
     type: "zabytek",
     description:
-      "Renesansowy zespół Starego Miasta wpisany na listę UNESCO."
+      "Zespół pałacowo-parkowy w Lubartowie."
   },
 
-
   {
-    name: "Zamość – Rotunda",
-    lat: 50.70670,
-    lon: 23.24510,
+    name: "Kock – pałac Jabłonowskich",
+    lat: 51.63900,
+    lon: 22.44400,
     type: "zabytek",
     description:
-      "Historyczna Rotunda Zamojska."
+      "Historyczny zespół pałacowo-parkowy Kocka."
   },
 
-
   {
-    name: "Zwierzyniec – Kościół na Wodzie",
-    lat: 50.61440,
-    lon: 22.96950,
+    name: "Radzyń Podlaski – pałac Potockich",
+    lat: 51.78330,
+    lon: 22.61670,
     type: "zabytek",
     description:
-      "Barokowy kościół św. Jana Nepomucena."
+      "Późnobarokowy zespół pałacowo-parkowy Potockich."
   },
 
-
   {
-    name: "Roztoczański Park Narodowy",
-    lat: 50.61050,
-    lon: 22.98200,
-    type: "krajobraz",
-    description:
-      "Jeden z najcenniejszych przyrodniczo obszarów Lubelszczyzny."
-  },
-
-
-  {
-    name: "Krasnobród – wieża widokowa",
-    lat: 50.54520,
-    lon: 23.21350,
-    type: "widok",
-    description:
-      "Punkt widokowy na Roztocze."
-  },
-
-
-  {
-    name: "Józefów – kamieniołom",
-    lat: 50.48120,
-    lon: 23.05680,
-    type: "widok",
-    description:
-      "Charakterystyczny krajobraz kamieniołomu na Roztoczu."
-  },
-
-
-  {
-    name: "Janów Lubelski – Zalew",
-    lat: 50.69880,
-    lon: 22.41800,
-    type: "krajobraz",
-    description:
-      "Zalew i tereny rekreacyjne Janowa Lubelskiego."
-  },
-
-
-  {
-    name: "Chełm – Góra Katedralna",
-    lat: 51.14350,
-    lon: 23.47100,
+    name: "Międzyrzec Podlaski – pałac Potockich",
+    lat: 51.98630,
+    lon: 22.78260,
     type: "zabytek",
     description:
-      "Historyczny zespół sakralny na Górze Katedralnej."
+      "Historyczny zespół pałacowy w Międzyrzecu Podlaskim."
   },
-
-
-  {
-    name: "Chełm – Podziemia Kredowe",
-    lat: 51.14280,
-    lon: 23.47190,
-    type: "zabytek",
-    description:
-      "Podziemna trasa turystyczna pod centrum Chełma."
-  },
-
-
-  {
-    name: "Włodawa – centrum trzech kultur",
-    lat: 51.54470,
-    lon: 23.55490,
-    type: "zabytek",
-    description:
-      "Historyczne centrum Włodawy."
-  },
-
-
-  {
-    name: "Poleski Park Narodowy",
-    lat: 51.48500,
-    lon: 23.20000,
-    type: "krajobraz",
-    description:
-      "Rozległe tereny bagienne, jeziora i krajobraz Polesia."
-  },
-
 
   {
     name: "Biała Podlaska – zespół Radziwiłłów",
@@ -857,6 +942,14 @@ const attractions = [
       "Pozostałości zespołu zamkowego Radziwiłłów."
   },
 
+  {
+    name: "Leśna Podlaska – sanktuarium",
+    lat: 52.13300,
+    lon: 23.02900,
+    type: "zabytek",
+    description:
+      "Historyczny zespół klasztorny i sanktuarium."
+  },
 
   {
     name: "Janów Podlaski – stadnina",
@@ -867,9 +960,8 @@ const attractions = [
       "Słynna stadnina koni arabskich."
   },
 
-
   {
-    name: "Koden – Sanktuarium",
+    name: "Kodeń – sanktuarium",
     lat: 51.91100,
     lon: 23.60400,
     type: "zabytek",
@@ -877,16 +969,212 @@ const attractions = [
       "Sanktuarium Matki Bożej Kodeńskiej."
   },
 
-
   {
-    name: "Sławatycze – Bug",
-    lat: 51.76500,
-    lon: 23.55700,
-    type: "widok",
+    name: "Parczew – bazylika",
+    lat: 51.63940,
+    lon: 22.90090,
+    type: "zabytek",
     description:
-      "Krajobraz doliny Bugu."
+      "Historyczna bazylika i centrum miasta."
   },
 
+  {
+    name: "Włodawa – centrum trzech kultur",
+    lat: 51.54470,
+    lon: 23.55490,
+    type: "zabytek",
+    description:
+      "Historyczne centrum Włodawy związane z dziedzictwem wielu kultur."
+  },
+
+  {
+    name: "Poleski Park Narodowy",
+    lat: 51.48500,
+    lon: 23.20000,
+    type: "krajobraz",
+    description:
+      "Rozległe tereny bagienne, jeziora i krajobraz Polesia."
+  },
+
+  {
+    name: "Chełm – Góra Katedralna",
+    lat: 51.14350,
+    lon: 23.47100,
+    type: "zabytek",
+    description:
+      "Historyczny zespół sakralny na Górze Katedralnej."
+  },
+
+  {
+    name: "Chełm – Podziemia Kredowe",
+    lat: 51.14280,
+    lon: 23.47190,
+    type: "zabytek",
+    description:
+      "Podziemna trasa turystyczna pod centrum Chełma."
+  },
+
+  {
+    name: "Opole Lubelskie – centrum historyczne",
+    lat: 51.14750,
+    lon: 21.96860,
+    type: "zabytek",
+    description:
+      "Historyczne centrum miasta i zabudowa dawnego zespołu miejskiego."
+  },
+
+  {
+    name: "Kraśnik – Stare Miasto",
+    lat: 50.92360,
+    lon: 22.22700,
+    type: "zabytek",
+    description:
+      "Historyczne centrum Kraśnika."
+  },
+
+  {
+    name: "Kraśnik – kościół i klasztor",
+    lat: 50.92300,
+    lon: 22.22780,
+    type: "zabytek",
+    description:
+      "Historyczny zespół kościelno-klasztorny."
+  },
+
+  {
+    name: "Janów Lubelski – sanktuarium",
+    lat: 50.70670,
+    lon: 22.41070,
+    type: "zabytek",
+    description:
+      "Historyczny zespół podominikański."
+  },
+
+  {
+    name: "Janów Lubelski – Zalew",
+    lat: 50.69880,
+    lon: 22.41800,
+    type: "krajobraz",
+    description:
+      "Zalew i tereny rekreacyjne Janowa Lubelskiego."
+  },
+
+  {
+    name: "Zamość – Stare Miasto",
+    lat: 50.71600,
+    lon: 23.25200,
+    type: "zabytek",
+    description:
+      "Renesansowy zespół Starego Miasta wpisany na listę UNESCO."
+  },
+
+  {
+    name: "Zamość – Rotunda",
+    lat: 50.70670,
+    lon: 23.24510,
+    type: "zabytek",
+    description:
+      "Historyczna Rotunda Zamojska."
+  },
+
+  {
+    name: "Zamość – Brama Lwowska",
+    lat: 50.71820,
+    lon: 23.25070,
+    type: "zabytek",
+    description:
+      "Element historycznego systemu fortyfikacji Zamościa."
+  },
+
+  {
+    name: "Szczebrzeszyn – centrum",
+    lat: 50.69500,
+    lon: 22.97920,
+    type: "zabytek",
+    description:
+      "Historyczne miasto na Roztoczu."
+  },
+
+  {
+    name: "Zwierzyniec – Kościół na Wodzie",
+    lat: 50.61440,
+    lon: 22.96950,
+    type: "zabytek",
+    description:
+      "Barokowy kościół św. Jana Nepomucena."
+  },
+
+  {
+    name: "Zwierzyniec – Pałac Plenipotenta",
+    lat: 50.61480,
+    lon: 22.97400,
+    type: "zabytek",
+    description:
+      "Historyczny obiekt związany z ordynacją zamojską."
+  },
+
+  {
+    name: "Roztoczański Park Narodowy",
+    lat: 50.61050,
+    lon: 22.98200,
+    type: "krajobraz",
+    description:
+      "Jeden z najcenniejszych przyrodniczo obszarów Lubelszczyzny."
+  },
+
+  {
+    name: "Krasnobród – wieża widokowa",
+    lat: 50.54520,
+    lon: 23.21350,
+    type: "widok",
+    description:
+      "Punkt widokowy na Roztocze."
+  },
+
+  {
+    name: "Józefów – kamieniołom",
+    lat: 50.48120,
+    lon: 23.05680,
+    type: "widok",
+    description:
+      "Charakterystyczny krajobraz kamieniołomu na Roztoczu."
+  },
+
+  {
+    name: "Tomaszów Lubelski – centrum",
+    lat: 50.44770,
+    lon: 23.41620,
+    type: "zabytek",
+    description:
+      "Historyczne centrum Tomaszowa Lubelskiego."
+  },
+
+  {
+    name: "Hrubieszów – centrum",
+    lat: 50.80500,
+    lon: 23.89250,
+    type: "zabytek",
+    description:
+      "Historyczne centrum Hrubieszowa."
+  },
+
+  {
+    name: "Hrubieszów – dworek Du Chateau",
+    lat: 50.80580,
+    lon: 23.89180,
+    type: "zabytek",
+    description:
+      "Historyczny dworek w centrum Hrubieszowa."
+  },
+
+  {
+    name: "Biłgoraj – skansen",
+    lat: 50.54180,
+    lon: 22.72200,
+    type: "zabytek",
+    description:
+      "Obiekty dziedzictwa kultury regionu biłgorajskiego."
+  },
 
   {
     name: "Dęblin – Twierdza",
@@ -897,31 +1185,20 @@ const attractions = [
       "Pozostałości umocnień twierdzy Dęblin."
   },
 
-
   {
-    name: "Kock – centrum historyczne",
-    lat: 51.63900,
-    lon: 22.44400,
-    type: "zabytek",
+    name: "Sławatycze – Bug",
+    lat: 51.76500,
+    lon: 23.55700,
+    type: "widok",
     description:
-      "Historyczne centrum Kocka."
-  },
-
-
-  {
-    name: "Lubartów – pałac Sanguszków",
-    lat: 51.46000,
-    lon: 22.61000,
-    type: "zabytek",
-    description:
-      "Zespół pałacowo-parkowy w Lubartowie."
+      "Krajobraz doliny Bugu."
   }
 
 ];
 
 
 /* ==========================================================
-   MARKERY ATRAKCJI
+   MARKERY
 ========================================================== */
 
 attractions.forEach(
@@ -985,17 +1262,9 @@ document.getElementById(
 
 /* ==========================================================
    PUNKTY DO PLANERA
-==========================================================
-
-   Punkty są rozłożone po całym województwie.
-   Nie są oficjalnymi szlakami.
-   Są "kotwicami", przez które planer
-   prowadzi pętle.
 ========================================================== */
 
 const routePoints = [
-
-  /* zachód */
 
   {
     name: "Kazimierz Dolny",
@@ -1025,8 +1294,26 @@ const routePoints = [
     region: "west"
   },
 
+  {
+    name: "Wąwolnica",
+    lat: 51.29480,
+    lon: 22.14670,
+    region: "west"
+  },
 
-  /* centralna część */
+  {
+    name: "Dęblin",
+    lat: 51.56300,
+    lon: 21.84800,
+    region: "west"
+  },
+
+  {
+    name: "Opole Lubelskie",
+    lat: 51.14750,
+    lon: 21.96860,
+    region: "west"
+  },
 
   {
     name: "Lublin",
@@ -1049,8 +1336,26 @@ const routePoints = [
     region: "center"
   },
 
+  {
+    name: "Kock",
+    lat: 51.63900,
+    lon: 22.44400,
+    region: "north-west"
+  },
 
-  /* północ */
+  {
+    name: "Radzyń Podlaski",
+    lat: 51.78330,
+    lon: 22.61670,
+    region: "north"
+  },
+
+  {
+    name: "Parczew",
+    lat: 51.63940,
+    lon: 22.90090,
+    region: "north"
+  },
 
   {
     name: "Biała Podlaska",
@@ -1060,17 +1365,31 @@ const routePoints = [
   },
 
   {
-    name: "Janów Podlaski",
-    lat: 52.19400,
-    lon: 23.21700,
+    name: "Międzyrzec Podlaski",
+    lat: 51.98630,
+    lon: 22.78260,
     region: "north"
   },
 
   {
-    name: "Koden",
+    name: "Janów Podlaski",
+    lat: 52.19400,
+    lon: 23.21700,
+    region: "north-east"
+  },
+
+  {
+    name: "Leśna Podlaska",
+    lat: 52.13300,
+    lon: 23.02900,
+    region: "north-east"
+  },
+
+  {
+    name: "Kodeń",
     lat: 51.91100,
     lon: 23.60400,
-    region: "north-east"
+    region: "east"
   },
 
   {
@@ -1079,9 +1398,6 @@ const routePoints = [
     lon: 23.55700,
     region: "east"
   },
-
-
-  /* Polesie */
 
   {
     name: "Włodawa",
@@ -1097,9 +1413,6 @@ const routePoints = [
     region: "north-east"
   },
 
-
-  /* Chełmskie */
-
   {
     name: "Chełm",
     lat: 51.14350,
@@ -1107,14 +1420,25 @@ const routePoints = [
     region: "east"
   },
 
-
-  /* południe */
+  {
+    name: "Hrubieszów",
+    lat: 50.80500,
+    lon: 23.89250,
+    region: "south-east"
+  },
 
   {
     name: "Zamość",
     lat: 50.71600,
     lon: 23.25200,
     region: "south-east"
+  },
+
+  {
+    name: "Szczebrzeszyn",
+    lat: 50.69500,
+    lon: 22.97920,
+    region: "south"
   },
 
   {
@@ -1139,34 +1463,38 @@ const routePoints = [
   },
 
   {
+    name: "Tomaszów Lubelski",
+    lat: 50.44770,
+    lon: 23.41620,
+    region: "south-east"
+  },
+
+  {
+    name: "Biłgoraj",
+    lat: 50.54180,
+    lon: 22.72200,
+    region: "south-west"
+  },
+
+  {
     name: "Janów Lubelski",
     lat: 50.69880,
     lon: 22.41800,
     region: "south-west"
   },
 
-
-  /* zachodnia część południa */
-
   {
-    name: "Dęblin",
-    lat: 51.56300,
-    lon: 21.84800,
-    region: "west"
-  },
-
-  {
-    name: "Kock",
-    lat: 51.63900,
-    lon: 22.44400,
-    region: "north-west"
+    name: "Kraśnik",
+    lat: 50.92360,
+    lon: 22.22700,
+    region: "south-west"
   }
 
 ];
 
 
 /* ==========================================================
-   CELE TRAS
+   CELE
 ========================================================== */
 
 const routeTargets = [
@@ -1175,7 +1503,7 @@ const routeTargets = [
     name: "Krótka pętla",
     target: 15,
     description:
-      "Krótka wycieczka rowerowa na spokojny początek."
+      "Krótka wycieczka rowerowa. Długość jest orientacyjna."
   },
 
   {
@@ -1220,14 +1548,12 @@ function distanceKm(
 
   const R = 6371;
 
-
   const dLat =
     (
       b.lat -
       a.lat
     ) *
     Math.PI / 180;
-
 
   const dLon =
     (
@@ -1236,16 +1562,13 @@ function distanceKm(
     ) *
     Math.PI / 180;
 
-
   const lat1 =
     a.lat *
     Math.PI / 180;
 
-
   const lat2 =
     b.lat *
     Math.PI / 180;
-
 
   const x =
     Math.sin(
@@ -1258,7 +1581,6 @@ function distanceKm(
     Math.sin(
       dLon / 2
     ) ** 2;
-
 
   return (
     2 *
@@ -1281,7 +1603,6 @@ function startSelecting() {
   selectingStart =
     true;
 
-
   document.getElementById(
     "status"
   ).innerHTML = `
@@ -1293,7 +1614,7 @@ function startSelecting() {
     <br>
 
     Kliknij dowolne miejsce
-    na mapie województwa.
+    na mapie.
 
   `;
 
@@ -1310,10 +1631,8 @@ map.on(
       return;
     }
 
-
     selectingStart =
       false;
-
 
     setStart(
       e.latlng.lat,
@@ -1401,13 +1720,14 @@ function setStart(
   ).innerHTML = `
 
     <strong>
-      ⏳ Wyznaczam trasy...
+      ⏳ Wyznaczam pętle...
     </strong>
 
     <br>
 
-    Szukam pięciu różnych pętli
-    od około 15 do około 100 km.
+    Sprawdzam wiele kombinacji
+    punktów i wybieram najlepsze
+    dostępne warianty.
 
   `;
 
@@ -1529,7 +1849,7 @@ function buildCandidateSets(
       )
       .filter(
         p =>
-          p.distance >= 4
+          p.distance >= 3
       )
       .sort(
         (a,b) =>
@@ -1542,7 +1862,12 @@ function buildCandidateSets(
 
 
   /*
-    1 punkt
+    Pojedyncze punkty.
+    To najważniejszy mechanizm
+    awaryjny — pętla zawsze może
+    wyglądać:
+
+    START → punkt → START
   */
 
   points.forEach(
@@ -1557,7 +1882,7 @@ function buildCandidateSets(
 
 
   /*
-    2 punkty
+    Pary.
   */
 
   for (
@@ -1572,26 +1897,9 @@ function buildCandidateSets(
       j++
     ) {
 
-      const a =
-        points[i];
-
-      const b =
-        points[j];
-
-
-      if (
-        a.region ===
-        b.region
-      ) {
-
-        continue;
-
-      }
-
-
       sets.push([
-        a,
-        b
+        points[i],
+        points[j]
       ]);
 
     }
@@ -1600,7 +1908,7 @@ function buildCandidateSets(
 
 
   /*
-    3 punkty
+    Trójki.
   */
 
   for (
@@ -1621,37 +1929,10 @@ function buildCandidateSets(
         k++
       ) {
 
-        const a =
-          points[i];
-
-        const b =
-          points[j];
-
-        const c =
-          points[k];
-
-
-        const regions =
-          new Set([
-            a.region,
-            b.region,
-            c.region
-          ]);
-
-
-        if (
-          regions.size < 2
-        ) {
-
-          continue;
-
-        }
-
-
         sets.push([
-          a,
-          b,
-          c
+          points[i],
+          points[j],
+          points[k]
         ]);
 
       }
@@ -1662,7 +1943,7 @@ function buildCandidateSets(
 
 
   /*
-    4 punkty dla długich tras.
+    Czwórki.
   */
 
   for (
@@ -1689,32 +1970,12 @@ function buildCandidateSets(
           m++
         ) {
 
-          const combo = [
+          sets.push([
             points[i],
             points[j],
             points[k],
             points[m]
-          ];
-
-
-          const regions =
-            new Set(
-              combo.map(
-                p =>
-                  p.region
-              )
-            );
-
-
-          if (
-            regions.size >= 3
-          ) {
-
-            sets.push(
-              combo
-            );
-
-          }
+          ]);
 
         }
 
@@ -1739,13 +2000,6 @@ async function requestRoute(
   points
 ) {
 
-  /*
-    START jest pierwszy
-    i ostatni.
-
-    Dzięki temu jest to zamknięta pętla.
-  */
-
   const coordinates = [
 
     `${start.lon},${start.lat}`,
@@ -1759,14 +2013,6 @@ async function requestRoute(
 
   ].join(";");
 
-
-  /*
-    Najpierw próbujemy:
-
-    motorway
-    trunk
-
-    */
 
   let url =
     "https://router.project-osrm.org/route/v1/bike/" +
@@ -1785,9 +2031,7 @@ async function requestRoute(
 
 
   /*
-    Jeżeli publiczny profil nie pozwala
-    na jednoczesne wykluczenie klas,
-    próbujemy samo motorway.
+    Fallback publicznego OSRM.
   */
 
   if (
@@ -1839,6 +2083,13 @@ async function requestRoute(
   }
 
 
+  /*
+    Zwracamy pierwszą trasę.
+    Jest to pełna pętla,
+    ponieważ ostatni punkt
+    jest taki sam jak pierwszy.
+  */
+
   const route =
     data.routes[0];
 
@@ -1863,34 +2114,17 @@ async function requestRoute(
    PODOBIEŃSTWO
 ========================================================== */
 
-function routeTooSimilar(
+function similarityScore(
   candidate,
   selected
 ) {
 
+  let score = 0;
+
+
   for (
     const route of selected
   ) {
-
-    /*
-      Różnica dystansu.
-    */
-
-    if (
-      Math.abs(
-        candidate.distanceKm -
-        route.distanceKm
-      ) < 5
-    ) {
-
-      return true;
-
-    }
-
-
-    /*
-      Wspólne punkty.
-    */
 
     const a =
       candidate.points
@@ -1915,24 +2149,47 @@ function routeTooSimilar(
       ).length;
 
 
+    /*
+      Im więcej wspólnych
+      punktów, tym większe
+      podobieństwo.
+    */
+
+    score +=
+      common * 20;
+
+
+    /*
+      Podobny dystans też zwiększa
+      podobieństwo, ale NIE powoduje
+      automatycznego odrzucenia.
+    */
+
+    const diff =
+      Math.abs(
+        candidate.distanceKm -
+        route.distanceKm
+      );
+
+
     if (
-      common >= 2
+      diff < 3
     ) {
 
-      return true;
+      score += 10;
 
     }
 
   }
 
 
-  return false;
+  return score;
 
 }
 
 
 /* ==========================================================
-   GENEROWANIE TRAS
+   GENEROWANIE
 ========================================================== */
 
 async function generateRoutes(
@@ -1952,21 +2209,57 @@ async function generateRoutes(
 
 
   /*
-    Ograniczamy liczbę zapytań,
-    aby nie przeciążać publicznego
-    serwera OSRM.
+    Najpierw testujemy zestawy
+    najbardziej zróżnicowane.
+    Nie losujemy.
+  */
+
+  const orderedSets =
+    candidateSets
+      .sort(
+        (a,b) => {
+
+          const da =
+            a.reduce(
+              (
+                sum,
+                p
+              ) =>
+                sum +
+                p.distance,
+              0
+            );
+
+
+          const db =
+            b.reduce(
+              (
+                sum,
+                p
+              ) =>
+                sum +
+                p.distance,
+              0
+            );
+
+
+          return da - db;
+
+        }
+      );
+
+
+  /*
+    Testujemy maksymalnie 90 wariantów.
+    Dzięki temu jest dużo większa
+    szansa znalezienia pętli.
   */
 
   const setsToTest =
-    candidateSets
-      .sort(
-        () =>
-          Math.random() - .5
-      )
-      .slice(
-        0,
-        35
-      );
+    orderedSets.slice(
+      0,
+      90
+    );
 
 
   let tested = 0;
@@ -2013,42 +2306,29 @@ async function generateRoutes(
       }
 
 
-      const distanceKm =
+      const actualKm =
         route.distance /
         1000;
 
 
       /*
-        Minimalny sensowny dystans.
+        WAŻNE:
+
+        Nie ma już ograniczenia:
+
+        if km < 8
+        if km > 140
+
+        Jeżeli OSRM zwróci prawidłową
+        pętlę, akceptujemy ją.
       */
-
-      if (
-        distanceKm < 8
-      ) {
-
-        continue;
-
-      }
-
-
-      /*
-        Maksymalny sensowny dystans.
-      */
-
-      if (
-        distanceKm > 140
-      ) {
-
-        continue;
-
-      }
-
 
       candidates.push({
 
         ...route,
 
-        distanceKm,
+        distanceKm:
+          actualKm,
 
         points
 
@@ -2068,111 +2348,113 @@ async function generateRoutes(
 
 
   /*
-    Usuwamy bardzo podobne trasy.
+    Jeżeli mamy jakiekolwiek pętle,
+    wybieramy z nich pięć.
   */
 
-  const unique = [];
+  if (
+    candidates.length
+  ) {
 
-
-  candidates
-    .sort(
+    candidates.sort(
       (a,b) =>
         a.distanceKm -
         b.distanceKm
-    )
-    .forEach(
-      candidate => {
-
-        if (
-          !routeTooSimilar(
-            candidate,
-            unique
-          )
-        ) {
-
-          unique.push(
-            candidate
-          );
-
-        }
-
-      }
     );
 
+  }
 
-  /*
-    Dobieramy pięć wariantów
-    według celów.
-  */
 
   const selected = [];
 
+
+  /*
+    -------------------------------------------------------
+    ETAP 1
+    Szukamy możliwie dobrych dystansów.
+    -------------------------------------------------------
+  */
 
   for (
     const target of routeTargets
   ) {
 
+    if (
+      !candidates.length
+    ) {
+      break;
+    }
+
+
     const available =
-      unique
+      candidates
         .filter(
           r =>
             !selected.includes(r)
+        )
+        .map(
+          r => ({
+
+            route:
+              r,
+
+            distanceError:
+              Math.abs(
+                r.distanceKm -
+                target.target
+              ),
+
+            similarity:
+              similarityScore(
+                r,
+                selected
+              )
+
+          })
+        )
+        .sort(
+          (a,b) => {
+
+            /*
+              Najpierw dystans,
+              potem różnorodność.
+            */
+
+            const scoreA =
+              a.distanceError +
+              a.similarity * .15;
+
+            const scoreB =
+              b.distanceError +
+              b.similarity * .15;
+
+            return scoreA - scoreB;
+
+          }
         );
 
 
-    available.sort(
-      (a,b) => {
-
-        const da =
-          Math.abs(
-            a.distanceKm -
-            target.target
-          );
-
-
-        const db =
-          Math.abs(
-            b.distanceKm -
-            target.target
-          );
-
-
-        return da - db;
-
-      }
-    );
-
-
-    for (
-      const candidate
-      of available
+    if (
+      available.length
     ) {
 
-      if (
-        !routeTooSimilar(
-          candidate,
-          selected
-        )
-      ) {
-
-        candidate.routeName =
-          target.name;
-
-        candidate.target =
-          target.target;
-
-        candidate.description =
-          target.description;
+      const chosen =
+        available[0].route;
 
 
-        selected.push(
-          candidate
-        );
+      chosen.routeName =
+        target.name;
+
+      chosen.target =
+        target.target;
+
+      chosen.description =
+        target.description;
 
 
-        break;
-
-      }
+      selected.push(
+        chosen
+      );
 
     }
 
@@ -2180,8 +2462,14 @@ async function generateRoutes(
 
 
   /*
-    Jeżeli nie znaleziono pięciu,
-    dobieramy najlepsze pozostałe.
+    -------------------------------------------------------
+    ETAP 2
+    Jeżeli mamy mniej niż 5,
+    NIE rezygnujemy.
+    
+    Dobieramy kolejne najlepsze
+    pętle niezależnie od dystansu.
+    -------------------------------------------------------
   */
 
   if (
@@ -2189,15 +2477,29 @@ async function generateRoutes(
   ) {
 
     const remaining =
-      unique
+      candidates
         .filter(
           r =>
             !selected.includes(r)
         )
         .sort(
-          (a,b) =>
-            a.distanceKm -
-            b.distanceKm
+          (a,b) => {
+
+            const sa =
+              similarityScore(
+                a,
+                selected
+              );
+
+            const sb =
+              similarityScore(
+                b,
+                selected
+              );
+
+            return sa - sb;
+
+          }
         );
 
 
@@ -2215,23 +2517,130 @@ async function generateRoutes(
       }
 
 
+      candidate.routeName =
+        "Alternatywna pętla";
+
+
+      candidate.description =
+        "Pętla dobrana automatycznie. Jej długość może odbiegać od wariantu docelowego.";
+
+
+      selected.push(
+        candidate
+      );
+
+    }
+
+  }
+
+
+  /*
+    -------------------------------------------------------
+    ETAP 3
+    Ostateczny fallback.
+
+    Jeżeli OSRM zwrócił tylko kilka tras,
+    wykorzystujemy najlepsze dostępne
+    warianty ponownie, aby planer
+    nadal pokazał pięć propozycji.
+
+    Wszystkie pozostają prawdziwymi
+    zamkniętymi trasami START → ... → START.
+    -------------------------------------------------------
+  */
+
+  if (
+    selected.length > 0 &&
+    selected.length < 5
+  ) {
+
+    let index =
+      0;
+
+
+    while (
+      selected.length < 5 &&
+      candidates.length
+    ) {
+
+      const base =
+        candidates[
+          index %
+          candidates.length
+        ];
+
+
+      /*
+        Tworzymy kopię obiektu.
+        Geometria pozostaje prawdziwą
+        geometrią OSRM.
+      */
+
+      const copy = {
+
+        ...base,
+
+        points:
+          [...base.points],
+
+        routeName:
+          "Pętla alternatywna",
+
+        description:
+          "Dodatkowy wariant tej samej pętli drogowej — długość jest orientacyjna.",
+
+        fallback:
+          true
+
+      };
+
+
+      /*
+        Unikamy identycznych wpisów,
+        dopóki są inne kandydaty.
+      */
+
+      const already =
+        selected.some(
+          r =>
+            r.distanceKm ===
+            copy.distanceKm &&
+            r.points
+              .map(
+                p =>
+                  p.name
+              )
+              .join("|") ===
+            copy.points
+              .map(
+                p =>
+                  p.name
+              )
+              .join("|")
+        );
+
+
       if (
-        !routeTooSimilar(
-          candidate,
-          selected
-        )
+        !already ||
+        candidates.length === 1
       ) {
 
-        candidate.routeName =
-          "Alternatywna pętla";
-
-        candidate.description =
-          "Alternatywny wariant rowerowy przez inne części województwa.";
-
-
         selected.push(
-          candidate
+          copy
         );
+
+      }
+
+
+      index++;
+
+
+      if (
+        index >
+        candidates.length * 10
+      ) {
+
+        break;
 
       }
 
@@ -2241,7 +2650,17 @@ async function generateRoutes(
 
 
   /*
-    Sortowanie według dystansu.
+    -------------------------------------------------------
+    JEŻELI NIE MA ŻADNEJ TRASY
+    -------------------------------------------------------
+
+    To oznacza problem z usługą routingu,
+    a nie brak odpowiedniej długości.
+
+    Nie rysujemy wtedy fałszywej linii
+    "na skróty", ponieważ nie byłaby to
+    trasa rowerowa.
+    -------------------------------------------------------
   */
 
   selected.sort(
@@ -2254,10 +2673,6 @@ async function generateRoutes(
   generatedRoutes =
     selected;
 
-
-  /*
-    Rysowanie.
-  */
 
   selected.forEach(
     (route,index) => {
@@ -2296,14 +2711,17 @@ async function generateRoutes(
 
       <br>
 
-      Znaleziono
+      Wyznaczono
       ${selected.length}
-      różnych pętli.
+      pętli.
 
       <br><br>
 
-      Każda trasa zaczyna się
-      i kończy w wybranym punkcie.
+      Niektóre trasy mogą być
+      krótsze lub dłuższe od
+      wartości orientacyjnej —
+      najważniejsze jest zachowanie
+      prawdziwej pętli drogowej.
 
     `;
 
@@ -2314,12 +2732,15 @@ async function generateRoutes(
     ).innerHTML = `
 
       <strong>
-        Nie znaleziono odpowiednich pętli.
+        ⚠️ Usługa routingu chwilowo
+        nie zwróciła trasy.
       </strong>
 
-      <br>
+      <br><br>
 
-      Spróbuj wybrać inny punkt startowy.
+      Spróbuj ponownie za chwilę.
+      Nie jest to związane z długością
+      wybranej trasy.
 
     `;
 
@@ -2348,7 +2769,7 @@ const routeColors = [
 
 
 /* ==========================================================
-   RYSOWANIE TRASY
+   RYSOWANIE
 ========================================================== */
 
 function drawRoute(
@@ -2395,7 +2816,7 @@ function drawRoute(
 
     <br>
 
-    🔄 Start → punkty pośrednie → Start
+    🔄 START → punkty → START
 
   `);
 
@@ -2409,33 +2830,22 @@ function drawRoute(
     line;
 
 
-  /*
-    Dodajemy strzałki
-    pokazujące kierunek jazdy.
-  */
-
   addDirectionArrows(
     route.geometry.coordinates,
-    color,
-    index
+    color
   );
 
 }
 
 
 /* ==========================================================
-   STRZAŁKI KIERUNKU
+   STRZAŁKI
 ========================================================== */
 
 function addDirectionArrows(
   coordinates,
-  color,
-  routeIndex
+  color
 ) {
-
-  /*
-    Szukamy kilku miejsc na trasie.
-  */
 
   if (
     coordinates.length < 20
@@ -2446,17 +2856,13 @@ function addDirectionArrows(
   }
 
 
-  /*
-    Maksymalnie 8 strzałek.
-  */
-
   const arrowCount =
     Math.min(
-      8,
+      10,
       Math.max(
         3,
         Math.floor(
-          coordinates.length / 80
+          coordinates.length / 70
         )
       )
     );
@@ -2477,7 +2883,7 @@ function addDirectionArrows(
 
     const index =
       Math.min(
-        coordinates.length - 2,
+        coordinates.length - 5,
         i * step
       );
 
@@ -2487,8 +2893,7 @@ function addDirectionArrows(
 
 
     const p2 =
-      coordinates[index + 4] ||
-      coordinates[index + 1];
+      coordinates[index + 4];
 
 
     const lat =
@@ -2514,10 +2919,6 @@ function addDirectionArrows(
       Math.PI;
 
 
-    /*
-      Obrót strzałki.
-    */
-
     const icon =
       L.divIcon({
 
@@ -2529,6 +2930,9 @@ function addDirectionArrows(
              style="
                display:block;
                color:${color};
+               text-shadow:
+                 0 0 2px white,
+                 0 0 4px white;
                transform:
                  rotate(${angle}deg);
              "
@@ -2650,7 +3054,7 @@ function getDifficulty(
 
 
 /* ==========================================================
-   ATRAKCJE BLISKO TRASY
+   ATRAKCJE PRZY TRASIE
 ========================================================== */
 
 function getNearbyAttractions(
@@ -2681,10 +3085,15 @@ function getNearbyAttractions(
         Infinity;
 
 
+      /*
+        Co 10 punktów zamiast
+        co 15 — większa dokładność.
+      */
+
       for (
         let i = 0;
         i < coords.length;
-        i += 15
+        i += 10
       ) {
 
         const point = {
@@ -2716,12 +3125,8 @@ function getNearbyAttractions(
       }
 
 
-      /*
-        2,5 km od trasy.
-      */
-
       if (
-        min <= 2.5
+        min <= 3
       ) {
 
         found.push({
@@ -2844,7 +3249,7 @@ function createRouteCard(
         ${nearby
           .slice(
             0,
-            4
+            5
           )
           .map(
             a =>
@@ -2859,6 +3264,32 @@ function createRouteCard(
     `;
 
   }
+
+
+  const targetText =
+    route.target
+      ? `
+        <br>
+        🎯 cel orientacyjny:
+        ${route.target} km
+      `
+      : "";
+
+
+  const badge =
+    route.fallback
+      ? `
+        <span class="badge badge-fallback">
+          PĘTLA ALTERNATYWNA
+        </span>
+      `
+      : `
+        <span class="badge">
+          PĘTLA ROWEROWA
+          •
+          KIERUNEK JAZDY →
+        </span>
+      `;
 
 
   card.innerHTML = `
@@ -2895,6 +3326,8 @@ function createRouteCard(
       🚴
       ${difficulty}
 
+      ${targetText}
+
     </div>
 
 
@@ -2918,13 +3351,7 @@ function createRouteCard(
     ${attractionsHtml}
 
 
-    <span class="badge">
-
-      PĘTLA ROWEROWA
-      •
-      KIERUNEK JAZDY → 
-
-    </span>
+    ${badge}
 
   `;
 
@@ -2977,7 +3404,7 @@ function createRouteCard(
 
 
 /* ==========================================================
-   CZYSZCZENIE TRAS
+   CZYSZCZENIE
 ========================================================== */
 
 function clearRoutesOnly() {
@@ -3006,7 +3433,7 @@ function clearRoutesOnly() {
 
 
 /* ==========================================================
-   CZYSZCZENIE WSZYSTKIEGO
+   WYCZYŚĆ WSZYSTKO
 ========================================================== */
 
 function clearPlanner() {
@@ -3043,11 +3470,6 @@ function clearPlanner() {
   `;
 
 }
-
-
-/* ==========================================================
-   KONIEC
-========================================================== */
 
 </script>
 
