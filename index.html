@@ -12,1831 +12,1154 @@
   />
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
-    html,
     body {
       margin: 0;
-      height: 100%;
-      font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
-      background: #eef2ed;
-      color: #17251c;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7f3;
+      color: #203126;
     }
 
-    body {
-      overflow: hidden;
-    }
-
-    #app {
+    .app {
+      display: grid;
+      grid-template-columns: 380px 1fr;
       height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
-    header {
-      height: 72px;
-      background: #123b2a;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 1000;
-      box-shadow: 0 3px 18px rgba(0,0,0,.2);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: #e5ad34;
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 20px;
-      line-height: 1.1;
-    }
-
-    .brand span {
-      display: block;
-      margin-top: 4px;
-      font-size: 12px;
-      opacity: .72;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .header-btn {
-      border: 1px solid rgba(255,255,255,.2);
-      background: rgba(255,255,255,.08);
-      color: white;
-      padding: 9px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .header-btn:hover {
-      background: rgba(255,255,255,.16);
-    }
-
-    /* =====================================================
-       LAYOUT
-    ===================================================== */
-
-    .content {
-      flex: 1;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 390px 1fr;
-    }
+    /* =========================
+       PANEL BOCZNY
+    ========================= */
 
     .sidebar {
-      background: #f8faf7;
-      border-right: 1px solid #dbe4dc;
+      background: #ffffff;
+      padding: 22px;
       overflow-y: auto;
-      z-index: 900;
+      box-shadow: 2px 0 12px rgba(0,0,0,.12);
+      z-index: 1000;
     }
 
-    .sidebar-inner {
-      padding: 17px;
-    }
-
-    .intro {
-      margin-bottom: 16px;
-    }
-
-    .intro h2 {
-      margin: 0 0 5px;
-      font-size: 21px;
-    }
-
-    .intro p {
-      margin: 0;
-      color: #68746b;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    /* =====================================================
-       PLANNER
-    ===================================================== */
-
-    .planner {
-      background: white;
-      border: 1px solid #dbe4dc;
-      border-radius: 16px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 5px 18px rgba(23,50,35,.06);
-    }
-
-    .planner-top {
-      display: flex;
-      gap: 12px;
-      justify-content: space-between;
-    }
-
-    .planner-title {
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .planner-description {
-      margin-top: 4px;
-      color: #68746b;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .planner-icon {
-      flex: 0 0 auto;
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      background: #eaf3ed;
-      border-radius: 11px;
-      font-size: 18px;
-    }
-
-    .planner-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 13px;
-    }
-
-    .primary,
-    .secondary {
-      border-radius: 10px;
-      padding: 10px;
-      cursor: pointer;
+    .logo {
+      font-size: 27px;
       font-weight: 800;
+      color: #176b3a;
+      margin-bottom: 5px;
     }
 
-    .primary {
-      border: none;
-      background: #16623f;
-      color: white;
-    }
-
-    .primary:hover {
-      background: #104d31;
-    }
-
-    .secondary {
-      background: white;
-      border: 1px solid #cbd8ce;
-      color: #294534;
-    }
-
-    .secondary:hover {
-      background: #f2f6f3;
-    }
-
-    .planner-status {
-      display: none;
-      margin-top: 11px;
-      padding: 10px;
-      border-radius: 10px;
-      background: #edf7ef;
-      color: #24563b;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .planner-status.active {
-      display: block;
-    }
-
-    /* =====================================================
-       SEARCH
-    ===================================================== */
-
-    .search {
-      position: relative;
-      margin-bottom: 11px;
-    }
-
-    .search input {
-      width: 100%;
-      border: 1px solid #d5ded7;
-      border-radius: 11px;
-      padding: 11px 12px 11px 39px;
-      outline: none;
-      background: white;
+    .subtitle {
+      color: #6d7b72;
       font-size: 14px;
+      margin-bottom: 24px;
     }
 
-    .search input:focus {
-      border-color: #4b8d69;
-      box-shadow: 0 0 0 3px rgba(45,125,82,.12);
+    .section {
+      margin-bottom: 22px;
     }
 
-    .search-icon {
-      position: absolute;
-      left: 13px;
-      top: 10px;
-      color: #78837b;
+    .section h2 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: #234b34;
     }
 
-    /* =====================================================
-       FILTERS
-    ===================================================== */
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 15px;
+    .section p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #59655d;
     }
 
-    .filter {
-      border: 1px solid #d3ddd5;
-      background: white;
-      color: #536057;
-      border-radius: 20px;
-      padding: 6px 10px;
-      font-size: 11px;
+    .planner-box {
+      background: #eef7f0;
+      border: 1px solid #cce5d2;
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    .planner-box h2 {
+      margin-top: 0;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
+      margin-top: 8px;
+      transition: .2s;
     }
 
-    .filter.active {
-      background: #173f2d;
+    button:hover {
+      transform: translateY(-1px);
+      opacity: .94;
+    }
+
+    .btn-primary {
+      background: #176b3a;
       color: white;
-      border-color: #173f2d;
     }
 
-    /* =====================================================
-       STATS
-    ===================================================== */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 7px;
-      margin-bottom: 16px;
+    .btn-secondary {
+      background: #dfe9e2;
+      color: #244632;
     }
 
-    .stat {
+    .btn-danger {
+      background: #f1dddd;
+      color: #8a3030;
+    }
+
+    .status {
       background: white;
-      border: 1px solid #dce4dc;
-      border-radius: 12px;
-      padding: 9px;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      border: 1px solid #dce8df;
     }
-
-    .stat strong {
-      display: block;
-      font-size: 17px;
-    }
-
-    .stat span {
-      color: #788279;
-      font-size: 10px;
-    }
-
-    /* =====================================================
-       SEKCJE
-    ===================================================== */
-
-    .section-title {
-      margin: 10px 0 9px;
-      font-size: 15px;
-      font-weight: 900;
-    }
-
-    /* =====================================================
-       ROUTE CARDS
-    ===================================================== */
 
     .route-card {
       background: white;
-      border: 1px solid #dce4dc;
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 9px;
+      border: 1px solid #dce5df;
+      border-radius: 13px;
+      padding: 13px;
+      margin-top: 10px;
       cursor: pointer;
-      transition: .15s;
+      transition: .2s;
     }
 
     .route-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 5px 15px rgba(20,55,35,.08);
+      border-color: #176b3a;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
     }
 
-    .route-head {
+    .route-title {
       display: flex;
+      justify-content: space-between;
       gap: 10px;
+      font-weight: 800;
+      color: #214d32;
     }
 
-    .route-color {
-      width: 8px;
-      border-radius: 7px;
-      flex: 0 0 auto;
-    }
-
-    .route-name {
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .route-subtitle {
-      color: #69746c;
-      font-size: 11px;
-      line-height: 1.4;
-      margin-top: 3px;
+    .route-distance {
+      color: #176b3a;
+      font-weight: 800;
+      white-space: nowrap;
     }
 
     .route-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 9px;
+      font-size: 12px;
+      color: #68756d;
+      margin-top: 5px;
     }
 
-    .badge {
-      background: #eff4f0;
-      color: #455349;
-      border-radius: 7px;
-      padding: 5px 7px;
-      font-size: 10px;
-    }
-
-    /* =====================================================
-       GENERATED ROUTES
-    ===================================================== */
-
-    #generatedRoutes {
-      display: none;
-    }
-
-    #generatedRoutes.active {
-      display: block;
-    }
-
-    .generated-card {
-      background: white;
-      border: 1px solid #d9e3db;
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-
-    .generated-card:hover {
-      border-color: #8eb19b;
-    }
-
-    .generated-card.active {
-      border: 2px solid #16623f;
-      padding: 11px;
-      box-shadow: 0 4px 15px rgba(22,98,63,.1);
-    }
-
-    .generated-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .generated-number {
-      width: 29px;
-      height: 29px;
-      border-radius: 50%;
-      background: #eaf3ed;
-      color: #17603f;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      flex: 0 0 auto;
-    }
-
-    .generated-title {
-      flex: 1;
-      font-weight: 900;
+    .route-description {
       font-size: 13px;
-    }
-
-    .generated-distance {
-      font-size: 15px;
-      font-weight: 900;
-    }
-
-    .generated-description {
-      color: #69746c;
-      font-size: 11px;
       line-height: 1.4;
+      color: #4e5b53;
       margin-top: 7px;
     }
 
-    .generated-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
+    .badge {
+      display: inline-block;
+      background: #e4f2e7;
+      color: #176b3a;
+      padding: 4px 7px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
       margin-top: 8px;
     }
 
     .attractions {
       margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #edf0ed;
-      font-size: 10px;
-      color: #536057;
-      line-height: 1.5;
-    }
-
-    .route-loading {
-      text-align: center;
-      padding: 16px 5px;
-      color: #667269;
+      padding-left: 17px;
       font-size: 12px;
+      color: #59665e;
     }
 
-    .spinner {
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      border: 2px solid #cbd8ce;
-      border-top-color: #16623f;
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      vertical-align: -3px;
-      margin-right: 6px;
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    .stat {
+      background: #f3f6f3;
+      border-radius: 10px;
+      padding: 9px;
+      text-align: center;
     }
 
-    /* =====================================================
-       MAP
-    ===================================================== */
+    .stat strong {
+      display: block;
+      font-size: 17px;
+      color: #176b3a;
+    }
+
+    .stat span {
+      font-size: 10px;
+      color: #68756d;
+    }
+
+    /* =========================
+       MAPA
+    ========================= */
 
     #map {
       width: 100%;
-      height: 100%;
-      min-width: 0;
+      height: 100vh;
     }
 
-    .start-marker {
-      width: 36px;
-      height: 36px;
-      background: #16623f;
-      border: 4px solid white;
-      border-radius: 50%;
-      box-shadow: 0 2px 9px rgba(0,0,0,.3);
-      display: grid;
-      place-items: center;
-      color: white;
-      font-size: 16px;
-    }
-
-    .planner-map-help {
-      background: white;
+    .map-info {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 999;
+      background: rgba(255,255,255,.96);
+      padding: 10px 13px;
       border-radius: 10px;
-      padding: 8px 11px;
-      box-shadow: 0 2px 9px rgba(0,0,0,.18);
-      font-size: 11px;
-      font-weight: 800;
-      color: #173b29;
+      box-shadow: 0 2px 10px rgba(0,0,0,.15);
+      font-size: 12px;
+      color: #425047;
     }
 
-    .route-popup {
-      min-width: 190px;
+    .legend {
+      margin-top: 10px;
+      font-size: 12px;
     }
 
-    .route-popup strong {
-      font-size: 14px;
+    .legend-row {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
     }
 
-    .route-popup small {
-      color: #68746b;
-      line-height: 1.4;
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 7px;
     }
 
-    /* =====================================================
-       MOBILE
-    ===================================================== */
+    .leaflet-popup-content {
+      line-height: 1.45;
+    }
 
-    @media (max-width: 850px) {
+    @media(max-width: 850px) {
 
-      body {
-        overflow: auto;
-      }
-
-      #app {
-        height: auto;
-        min-height: 100vh;
-      }
-
-      header {
-        min-height: 68px;
-        height: auto;
-        padding: 10px 13px;
-      }
-
-      .brand h1 {
-        font-size: 17px;
-      }
-
-      .brand span {
-        font-size: 10px;
-      }
-
-      .header-actions {
-        display: none;
-      }
-
-      .content {
+      .app {
         display: flex;
         flex-direction: column;
+        height: auto;
       }
 
       #map {
-        order: 1;
         height: 55vh;
-        min-height: 390px;
+        order: 1;
       }
 
       .sidebar {
         order: 2;
-        border-right: none;
-        border-top: 1px solid #dce4dc;
-        overflow: visible;
+        box-shadow: none;
       }
 
-      .sidebar-inner {
-        padding: 14px;
+      .map-info {
+        top: 10px;
+        right: 10px;
       }
     }
-
   </style>
 </head>
 
 <body>
 
-<div id="app">
+<div class="app">
 
-  <header>
+  <!-- =========================
+       PANEL
+  ========================= -->
 
-    <div class="brand">
+  <aside class="sidebar">
 
-      <div class="brand-icon">
-        🚲
-      </div>
+    <div class="logo">
+      🚴 Rowerem po Łęczyńskiem
+    </div>
 
-      <div>
-        <h1>Rowerem po Łęczyńskiem</h1>
-        <span>Powiat łęczyński i najbliższe okolice</span>
+    <div class="subtitle">
+      Turystyczna mapa rowerowa Powiatu Łęczyńskiego i okolic
+    </div>
+
+    <div class="section planner-box">
+
+      <h2>🗺️ Zaplanuj swoją trasę</h2>
+
+      <p>
+        Wybierz punkt startowy na mapie, a planer przygotuje
+        kilka różnych propozycji pętli rowerowych.
+      </p>
+
+      <button
+        class="btn-primary"
+        onclick="startSelecting()"
+      >
+        📍 Wybierz punkt startowy
+      </button>
+
+      <button
+        class="btn-secondary"
+        onclick="useMyLocation()"
+      >
+        📱 Użyj mojej lokalizacji
+      </button>
+
+      <button
+        class="btn-danger"
+        onclick="clearPlanner()"
+      >
+        ✕ Wyczyść trasy
+      </button>
+
+      <div id="status" class="status">
+        Kliknij „Wybierz punkt startowy”, a następnie wskaż miejsce na mapie.
       </div>
 
     </div>
 
-    <div class="header-actions">
+    <div id="routes"></div>
 
-      <button
-        class="header-btn"
-        id="locateBtn"
-      >
-        📍 Moja lokalizacja
-      </button>
+    <div class="section">
 
-      <button
-        class="header-btn"
-        id="resetMapBtn"
-      >
-        ↺ Powiat łęczyński
-      </button>
+      <h2>📊 Informacje</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <strong id="routeCount">0</strong>
+          <span>tras</span>
+        </div>
+
+        <div class="stat">
+          <strong id="attractionCount">0</strong>
+          <span>atrakcji</span>
+        </div>
+
+        <div class="stat">
+          <strong>∞</strong>
+          <span>możliwości</span>
+        </div>
+      </div>
 
     </div>
 
-  </header>
+    <div class="section">
 
+      <h2>📍 Atrakcje</h2>
 
-  <div class="content">
+      <p>
+        Na mapie znajdziesz ciekawe miejsca, jeziora,
+        miejscowości i punkty związane z turystyką rowerową.
+      </p>
 
-    <aside class="sidebar">
+      <div class="legend">
 
-      <div class="sidebar-inner">
-
-        <div class="intro">
-
-          <h2>Odkrywaj na rowerze</h2>
-
-          <p>
-            Wybierz gotową trasę albo wskaż punkt startowy
-            i wygeneruj pięć pętli po rzeczywistej sieci dróg.
-          </p>
-
+        <div class="legend-row">
+          <span
+            class="legend-dot"
+            style="background:#176b3a"
+          ></span>
+          Atrakcja turystyczna
         </div>
 
-
-        <!-- =================================================
-             PLANNER
-        ================================================== -->
-
-        <section class="planner">
-
-          <div class="planner-top">
-
-            <div>
-
-              <div class="planner-title">
-                🧭 Zaplanuj własną trasę
-              </div>
-
-              <div class="planner-description">
-                Wskaż punkt na mapie. Aplikacja spróbuje
-                przygotować pięć różnych pętli rowerowych.
-              </div>
-
-            </div>
-
-            <div class="planner-icon">
-              🚴
-            </div>
-
-          </div>
-
-
-          <div class="planner-actions">
-
-            <button
-              class="primary"
-              id="startPlannerBtn"
-            >
-              Wybierz punkt startowy
-            </button>
-
-            <button
-              class="secondary"
-              id="clearPlannerBtn"
-            >
-              Wyczyść
-            </button>
-
-          </div>
-
-
-          <div
-            class="planner-status"
-            id="plannerStatus"
-          ></div>
-
-        </section>
-
-
-        <!-- =================================================
-             GENERATED ROUTES
-        ================================================== -->
-
-        <section id="generatedRoutes">
-
-          <div class="section-title">
-            Proponowane trasy
-          </div>
-
-          <div id="generatedList"></div>
-
-        </section>
-
-
-        <!-- =================================================
-             SEARCH
-        ================================================== -->
-
-        <div class="search">
-
-          <span class="search-icon">
-            🔎
-          </span>
-
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Szukaj trasy lub miejsca..."
-          >
-
+        <div class="legend-row">
+          <span
+            class="legend-dot"
+            style="background:#d62828"
+          ></span>
+          Punkt startowy
         </div>
-
-
-        <!-- =================================================
-             FILTERS
-        ================================================== -->
-
-        <div class="filters">
-
-          <button
-            class="filter active"
-            data-filter="all"
-          >
-            Wszystko
-          </button>
-
-          <button
-            class="filter"
-            data-filter="routes"
-          >
-            Trasy
-          </button>
-
-          <button
-            class="filter"
-            data-filter="easy"
-          >
-            Łatwe
-          </button>
-
-          <button
-            class="filter"
-            data-filter="medium"
-          >
-            Średnie
-          </button>
-
-          <button
-            class="filter"
-            data-filter="nature"
-          >
-            Przyroda
-          </button>
-
-          <button
-            class="filter"
-            data-filter="history"
-          >
-            Zabytki
-          </button>
-
-        </div>
-
-
-        <!-- =================================================
-             STATS
-        ================================================== -->
-
-        <div class="stats">
-
-          <div class="stat">
-            <strong>4</strong>
-            <span>oficjalne trasy lokalne</span>
-          </div>
-
-          <div class="stat">
-            <strong>30–42</strong>
-            <span>km</span>
-          </div>
-
-          <div class="stat">
-            <strong>5</strong>
-            <span>propozycji własnych</span>
-          </div>
-
-        </div>
-
-
-        <!-- =================================================
-             OFFICIAL ROUTES
-        ================================================== -->
-
-        <div class="section-title">
-          Oficjalne trasy powiatu
-        </div>
-
-        <div id="routesList"></div>
-
-
-        <!-- =================================================
-             PLACES
-        ================================================== -->
-
-        <div class="section-title">
-          Ciekawe miejsca
-        </div>
-
-        <div id="placesList"></div>
 
       </div>
 
-    </aside>
+    </div>
 
+  </aside>
 
-    <main id="map"></main>
+  <!-- =========================
+       MAPA
+  ========================= -->
 
-  </div>
+  <main style="position:relative">
+
+    <div id="map"></div>
+
+    <div class="map-info">
+      🚴 Kliknij „Wybierz punkt startowy”
+    </div>
+
+  </main>
 
 </div>
 
 
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-  /* =========================================================
-     KONFIGURACJA
-  ========================================================= */
-
-  const OSRM_URL =
-    "https://router.project-osrm.org/route/v1/bike";
-
-
-  /*
-    Cele używane do budowania propozycji.
-    Są to publiczne miejsca/obszary związane z regionem.
-  */
-
-  const plannerPoints = [
-
-    {
-      name: "Łęczna",
-      coords: [51.3015, 22.8810]
-    },
-
-    {
-      name: "Zawieprzyce",
-      coords: [51.3069, 22.8466]
-    },
-
-    {
-      name: "Milejów",
-      coords: [51.2306, 22.9228]
-    },
-
-    {
-      name: "Klarów",
-      coords: [51.2367, 22.8914]
-    },
-
-    {
-      name: "Ciechanki",
-      coords: [51.2853, 22.9395]
-    },
-
-    {
-      name: "Łańcuchów",
-      coords: [51.2747, 22.9135]
-    },
-
-    {
-      name: "Puchaczów",
-      coords: [51.3072, 23.0062]
-    },
-
-    {
-      name: "Dratów",
-      coords: [51.2925, 23.0005]
-    },
-
-    {
-      name: "Nadrybie",
-      coords: [51.3432, 23.0132]
-    },
-
-    {
-      name: "Cyców",
-      coords: [51.2980, 23.0260]
-    },
-
-    {
-      name: "Jezioro Krzczeń",
-      coords: [51.3018, 22.9742]
-    },
-
-    {
-      name: "Jezioro Piaseczno",
-      coords: [51.3778, 23.0042]
-    },
-
-    {
-      name: "Wólka Bielecka",
-      coords: [51.2630, 22.8682]
-    },
-
-    {
-      name: "Świerszczów",
-      coords: [51.2741, 23.0762]
-    }
-
-  ];
-
-
-  /* =========================================================
+  /* ==========================================================
      MAPA
-  ========================================================= */
+  ========================================================== */
 
-  const map =
-    L.map("map", {
-      zoomControl: true
-    });
-
+  const map = L.map("map").setView(
+    [51.30, 23.00],
+    10
+  );
 
   L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
       maxZoom: 19,
-
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+      attribution: "&copy; OpenStreetMap contributors"
     }
   ).addTo(map);
 
 
-  map.fitBounds([
-    [51.18, 22.78],
-    [51.48, 23.20]
-  ]);
+  /* ==========================================================
+     WARSTWY
+  ========================================================== */
 
+  const attractionLayer = L.layerGroup().addTo(map);
+  const routeLayer = L.layerGroup().addTo(map);
 
-  /* =========================================================
-     KOLORY
-  ========================================================= */
+  let startMarker = null;
+  let selectingStart = false;
 
-  const routeColors = {
 
-    blue: "#2875d8",
-
-    yellow: "#d5a31b",
-
-    green: "#2d8b58",
-
-    black: "#343a36"
-
-  };
-
-
-  /* =========================================================
-     OFICJALNE TRASY
-  ========================================================= */
-
-  const officialRoutes = [
-
-    {
-      id: "blue",
-
-      title:
-        "Niebieska trasa",
-
-      subtitle:
-        "Kijany – Zawieprzyce – Dratów – Puchaczów",
-
-      distance:
-        42,
-
-      time:
-        "ok. 3 h",
-
-      difficulty:
-        "Trudna",
-
-      color:
-        routeColors.blue,
-
-      description:
-        "Najdłuższa z czterech lokalnych tras. Przebiega przez Kijany, Zawieprzyce, Dratów i Puchaczów.",
-
-      points: [
-
-        [51.3412,22.8115],
-
-        [51.3069,22.8466],
-
-        [51.3157,22.8892],
-
-        [51.3226,22.9386],
-
-        [51.3018,22.9742],
-
-        [51.2925,23.0005],
-
-        [51.3072,23.0062]
-
-      ]
-
-    },
-
-
-    {
-      id: "yellow",
-
-      title:
-        "Żółta trasa",
-
-      subtitle:
-        "Nadrybie – Ciechanki – Łańcuchów – Wólka Łańcuchowska",
-
-      distance:
-        30,
-
-      time:
-        "ok. 2 h",
-
-      difficulty:
-        "Łatwa",
-
-      color:
-        routeColors.yellow,
-
-      description:
-        "Spokojniejsza trasa przez okolice Nadrybia, Ciechanek i Łańcuchowa.",
-
-      points: [
-
-        [51.3432,23.0132],
-
-        [51.3291,23.0155],
-
-        [51.2981,23.0082],
-
-        [51.2853,22.9395],
-
-        [51.2747,22.9135],
-
-        [51.2995,22.9425]
-
-      ]
-
-    },
-
-
-    {
-      id: "green",
-
-      title:
-        "Zielona trasa",
-
-      subtitle:
-        "Łęczna – Milejów – Klarów – Wólka Bielecka – Ciechanki – Łęczna",
-
-      distance:
-        37,
-
-      time:
-        "ok. 2,5 h",
-
-      difficulty:
-        "Średnia",
-
-      color:
-        routeColors.green,
-
-      description:
-        "Pętla łącząca Łęczną, Milejów, Klarów, Wólkę Bielecką i Ciechanki.",
-
-      points: [
-
-        [51.3015,22.8810],
-
-        [51.2306,22.9228],
-
-        [51.2367,22.8914],
-
-        [51.2630,22.8682],
-
-        [51.2853,22.9395],
-
-        [51.3015,22.8810]
-
-      ]
-
-    },
-
-
-    {
-      id: "black",
-
-      title:
-        "Czarna trasa",
-
-      subtitle:
-        "Nadrybie – Cyców – Świerszczów – Nadrybie",
-
-      distance:
-        30,
-
-      time:
-        "ok. 2 h",
-
-      difficulty:
-        "Średnia",
-
-      color:
-        routeColors.black,
-
-      description:
-        "Pętla przez Nadrybie, Cyców i okolice Świerszczowa.",
-
-      points: [
-
-        [51.3432,23.0132],
-
-        [51.3188,23.0272],
-
-        [51.2980,23.0260],
-
-        [51.2741,23.0762],
-
-        [51.3005,23.0610],
-
-        [51.3432,23.0132]
-
-      ]
-
-    }
-
-  ];
-
-
-  /* =========================================================
+  /* ==========================================================
      ATRAKCJE
-  ========================================================= */
+  ========================================================== */
 
-  const places = [
+  const attractions = [
 
     {
       name: "Łęczna – Stare Miasto",
-      type: "history",
-      coords: [51.3015,22.8810],
-      description:
-        "Historyczne centrum Łęcznej."
+      lat: 51.3018,
+      lon: 22.8815,
+      description: "Historyczne centrum Łęcznej."
     },
 
     {
       name: "Zawieprzyce – ruiny zamku",
-      type: "history",
-      coords: [51.3069,22.8466],
-      description:
-        "Ruiny zespołu pałacowo-parkowego."
+      lat: 51.3900,
+      lon: 22.6420,
+      description: "Ruiny zespołu pałacowo-parkowego."
     },
 
     {
       name: "Puchaczów – kościół",
-      type: "history",
-      coords: [51.3072,23.0062],
-      description:
-        "Zabytkowy kościół w Puchaczowie."
+      lat: 51.3105,
+      lon: 23.0005,
+      description: "Kościół w centrum Puchaczowa."
     },
 
     {
       name: "Dratów – cerkiew",
-      type: "history",
-      coords: [51.2925,23.0005],
-      description:
-        "Charakterystyczna cerkiew w Dratowie."
+      lat: 51.3505,
+      lon: 23.0750,
+      description: "Cerkiew prawosławna w Dratowie."
     },
 
     {
       name: "Jezioro Krzczeń",
-      type: "nature",
-      coords: [51.3018,22.9742],
-      description:
-        "Jezioro w rejonie Dratowa."
+      lat: 51.4200,
+      lon: 23.0700,
+      description: "Popularne miejsce wypoczynku nad wodą."
     },
 
     {
       name: "Jezioro Piaseczno",
-      type: "nature",
-      coords: [51.3778,23.0042],
-      description:
-        "Jedno z jezior Pojezierza Łęczyńsko-Włodawskiego."
+      lat: 51.4250,
+      lon: 23.0200,
+      description: "Jedno z najbardziej znanych jezior Pojezierza Łęczyńsko-Włodawskiego."
     },
 
     {
       name: "Jezioro Rogóźno",
-      type: "nature",
-      coords: [51.4035,22.9842],
-      description:
-        "Jezioro w krajobrazie Pojezierza."
+      lat: 51.3900,
+      lon: 23.0200,
+      description: "Jezioro rekreacyjne w okolicy Łęcznej."
     },
 
     {
       name: "Poleski Park Narodowy",
-      type: "nature",
-      coords: [51.4267,23.2040],
-      description:
-        "Cenny przyrodniczo obszar Polesia."
+      lat: 51.4300,
+      lon: 23.1900,
+      description: "Obszar cenny przyrodniczo."
     },
 
     {
       name: "Ścieżka rowerowa „Mietiułka”",
-      type: "nature",
-      coords: [51.4445,23.1904],
-      description:
-        "Ścieżka rowerowa w rejonie Poleskiego Parku Narodowego."
+      lat: 51.4500,
+      lon: 23.1800,
+      description: "Trasa prowadząca przez tereny Polesia."
     },
 
     {
       name: "Milejów",
-      type: "history",
-      coords: [51.2306,22.9228],
-      description:
-        "Miejscowość na południe od Łęcznej."
+      lat: 51.2250,
+      lon: 22.9250,
+      description: "Miejscowość położona na południe od Łęcznej."
     },
 
     {
       name: "Klarów",
-      type: "nature",
-      coords: [51.2367,22.8914],
-      description:
-        "Spokojna okolica na trasie w kierunku Milejowa."
+      lat: 51.2350,
+      lon: 22.9800,
+      description: "Wieś w okolicach Milejowa."
     },
 
     {
       name: "Cyców – Izba Tradycji",
-      type: "history",
-      coords: [51.2980,23.0260],
-      description:
-        "Miejsce prezentujące lokalną historię."
+      lat: 51.2970,
+      lon: 23.1400,
+      description: "Miejsce związane z lokalną historią."
     },
 
     {
       name: "Łańcuchów – dwór",
-      type: "history",
-      coords: [51.2747,22.9135],
-      description:
-        "Zespół dworski w Łańcuchowie."
+      lat: 51.2500,
+      lon: 22.8500,
+      description: "Zespół dworski w Łańcuchowie."
+    },
+
+    {
+      name: "Świerszczów",
+      lat: 51.3500,
+      lon: 23.1600,
+      description: "Miejscowość w rejonie Pojezierza."
     }
 
   ];
 
 
-  /* =========================================================
-     WARSTWY
-  ========================================================= */
+  /* ==========================================================
+     DODAWANIE ATRAKCJI
+  ========================================================== */
 
-  const officialLayers = {};
+  attractions.forEach(place => {
 
-  const placeLayers = {};
-
-  let generatedLayers = [];
-
-  let startMarker = null;
-
-  let plannerMode = false;
-
-
-  /* =========================================================
-     IKONA STARTU
-  ========================================================= */
-
-  const startIcon =
-    L.divIcon({
-
-      className: "",
-
-      html:
-        '<div class="start-marker">🚩</div>',
-
-      iconSize:
-        [36,36],
-
-      iconAnchor:
-        [18,18]
-
-    });
-
-
-  /* =========================================================
-     ATRAKCJE NA MAPIE
-  ========================================================= */
-
-  places.forEach(place => {
-
-    const marker =
-      L.circleMarker(
-        place.coords,
-        {
-          radius: 7,
-          weight: 2,
-          color: "#fff",
-          fillColor:
-            place.type === "nature"
-              ? "#3b8b5a"
-              : "#a76d35",
-          fillOpacity: 1
-        }
-      );
-
+    const marker = L.circleMarker(
+      [place.lat, place.lon],
+      {
+        radius: 7,
+        color: "#176b3a",
+        weight: 2,
+        fillColor: "#4fa66b",
+        fillOpacity: .9
+      }
+    );
 
     marker.bindPopup(`
-
-      <div class="route-popup">
-
-        <strong>
-          ${place.name}
-        </strong>
-
-        <br>
-
-        <small>
-          ${place.description}
-        </small>
-
-      </div>
-
+      <strong>${place.name}</strong>
+      <br>
+      ${place.description}
     `);
 
-
-    marker.addTo(map);
-
-    placeLayers[place.name] = marker;
+    marker.addTo(attractionLayer);
 
   });
 
-
-  /* =========================================================
-     OFICJALNE TRASY NA MAPIE
-  ========================================================= */
-
-  officialRoutes.forEach(route => {
-
-    const layer =
-      L.polyline(
-        route.points,
-        {
-          color:
-            route.color,
-
-          weight:
-            5,
-
-          opacity:
-            .72,
-
-          lineCap:
-            "round",
-
-          lineJoin:
-            "round"
-        }
-      );
-
-
-    layer.bindPopup(`
-
-      <div class="route-popup">
-
-        <strong>
-          ${route.title}
-        </strong>
-
-        <br>
-
-        <b>
-          ${route.distance} km
-        </b>
-        ·
-        ${route.time}
-
-        <br>
-
-        <small>
-          ${route.description}
-        </small>
-
-      </div>
-
-    `);
-
-
-    layer.addTo(map);
-
-    officialLayers[route.id] = layer;
-
-  });
-
-
-  /* =========================================================
-     LISTA OFICJALNYCH TRAS
-  ========================================================= */
-
-  const routesList =
-    document.getElementById(
-      "routesList"
-    );
-
-
-  function renderOfficialRoutes(
-    list = officialRoutes
-  ) {
-
-    routesList.innerHTML = "";
-
-
-    list.forEach(route => {
-
-      const card =
-        document.createElement("div");
-
-
-      card.className =
-        "route-card";
-
-
-      card.innerHTML = `
-
-        <div class="route-head">
-
-          <div
-            class="route-color"
-            style="
-              background:${route.color}
-            "
-          ></div>
-
-          <div>
-
-            <div class="route-name">
-              ${route.title}
-            </div>
-
-            <div class="route-subtitle">
-              ${route.subtitle}
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="route-meta">
-
-          <span class="badge">
-            🚲 ${route.distance} km
-          </span>
-
-          <span class="badge">
-            ⏱ ${route.time}
-          </span>
-
-          <span class="badge">
-            ${route.difficulty}
-          </span>
-
-        </div>
-
-      `;
-
-
-      card.addEventListener(
-        "click",
-        () => {
-
-          const layer =
-            officialLayers[route.id];
-
-
-          map.fitBounds(
-            layer.getBounds(),
-            {
-              padding:
-                [35,35]
-            }
-          );
-
-
-          layer.openPopup();
-
-        }
-      );
-
-
-      routesList.appendChild(card);
-
-    });
-
-  }
-
-
-  renderOfficialRoutes();
-
-
-  /* =========================================================
-     LISTA ATRAKCJI
-  ========================================================= */
-
-  const placesList =
-    document.getElementById(
-      "placesList"
-    );
-
-
-  function renderPlaces(
-    list = places
-  ) {
-
-    placesList.innerHTML = "";
-
-
-    list.forEach(place => {
-
-      const card =
-        document.createElement("div");
-
-
-      card.className =
-        "route-card";
-
-
-      card.innerHTML = `
-
-        <div class="route-head">
-
-          <div
-            class="route-color"
-            style="
-              background:
-              ${place.type === "nature"
-                ? "#3b8b5a"
-                : "#a76d35"}
-            "
-          ></div>
-
-          <div>
-
-            <div class="route-name">
-              ${place.name}
-            </div>
-
-            <div class="route-subtitle">
-              ${place.description}
-            </div>
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      card.addEventListener(
-        "click",
-        () => {
-
-          map.setView(
-            place.coords,
-            13
-          );
-
-
-          placeLayers[
-            place.name
-          ].openPopup();
-
-        }
-      );
-
-
-      placesList.appendChild(card);
-
-    });
-
-  }
-
-
-  renderPlaces();
-
-
-  /* =========================================================
+  document.getElementById("attractionCount").textContent =
+    attractions.length;
+
+
+  /* ==========================================================
+     PUNKTY DO PLANERA
+  ========================================================== */
+
+  const plannerPoints = [
+
+    {
+      name: "Łęczna",
+      lat: 51.3018,
+      lon: 22.8815
+    },
+
+    {
+      name: "Zawieprzyce",
+      lat: 51.3900,
+      lon: 22.6420
+    },
+
+    {
+      name: "Milejów",
+      lat: 51.2250,
+      lon: 22.9250
+    },
+
+    {
+      name: "Klarów",
+      lat: 51.2350,
+      lon: 22.9800
+    },
+
+    {
+      name: "Ciechanki",
+      lat: 51.2700,
+      lon: 22.8200
+    },
+
+    {
+      name: "Łańcuchów",
+      lat: 51.2500,
+      lon: 22.8500
+    },
+
+    {
+      name: "Puchaczów",
+      lat: 51.3105,
+      lon: 23.0005
+    },
+
+    {
+      name: "Dratów",
+      lat: 51.3505,
+      lon: 23.0750
+    },
+
+    {
+      name: "Nadrybie",
+      lat: 51.3400,
+      lon: 23.1200
+    },
+
+    {
+      name: "Cyców",
+      lat: 51.2970,
+      lon: 23.1400
+    },
+
+    {
+      name: "Jezioro Krzczeń",
+      lat: 51.4200,
+      lon: 23.0700
+    },
+
+    {
+      name: "Jezioro Piaseczno",
+      lat: 51.4250,
+      lon: 23.0200
+    },
+
+    {
+      name: "Wólka Bielecka",
+      lat: 51.2800,
+      lon: 23.0200
+    },
+
+    {
+      name: "Świerszczów",
+      lat: 51.3500,
+      lon: 23.1600
+    }
+
+  ];
+
+
+  /* ==========================================================
      ODLEGŁOŚĆ
-  ========================================================= */
+  ========================================================== */
 
-  function haversine(
-    a,
-    b
-  ) {
+  function distanceKm(a, b) {
 
-    const R =
-      6371;
+    const R = 6371;
 
-    const p1 =
-      a[0] *
-      Math.PI /
-      180;
+    const dLat =
+      (b.lat - a.lat) * Math.PI / 180;
 
-    const p2 =
-      b[0] *
-      Math.PI /
-      180;
+    const dLon =
+      (b.lon - a.lon) * Math.PI / 180;
 
-    const dp =
-      (b[0] - a[0]) *
-      Math.PI /
-      180;
+    const lat1 =
+      a.lat * Math.PI / 180;
 
-    const dl =
-      (b[1] - a[1]) *
-      Math.PI /
-      180;
-
+    const lat2 =
+      b.lat * Math.PI / 180;
 
     const x =
-      Math.sin(dp/2) ** 2 +
-      Math.cos(p1) *
-      Math.cos(p2) *
-      Math.sin(dl/2) ** 2;
+      Math.sin(dLat / 2) *
+      Math.sin(dLat / 2) +
+      Math.cos(lat1) *
+      Math.cos(lat2) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+    return 2 * R * Math.atan2(
+      Math.sqrt(x),
+      Math.sqrt(1 - x)
+    );
+  }
 
 
-    return (
-      2 *
-      R *
-      Math.asin(
-        Math.sqrt(x)
-      )
+  /* ==========================================================
+     WYBÓR STARTU
+  ========================================================== */
+
+  function startSelecting() {
+
+    selectingStart = true;
+
+    document.getElementById("status").innerHTML =
+      "<strong>Wybierz punkt na mapie.</strong><br>" +
+      "Kliknij miejsce, z którego chcesz rozpocząć wycieczkę.";
+
+  }
+
+
+  map.on("click", function(e) {
+
+    if (!selectingStart) return;
+
+    selectingStart = false;
+
+    setStart(
+      e.latlng.lat,
+      e.latlng.lng
+    );
+
+  });
+
+
+  /* ==========================================================
+     USTAWIENIE STARTU
+  ========================================================== */
+
+  function setStart(lat, lon) {
+
+    if (startMarker) {
+      map.removeLayer(startMarker);
+    }
+
+    startMarker = L.marker(
+      [lat, lon],
+      {
+        draggable: false
+      }
+    ).addTo(map);
+
+    startMarker.bindPopup(
+      "<strong>📍 Start trasy</strong>"
+    ).openPopup();
+
+    document.getElementById("status").innerHTML =
+      "<strong>Start ustawiony.</strong><br>" +
+      "Przygotowuję różne propozycje tras...";
+
+    generateRoutes({
+      lat,
+      lon
+    });
+
+  }
+
+
+  /* ==========================================================
+     MOJA LOKALIZACJA
+  ========================================================== */
+
+  function useMyLocation() {
+
+    if (!navigator.geolocation) {
+
+      alert(
+        "Twoja przeglądarka nie obsługuje geolokalizacji."
+      );
+
+      return;
+    }
+
+    document.getElementById("status").innerHTML =
+      "📍 Pobieranie lokalizacji...";
+
+    navigator.geolocation.getCurrentPosition(
+
+      position => {
+
+        const lat =
+          position.coords.latitude;
+
+        const lon =
+          position.coords.longitude;
+
+        map.setView(
+          [lat, lon],
+          13
+        );
+
+        setStart(lat, lon);
+
+      },
+
+      () => {
+
+        document.getElementById("status").innerHTML =
+          "Nie udało się pobrać lokalizacji. " +
+          "Wybierz punkt ręcznie na mapie.";
+
+      }
+
     );
 
   }
 
 
-  /* =========================================================
-     SORTOWANIE CELÓW WEDŁUG ODLEGŁOŚCI
-  ========================================================= */
+  /* ==========================================================
+     CEL TRAS
+  ========================================================== */
 
-  function getNearestPlannerPoints(
-    start
-  ) {
+  const targets = [
 
-    return plannerPoints
-      .map(point => ({
+    {
+      name: "Krótka pętla",
+      target: 12,
+      tolerance: 5,
+      description:
+        "Krótka wycieczka na spokojny początek."
+    },
 
-        ...point,
+    {
+      name: "Rekreacyjna",
+      target: 22,
+      tolerance: 7,
+      description:
+        "Lekka trasa na kilka godzin jazdy."
+    },
 
-        distance:
-          haversine(
+    {
+      name: "Krajobrazowa",
+      target: 32,
+      tolerance: 9,
+      description:
+        "Dłuższa pętla przez ciekawe okolice."
+    },
+
+    {
+      name: "Turystyczna",
+      target: 45,
+      tolerance: 12,
+      description:
+        "Trasa dla osób chcących zobaczyć więcej."
+    },
+
+    {
+      name: "Całodzienna",
+      target: 60,
+      tolerance: 16,
+      description:
+        "Najdłuższa propozycja na całodzienną wyprawę."
+    }
+
+  ];
+
+
+  /* ==========================================================
+     GENEROWANIE TRAS
+  ========================================================== */
+
+  async function generateRoutes(start) {
+
+    routeLayer.clearLayers();
+
+    document.getElementById("routes").innerHTML = "";
+
+    document.getElementById("routeCount").textContent = "0";
+
+    const candidates =
+      buildCandidates(start);
+
+    const results = [];
+
+    for (const candidate of candidates) {
+
+      try {
+
+        const route =
+          await requestRoute(
             start,
-            point.coords
-          )
+            candidate.points
+          );
 
-      }))
-      .filter(
-        point =>
-          point.distance > 1
-      )
-      .sort(
-        (a,b) =>
-          a.distance -
-          b.distance
-      );
+        if (!route) continue;
+
+        const km =
+          route.distance / 1000;
+
+        /* unikamy prawie identycznych tras */
+
+        const tooSimilar =
+          results.some(
+            r => Math.abs(r.distanceKm - km) < 3
+          );
+
+        if (tooSimilar) continue;
+
+        results.push({
+
+          ...route,
+
+          distanceKm: km,
+
+          target: candidate.target,
+
+          title: candidate.title,
+
+          description: candidate.description,
+
+          points: candidate.points
+
+        });
+
+      } catch (error) {
+
+        console.log(
+          "Błąd routingu:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* sortowanie po dystansie */
+
+    results.sort(
+      (a, b) =>
+        a.distanceKm - b.distanceKm
+    );
+
+
+    /* maksymalnie 5 */
+
+    const finalRoutes =
+      results.slice(0, 5);
+
+
+    if (!finalRoutes.length) {
+
+      document.getElementById("status").innerHTML =
+        "Nie udało się wyznaczyć tras. " +
+        "Spróbuj ponownie z innym punktem startowym.";
+
+      return;
+
+    }
+
+
+    document.getElementById("status").innerHTML =
+      "<strong>Gotowe!</strong><br>" +
+      "Wybrano punkt startowy i przygotowano " +
+      finalRoutes.length +
+      " różnych propozycji.";
+
+
+    finalRoutes.forEach(
+      (route, index) => {
+
+        drawRoute(
+          route,
+          index
+        );
+
+        createRouteCard(
+          route,
+          index
+        );
+
+      }
+    );
+
+
+    document.getElementById("routeCount").textContent =
+      finalRoutes.length;
 
   }
 
 
-  /* =========================================================
-     GENEROWANIE KANDYDATÓW
-  ========================================================= */
+  /* ==========================================================
+     TWORZENIE KANDYDATÓW
+  ========================================================== */
 
-  function buildCandidates(
-    start
-  ) {
+  function buildCandidates(start) {
 
-    const all =
-      getNearestPlannerPoints(
-        start
-      );
-
-
-    /*
-      Kandydaci są dobierani tak, aby otrzymać
-      różne długości pętli.
-
-      Każda trasa zostanie później sprawdzona
-      przez prawdziwy routing rowerowy OSRM.
-    */
-
-    const targetDistances =
-      [
-        10,
-        18,
-        28,
-        40,
-        55
-      ];
+    const available =
+      plannerPoints
+        .map(p => ({
+          ...p,
+          distance:
+            distanceKm(start, p)
+        }))
+        .sort(
+          (a, b) =>
+            a.distance - b.distance
+        );
 
 
     const candidates = [];
 
 
-    targetDistances.forEach(
+    /*
+      Szukamy punktów w różnych kierunkach.
+    */
+
+    const directions = {
+
+      north:
+        available.filter(
+          p => p.lat > start.lat + 0.025
+        ),
+
+      south:
+        available.filter(
+          p => p.lat < start.lat - 0.025
+        ),
+
+      east:
+        available.filter(
+          p => p.lon > start.lon + 0.025
+        ),
+
+      west:
+        available.filter(
+          p => p.lon < start.lon - 0.025
+        )
+
+    };
+
+
+    const pools = [
+      directions.west,
+      directions.south,
+      directions.east,
+      directions.north,
+      available
+    ];
+
+
+    targets.forEach(
       (target, index) => {
 
-        let best =
-          null;
-
-
-        let bestScore =
-          Infinity;
-
+        const pool =
+          pools[index] || available;
 
         /*
-          Szukamy jednego lub dwóch punktów,
-          które dają sensowną wielkość pętli.
+          Dla krótszych tras wybieramy
+          pojedynczy punkt.
+
+          Dla dłuższych łączymy kilka punktów.
         */
 
-        for (
-          let i = 0;
-          i < all.length;
-          i++
-        ) {
+        let points = [];
 
-          const p =
-            all[i];
+        if (target.target <= 25) {
 
+          points =
+            pool.slice(0, 1);
 
-          const estimated =
-            p.distance * 2;
+        } else if (target.target <= 40) {
 
+          points =
+            pool.slice(0, 2);
 
-          const score =
-            Math.abs(
-              estimated -
-              target
-            );
+        } else {
 
-
-          if (
-            score <
-            bestScore
-          ) {
-
-            bestScore =
-              score;
-
-            best =
-              {
-                points:
-                  [p],
-
-                target
-              };
-
-          }
+          points =
+            pool.slice(0, 3);
 
         }
 
 
-        /*
-          Dla dłuższych tras dodajemy drugi
-          punkt w innym kierunku.
-        */
+        if (!points.length) {
 
-        if (
-          index >= 2 &&
-          all.length >= 3
-        ) {
-
-          let second =
-            all.find(
-              p =>
-                p.name !==
-                best.points[0].name
+          points =
+            available.slice(
+              0,
+              target.target > 40 ? 3 : 2
             );
-
-
-          if (second) {
-
-            best.points.push(
-              second
-            );
-
-          }
 
         }
 
 
-        candidates.push(
-          best
-        );
+        candidates.push({
+
+          title: target.name,
+
+          target: target.target,
+
+          description:
+            target.description,
+
+          points
+
+        });
+
+      }
+    );
+
+
+    /*
+      Dodatkowe kombinacje.
+      Pomaga uzyskać bardziej różne trasy.
+    */
+
+    const extraSets = [
+
+      [1, 5],
+      [2, 7],
+      [3, 8],
+      [4, 10],
+      [6, 11]
+
+    ];
+
+
+    extraSets.forEach(
+      (indexes, i) => {
+
+        const points =
+          indexes
+            .map(
+              index =>
+                available[index]
+            )
+            .filter(Boolean)
+            .slice(0, 2);
+
+
+        if (points.length) {
+
+          candidates.push({
+
+            title:
+              "Wariant " +
+              (i + 1),
+
+            target:
+              20 + i * 10,
+
+            description:
+              "Alternatywna pętla przez inne okolice.",
+
+            points
+
+          });
+
+        }
 
       }
     );
@@ -1847,40 +1170,46 @@
   }
 
 
-  /* =========================================================
-     OSRM ROUTING
-  ========================================================= */
+  /* ==========================================================
+     OSRM
+  ========================================================== */
 
   async function requestRoute(
-    coordinates
+    start,
+    points
   ) {
 
-    const coordString =
-      coordinates
-        .map(
-          p =>
-            `${p[1]},${p[0]}`
-        )
-        .join(";");
+    const coordinates = [
+
+      `${start.lon},${start.lat}`,
+
+      ...points.map(
+        p => `${p.lon},${p.lat}`
+      ),
+
+      `${start.lon},${start.lat}`
+
+    ].join(";");
 
 
     const url =
-      `${OSRM_URL}/${coordString}` +
-      `?overview=full` +
-      `&geometries=geojson` +
-      `&steps=true`;
+      "https://router.project-osrm.org/route/v1/bike/" +
+      coordinates +
+      "?overview=full" +
+      "&geometries=geojson" +
+      "&steps=true" +
+      "&alternatives=true";
 
 
     const response =
-      await fetch(
-        url
-      );
+      await fetch(url);
 
 
     if (!response.ok) {
 
       throw new Error(
-        "Błąd serwera routingu"
+        "OSRM HTTP " +
+        response.status
       );
 
     }
@@ -1891,17 +1220,18 @@
 
 
     if (
-      data.code !== "Ok" ||
       !data.routes ||
       !data.routes.length
     ) {
 
-      throw new Error(
-        "Nie znaleziono przejezdnej trasy."
-      );
+      return null;
 
     }
 
+
+    /*
+      Pierwsza trasa jest głównym wariantem.
+    */
 
     const route =
       data.routes[0];
@@ -1910,1308 +1240,369 @@
     return {
 
       distance:
-        route.distance / 1000,
+        route.distance,
 
       duration:
-        route.duration / 3600,
+        route.duration,
 
       geometry:
         route.geometry,
 
-      legs:
-        route.legs,
-
-      waypoints:
-        data.waypoints
+      alternatives:
+        data.routes
 
     };
 
   }
 
 
-  /* =========================================================
-     WYSZUKIWANIE ATRAKCJI WZDŁUŻ TRASY
-  ========================================================= */
-
-  function getRouteAttractions(
-    routeGeometry
-  ) {
-
-    const coordinates =
-      routeGeometry.coordinates;
-
-
-    const found = [];
-
-
-    places.forEach(
-      place => {
-
-        let closest =
-          Infinity;
-
-
-        for (
-          let i = 0;
-          i < coordinates.length;
-          i += Math.max(
-            1,
-            Math.floor(
-              coordinates.length /
-              300
-            )
-          )
-        ) {
-
-          const c =
-            coordinates[i];
-
-
-          const d =
-            haversine(
-              [
-                c[1],
-                c[0]
-              ],
-              place.coords
-            );
-
-
-          if (
-            d <
-            closest
-          ) {
-
-            closest =
-              d;
-
-          }
-
-        }
-
-
-        /*
-          Około 1,5 km od przebiegu trasy
-          traktujemy jako miejsce znajdujące się
-          w pobliżu trasy.
-        */
-
-        if (
-          closest <= 1.5
-        ) {
-
-          found.push({
-            ...place,
-            distance:
-              closest
-          });
-
-        }
-
-      }
-    );
-
-
-    return found
-      .sort(
-        (a,b) =>
-          a.distance -
-          b.distance
-      )
-      .slice(
-        0,
-        4
-      );
-
-  }
-
-
-  /* =========================================================
-     TWORZENIE JEDNEJ PĘTLI
-  ========================================================= */
-
-  async function createLoop(
-    start,
-    candidate
-  ) {
-
-    const points = [
-      start
-    ];
-
-
-    candidate.points.forEach(
-      point =>
-        points.push(
-          point.coords
-        )
-    );
-
-
-    /*
-      Powrót do startu.
-    */
-
-    points.push(
-      start
-    );
-
-
-    const route =
-      await requestRoute(
-        points
-      );
-
-
-    return {
-
-      ...route,
-
-      requested:
-        candidate.target,
-
-      attractionList:
-        getRouteAttractions(
-          route.geometry
-        )
-
-    };
-
-  }
-
-
-  /* =========================================================
-     OCENA TRAS
-  ========================================================= */
-
-  function scoreRoutes(
-    routes
-  ) {
-
-    const targets =
-      [
-        12,
-        22,
-        32,
-        45,
-        60
-      ];
-
-
-    return routes
-      .map(route => ({
-
-        ...route,
-
-        score:
-          Math.min(
-            ...targets.map(
-              target =>
-                Math.abs(
-                  route.distance -
-                  target
-                )
-            )
-          )
-
-      }))
-      .sort(
-        (a,b) =>
-          a.distance -
-          b.distance
-      );
-
-  }
-
-
-  /* =========================================================
-     RYSOWANIE WYGENEROWANEJ TRASY
-  ========================================================= */
-
-  function clearGeneratedLayers() {
-
-    generatedLayers.forEach(
-      layer =>
-        map.removeLayer(layer)
-    );
-
-
-    generatedLayers = [];
-
-  }
-
-
-  function drawGeneratedRoute(
-    route
-  ) {
-
-    clearGeneratedLayers();
-
-
-    const layer =
-      L.geoJSON(
-        route.geometry,
-        {
-          style: {
-            color:
-              "#16623f",
-
-            weight:
-              7,
-
-            opacity:
-              .92,
-
-            lineCap:
-              "round",
-
-            lineJoin:
-              "round"
-          }
-        }
-      ).addTo(map);
-
-
-    layer.bindPopup(`
-
-      <div class="route-popup">
-
-        <strong>
-          ${route.title || "Trasa rowerowa"}
-        </strong>
-
-        <br>
-
-        <b>
-          ${route.distance.toFixed(1)} km
-        </b>
-
-        ·
-
-        ${formatDuration(
-          route.duration
-        )}
-
-      </div>
-
-    `);
-
-
-    generatedLayers.push(
-      layer
-    );
-
-
-    if (
-      route.attractionList &&
-      route.attractionList.length
-    ) {
-
-      route.attractionList.forEach(
-        place => {
-
-          const marker =
-            L.circleMarker(
-              place.coords,
-              {
-                radius: 6,
-                color: "#fff",
-                weight: 2,
-                fillColor:
-                  place.type === "nature"
-                    ? "#3b8b5a"
-                    : "#a76d35",
-                fillOpacity: 1
-              }
-            ).addTo(map);
-
-
-          marker.bindPopup(`
-
-            <strong>
-              ${place.name}
-            </strong>
-
-            <br>
-
-            <small>
-              ${place.description}
-            </small>
-
-          `);
-
-
-          generatedLayers.push(
-            marker
-          );
-
-        }
-      );
-
-    }
-
-
-    map.fitBounds(
-      layer.getBounds(),
-      {
-        padding:
-          [45,45]
-      }
-    );
-
-  }
-
-
-  /* =========================================================
-     CZAS
-  ========================================================= */
-
-  function formatDuration(
-    hours
-  ) {
-
-    const totalMinutes =
-      Math.round(
-        hours * 60
-      );
-
-
-    const h =
-      Math.floor(
-        totalMinutes / 60
-      );
-
-
-    const m =
-      totalMinutes % 60;
-
-
-    if (h === 0) {
-
-      return `${m} min`;
-
-    }
-
-
-    if (m === 0) {
-
-      return `${h} h`;
-
-    }
-
-
-    return `${h} h ${m} min`;
-
-  }
-
-
-  /* =========================================================
-     TRUDNOŚĆ
-  ========================================================= */
-
-  function difficultyFor(
-    distance
-  ) {
-
-    if (
-      distance < 20
-    ) {
-
-      return "Łatwa";
-
-    }
-
-
-    if (
-      distance < 40
-    ) {
-
-      return "Średnia";
-
-    }
-
-
-    return "Trudniejsza";
-
-  }
-
-
-  /* =========================================================
-     OPIS
-  ========================================================= */
-
-  function descriptionFor(
+  /* ==========================================================
+     RYSOWANIE TRASY
+  ========================================================== */
+
+  function drawRoute(
     route,
     index
   ) {
 
-    const descriptions = [
-
-      "Krótka pętla na spokojną wycieczkę lub trening.",
-
-      "Niezbyt długa trasa z możliwością odwiedzenia lokalnych atrakcji.",
-
-      "Średnia wycieczka łącząca krajobraz, miejscowości i ciekawe miejsca.",
-
-      "Dłuższa wyprawa dla osób chcących spędzić kilka godzin na rowerze.",
-
-      "Najdłuższa propozycja — dobra opcja na całodniową wycieczkę."
-
+    const colors = [
+      "#176b3a",
+      "#2389da",
+      "#e67e22",
+      "#8e44ad",
+      "#c0392b"
     ];
 
 
-    return descriptions[index] ||
-      "Propozycja pętli rowerowej.";
+    const line =
+      L.geoJSON(
+        route.geometry,
+        {
+          style: {
+
+            color:
+              colors[
+                index %
+                colors.length
+              ],
+
+            weight: 5,
+
+            opacity: .85
+
+          }
+        }
+      );
+
+
+    line.bindPopup(
+      `<strong>${route.title}</strong><br>` +
+      `${route.distanceKm.toFixed(1)} km`
+    );
+
+
+    line.addTo(routeLayer);
+
+
+    route._leafletLayer =
+      line;
 
   }
 
 
-  /* =========================================================
-     GENEROWANIE 5 PRAWDZIWYCH TRAS
-  ========================================================= */
+  /* ==========================================================
+     KARTA TRASY
+  ========================================================== */
 
-  async function generateRealRoutes(
-    start
+  function createRouteCard(
+    route,
+    index
   ) {
 
-    const generatedRoutes =
+    const container =
       document.getElementById(
-        "generatedRoutes"
+        "routes"
       );
 
 
-    const generatedList =
-      document.getElementById(
-        "generatedList"
+    const minutes =
+      Math.round(
+        route.duration / 60
       );
 
 
-    generatedRoutes.classList.add(
-      "active"
-    );
+    const hours =
+      Math.floor(
+        minutes / 60
+      );
 
 
-    generatedList.innerHTML = `
+    const mins =
+      minutes % 60;
 
-      <div class="route-loading">
 
-        <span class="spinner"></span>
+    let timeText;
 
-        Wyznaczam rzeczywiste trasy rowerowe...
+
+    if (hours > 0) {
+
+      timeText =
+        `${hours} h ${mins} min`;
+
+    } else {
+
+      timeText =
+        `${mins} min`;
+
+    }
+
+
+    let difficulty;
+
+    if (route.distanceKm < 20) {
+
+      difficulty = "łatwa";
+
+    } else if (route.distanceKm < 40) {
+
+      difficulty = "średnia";
+
+    } else {
+
+      difficulty = "wymagająca";
+
+    }
+
+
+    const nearby =
+      getNearbyAttractions(
+        route
+      );
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+      "route-card";
+
+
+    card.innerHTML = `
+
+      <div class="route-title">
+
+        <span>
+          ${index + 1}. ${route.title}
+        </span>
+
+        <span class="route-distance">
+          ${route.distanceKm.toFixed(1)} km
+        </span>
 
       </div>
+
+      <div class="route-meta">
+
+        ⏱️ ${timeText}
+        &nbsp; • &nbsp;
+        🚴 ${difficulty}
+
+      </div>
+
+      <div class="route-description">
+
+        ${route.description}
+
+      </div>
+
+      <span class="badge">
+        Routing rowerowy
+      </span>
+
+      ${
+        nearby.length
+        ?
+        `
+        <ul class="attractions">
+
+          ${
+            nearby
+              .slice(0, 4)
+              .map(
+                a =>
+                  `<li>${a.name}</li>`
+              )
+              .join("")
+          }
+
+        </ul>
+        `
+        :
+        ""
+      }
 
     `;
 
 
-    clearGeneratedLayers();
+    card.onclick = () => {
 
-
-    const candidates =
-      buildCandidates(
-        start
+      map.fitBounds(
+        route._leafletLayer
+          .getBounds(),
+        {
+          padding: [
+            30,
+            30
+          ]
+        }
       );
 
+      route._leafletLayer
+        .openPopup();
 
-    const results = [];
-
-
-    /*
-      Maksymalnie pięć zapytań.
-      Każde prowadzi po sieci rowerowej.
-    */
-
-    for (
-      let i = 0;
-      i < candidates.length;
-      i++
-    ) {
-
-      try {
-
-        const route =
-          await createLoop(
-            start,
-            candidates[i]
-          );
+    };
 
 
-        results.push(
-          route
-        );
-
-      }
-      catch (error) {
-
-        console.warn(
-          "Nie udało się utworzyć trasy:",
-          error
-        );
-
-      }
-
-    }
-
-
-    if (!results.length) {
-
-      generatedList.innerHTML = `
-
-        <div class="route-loading">
-
-          Nie udało się znaleźć trasy rowerowej
-          z tego punktu.
-
-          <br><br>
-
-          Spróbuj kliknąć punkt bliżej drogi
-          lub miejscowości.
-
-        </div>
-
-      `;
-
-
-      return;
-
-    }
-
-
-    const finalRoutes =
-      scoreRoutes(
-        results
-      ).slice(
-        0,
-        5
-      );
-
-
-    renderGeneratedRoutes(
-      finalRoutes
+    container.appendChild(
+      card
     );
 
   }
 
 
-  /* =========================================================
-     LISTA 5 TRAS
-  ========================================================= */
+  /* ==========================================================
+     ATRAKCJE PRZY TRASIE
+  ========================================================== */
 
-  function renderGeneratedRoutes(
-    routes
+  function getNearbyAttractions(
+    route
   ) {
 
-    const list =
-      document.getElementById(
-        "generatedList"
-      );
+    if (
+      !route.geometry ||
+      !route.geometry.coordinates
+    ) {
+
+      return [];
+
+    }
 
 
-    list.innerHTML = "";
+    const coords =
+      route.geometry.coordinates;
 
 
-    routes.forEach(
-      (route,index) => {
+    return attractions
+      .map(place => {
 
-        route.title =
-          [
-            "Krótka pętla",
-            "Spokojna pętla",
-            "Trasa po okolicy",
-            "Dłuższa wyprawa",
-            "Duża pętla"
-          ][index];
+        let minimum =
+          Infinity;
 
 
-        route.description =
-          descriptionFor(
-            route,
-            index
-          );
+        /*
+          Sprawdzamy co kilka punktów
+          geometrii trasy.
+        */
 
-
-        const card =
-          document.createElement(
-            "div"
-          );
-
-
-        card.className =
-          "generated-card";
-
-
-        if (
-          index === 0
+        for (
+          let i = 0;
+          i < coords.length;
+          i += 10
         ) {
 
-          card.classList.add(
-            "active"
-          );
+          const point = {
+
+            lat:
+              coords[i][1],
+
+            lon:
+              coords[i][0]
+
+          };
+
+
+          const d =
+            distanceKm(
+              place,
+              point
+            );
+
+
+          if (d < minimum) {
+
+            minimum = d;
+
+          }
 
         }
 
 
-        const attractions =
-          route.attractionList
-            .map(
-              place =>
-                place.name
-            )
-            .join(
-              " · "
-            );
+        return {
 
+          ...place,
 
-        card.innerHTML = `
+          distance:
+            minimum
 
-          <div class="generated-top">
+        };
 
-            <div class="generated-number">
-              ${index + 1}
-            </div>
+      })
 
-            <div class="generated-title">
-              ${route.title}
-            </div>
+      .filter(
+        place =>
+          place.distance < 2
+      )
 
-            <div class="generated-distance">
-              ${route.distance.toFixed(1)} km
-            </div>
-
-          </div>
-
-
-          <div class="generated-description">
-
-            ${route.description}
-
-          </div>
-
-
-          <div class="generated-meta">
-
-            <span class="badge">
-              ⏱ ${formatDuration(
-                route.duration
-              )}
-            </span>
-
-            <span class="badge">
-              ${difficultyFor(
-                route.distance
-              )}
-            </span>
-
-            <span class="badge">
-              🛣 routing rowerowy
-            </span>
-
-          </div>
-
-
-          ${
-            attractions
-              ? `
-                <div class="attractions">
-                  📍 <strong>Po drodze:</strong>
-                  ${attractions}
-                </div>
-              `
-              : ""
-          }
-
-        `;
-
-
-        card.addEventListener(
-          "click",
-          () => {
-
-            document
-              .querySelectorAll(
-                ".generated-card"
-              )
-              .forEach(
-                c =>
-                  c.classList.remove(
-                    "active"
-                  )
-              );
-
-
-            card.classList.add(
-              "active"
-            );
-
-
-            drawGeneratedRoute(
-              route
-            );
-
-          }
-        );
-
-
-        list.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-    drawGeneratedRoute(
-      routes[0]
-    );
-
-  }
-
-
-  /* =========================================================
-     PLANNER MODE
-  ========================================================= */
-
-  const startPlannerBtn =
-    document.getElementById(
-      "startPlannerBtn"
-    );
-
-
-  const clearPlannerBtn =
-    document.getElementById(
-      "clearPlannerBtn"
-    );
-
-
-  const plannerStatus =
-    document.getElementById(
-      "plannerStatus"
-    );
-
-
-  function activatePlanner() {
-
-    plannerMode = true;
-
-
-    map.getContainer()
-      .style.cursor =
-      "crosshair";
-
-
-    plannerStatus.classList.add(
-      "active"
-    );
-
-
-    plannerStatus.innerHTML = `
-
-      📍 <strong>
-        Wskaż punkt startowy na mapie.
-      </strong>
-
-      <br>
-
-      Kliknij miejsce, z którego chcesz rozpocząć wycieczkę.
-
-    `;
-
-  }
-
-
-  startPlannerBtn.addEventListener(
-    "click",
-    activatePlanner
-  );
-
-
-  /* =========================================================
-     KLIK MAPY
-  ========================================================= */
-
-  map.on(
-    "click",
-    event => {
-
-      if (!plannerMode) {
-        return;
-      }
-
-
-      plannerMode =
-        false;
-
-
-      map.getContainer()
-        .style.cursor =
-        "";
-
-
-      setStartPoint(
-        event.latlng
+      .sort(
+        (a, b) =>
+          a.distance -
+          b.distance
       );
 
-    }
-  );
+  }
 
 
-  /* =========================================================
-     PUNKT STARTOWY
-  ========================================================= */
+  /* ==========================================================
+     CZYSZCZENIE
+  ========================================================== */
 
-  async function setStartPoint(
-    latlng
-  ) {
+  function clearPlanner() {
 
-    if (
-      startMarker
-    ) {
+    routeLayer.clearLayers();
+
+    document.getElementById(
+      "routes"
+    ).innerHTML = "";
+
+    document.getElementById(
+      "routeCount"
+    ).textContent = "0";
+
+
+    if (startMarker) {
 
       map.removeLayer(
         startMarker
       );
 
+      startMarker = null;
+
     }
 
 
-    startMarker =
-      L.marker(
-        latlng,
-        {
-          icon:
-            startIcon,
-          zIndexOffset:
-            1000
-        }
-      ).addTo(map);
+    selectingStart = false;
 
 
-    startMarker.bindPopup(`
-      <strong>Punkt startowy</strong>
-      <br>
-      Twoja wycieczka rozpocznie się tutaj.
-    `).openPopup();
-
-
-    plannerStatus.classList.add(
-      "active"
-    );
-
-
-    plannerStatus.innerHTML = `
-
-      <span class="spinner"></span>
-
-      <strong>
-        Wyznaczam 5 tras...
-      </strong>
-
-      <br>
-
-      Sprawdzam rzeczywistą sieć dróg rowerowych.
-
-    `;
-
-
-    await generateRealRoutes(
-      [
-        latlng.lat,
-        latlng.lng
-      ]
-    );
-
-
-    plannerStatus.innerHTML = `
-
-      ✅ <strong>
-        Gotowe.
-      </strong>
-
-      <br>
-
-      Wybierz jedną z pięciu propozycji.
-
-    `;
+    document.getElementById(
+      "status"
+    ).innerHTML =
+      "Kliknij „Wybierz punkt startowy”, " +
+      "a następnie wskaż miejsce na mapie.";
 
   }
-
-
-  /* =========================================================
-     CZYSZCZENIE
-  ========================================================= */
-
-  clearPlannerBtn.addEventListener(
-    "click",
-    () => {
-
-      plannerMode =
-        false;
-
-
-      map.getContainer()
-        .style.cursor =
-        "";
-
-
-      clearGeneratedLayers();
-
-
-      document
-        .getElementById(
-          "generatedRoutes"
-        )
-        .classList.remove(
-          "active"
-        );
-
-
-      document
-        .getElementById(
-          "generatedList"
-        ).innerHTML = "";
-
-
-      if (
-        startMarker
-      ) {
-
-        map.removeLayer(
-          startMarker
-        );
-
-
-        startMarker =
-          null;
-
-      }
-
-
-      plannerStatus.classList.remove(
-        "active"
-      );
-
-    }
-  );
-
-
-  /* =========================================================
-     WYSZUKIWARKA
-  ========================================================= */
-
-  document
-    .getElementById(
-      "searchInput"
-    )
-    .addEventListener(
-      "input",
-      event => {
-
-        const q =
-          event.target.value
-            .trim()
-            .toLowerCase();
-
-
-        if (!q) {
-
-          renderOfficialRoutes();
-
-          renderPlaces();
-
-          return;
-
-        }
-
-
-        const routeResults =
-          officialRoutes.filter(
-            route =>
-              (
-                route.title +
-                " " +
-                route.subtitle +
-                " " +
-                route.description
-              )
-              .toLowerCase()
-              .includes(q)
-          );
-
-
-        const placeResults =
-          places.filter(
-            place =>
-              (
-                place.name +
-                " " +
-                place.description
-              )
-              .toLowerCase()
-              .includes(q)
-          );
-
-
-        renderOfficialRoutes(
-          routeResults
-        );
-
-
-        renderPlaces(
-          placeResults
-        );
-
-      }
-    );
-
-
-  /* =========================================================
-     FILTRY
-  ========================================================= */
-
-  document
-    .querySelectorAll(
-      ".filter"
-    )
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            document
-              .querySelectorAll(
-                ".filter"
-              )
-              .forEach(
-                b =>
-                  b.classList.remove(
-                    "active"
-                  )
-              );
-
-
-            button.classList.add(
-              "active"
-            );
-
-
-            const filter =
-              button.dataset.filter;
-
-
-            if (
-              filter === "all"
-            ) {
-
-              renderOfficialRoutes();
-
-              renderPlaces();
-
-              return;
-
-            }
-
-
-            if (
-              filter === "routes"
-            ) {
-
-              renderOfficialRoutes();
-
-              renderPlaces([]);
-
-              return;
-
-            }
-
-
-            if (
-              filter === "easy"
-            ) {
-
-              renderOfficialRoutes(
-                officialRoutes.filter(
-                  route =>
-                    route.difficulty ===
-                    "Łatwa"
-                )
-              );
-
-              renderPlaces([]);
-
-              return;
-
-            }
-
-
-            if (
-              filter === "medium"
-            ) {
-
-              renderOfficialRoutes(
-                officialRoutes.filter(
-                  route =>
-                    route.difficulty ===
-                    "Średnia"
-                )
-              );
-
-              renderPlaces([]);
-
-              return;
-
-            }
-
-
-            if (
-              filter === "nature"
-            ) {
-
-              renderOfficialRoutes([]);
-
-              renderPlaces(
-                places.filter(
-                  place =>
-                    place.type ===
-                    "nature"
-                )
-              );
-
-              return;
-
-            }
-
-
-            if (
-              filter === "history"
-            ) {
-
-              renderOfficialRoutes([]);
-
-              renderPlaces(
-                places.filter(
-                  place =>
-                    place.type ===
-                    "history"
-                )
-              );
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-
-  /* =========================================================
-     GEOLOKALIZACJA
-  ========================================================= */
-
-  document
-    .getElementById(
-      "locateBtn"
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-        if (
-          !navigator.geolocation
-        ) {
-
-          alert(
-            "Twoja przeglądarka nie obsługuje geolokalizacji."
-          );
-
-          return;
-
-        }
-
-
-        navigator.geolocation
-          .getCurrentPosition(
-            position => {
-
-              setStartPoint({
-
-                lat:
-                  position.coords.latitude,
-
-                lng:
-                  position.coords.longitude
-
-              });
-
-            },
-
-            () => {
-
-              alert(
-                "Nie udało się pobrać lokalizacji. Sprawdź uprawnienia przeglądarki."
-              );
-
-            }
-          );
-
-      }
-    );
-
-
-  /* =========================================================
-     RESET MAPY
-  ========================================================= */
-
-  document
-    .getElementById(
-      "resetMapBtn"
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-        map.fitBounds([
-          [51.18,22.78],
-          [51.48,23.20]
-        ]);
-
-      }
-    );
-
-
-  /* =========================================================
-     POMOC NA MAPIE
-  ========================================================= */
-
-  const help =
-    L.control({
-      position:
-        "topright"
-    });
-
-
-  help.onAdd =
-    function() {
-
-      const div =
-        L.DomUtil.create(
-          "div",
-          "planner-map-help"
-        );
-
-
-      div.innerHTML =
-        "🚲 Wybierz punkt startowy, aby zaplanować trasę";
-
-
-      return div;
-
-    };
-
-
-  help.addTo(map);
 
 </script>
 
