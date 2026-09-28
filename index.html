@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Kalendarz Biegowy Polska 2026</title>
+<title>Rowerem po Łęczyńskiem</title>
+
+<meta
+  name="description"
+  content="Turystyczna mapa rowerowa powiatu łęczyńskiego i okolic. Trasy rowerowe, jeziora, przyroda, zabytki i miejsca warte odwiedzenia."
+>
 
 <link
   rel="stylesheet"
@@ -13,1293 +18,1813 @@
 
 <style>
 
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f8;
-  color: #17202a;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  background: #f3f6f1;
+  color: #18241c;
 }
 
-/* =========================
-   NAGŁÓWEK
-========================= */
-
-header {
-  background: linear-gradient(135deg, #0f766e, #16a085);
-  color: white;
-  padding: 22px 25px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.15);
+button,
+input {
+  font: inherit;
 }
 
-header h1 {
-  margin: 0 0 6px;
-  font-size: 27px;
-}
-
-header p {
-  margin: 0;
-  opacity: .92;
-}
-
-/* =========================
-   FILTRY
-========================= */
-
-.toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  background: white;
-  padding: 12px;
-
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
-
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.toolbar select,
-.toolbar input,
-.toolbar button {
-  border: 1px solid #d5dadd;
-  border-radius: 9px;
-  padding: 10px 12px;
-  font-size: 14px;
-  background: white;
-}
-
-.toolbar input {
-  min-width: 220px;
-  flex: 1;
-}
-
-.toolbar button {
+button {
   cursor: pointer;
-  font-weight: bold;
 }
 
-.toolbar button:hover {
-  background: #eef7f6;
+
+/* =========================================================
+   KOLORY
+========================================================= */
+
+:root {
+  --green-900: #123d28;
+  --green-800: #185536;
+  --green-700: #237044;
+  --green-600: #328451;
+  --green-100: #e8f3e9;
+  --green-50: #f3f8f3;
+
+  --cream: #f7f5ed;
+  --text: #18241c;
+  --muted: #6d786f;
+  --border: #e0e6df;
+  --white: #ffffff;
+
+  --blue: #1976d2;
+  --yellow: #d5a316;
+  --black: #252525;
 }
 
-/* =========================
-   UKŁAD
-========================= */
 
-.layout {
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+  height: 76px;
+  background:
+    linear-gradient(
+      110deg,
+      #123d28,
+      #1b5b39
+    );
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2000;
+  box-shadow:
+    0 4px 18px rgba(0,0,0,.18);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 285px;
+}
+
+.brand-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #91c94f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  box-shadow:
+    0 5px 14px rgba(0,0,0,.15);
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.brand-subtitle {
+  font-size: 11px;
+  color: #c8dfcc;
+  margin-top: 3px;
+}
+
+.header-search {
+  flex: 1;
+  max-width: 670px;
+  margin: auto;
+  position: relative;
+}
+
+.header-search input {
+  width: 100%;
+  height: 46px;
+  border: 0;
+  outline: none;
+  border-radius: 25px;
+  padding:
+    0 48px 0 20px;
+  background: rgba(255,255,255,.97);
+  color: #18241c;
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.12);
+}
+
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: 13px;
+  color: #657168;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.app {
+  height: calc(100vh - 76px);
   display: grid;
-  grid-template-columns: 430px 1fr;
-
-  height: calc(100vh - 145px);
-  min-height: 650px;
+  grid-template-columns: 410px 1fr;
 }
-
-/* =========================
-   LISTA
-========================= */
 
 .sidebar {
   background: #fff;
+  border-right: 1px solid var(--border);
   overflow-y: auto;
-
-  border-right: 1px solid #ddd;
-
-  padding: 14px;
+  z-index: 1000;
 }
 
-.summary {
-  padding: 8px 4px 14px;
-
-  color: #5d6870;
-
-  font-size: 14px;
+.map-area {
+  position: relative;
+  min-width: 0;
 }
-
-/* =========================
-   KARTA BIEGU
-========================= */
-
-.event {
-  background: white;
-
-  border: 1px solid #e0e5e8;
-  border-left: 5px solid #16a085;
-
-  border-radius: 11px;
-
-  margin-bottom: 10px;
-  padding: 13px;
-
-  cursor: pointer;
-
-  transition: .15s;
-
-  box-shadow: 0 2px 5px rgba(0,0,0,.04);
-}
-
-.event:hover {
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 5px 13px rgba(0,0,0,.09);
-}
-
-.event.active {
-  border-left-color: #0b5d56;
-
-  background: #f0faf8;
-
-  box-shadow:
-    0 0 0 2px rgba(22,160,133,.18);
-}
-
-.event-date {
-  color: #16a085;
-
-  font-size: 13px;
-  font-weight: bold;
-
-  margin-bottom: 4px;
-}
-
-.event-name {
-  font-weight: 700;
-
-  font-size: 16px;
-
-  line-height: 1.25;
-
-  margin-bottom: 6px;
-}
-
-.event-location {
-  font-size: 13px;
-
-  color: #66727a;
-
-  margin-bottom: 8px;
-}
-
-.event-description {
-  font-size: 13px;
-
-  line-height: 1.45;
-
-  color: #39434a;
-}
-
-.badge {
-  display: inline-block;
-
-  background: #e8f6f3;
-
-  color: #117864;
-
-  border-radius: 20px;
-
-  padding: 4px 8px;
-
-  font-size: 11px;
-
-  margin-top: 8px;
-}
-
-/* =========================
-   MAPA
-========================= */
 
 #map {
   width: 100%;
   height: 100%;
 }
 
-/* =========================
-   POPUP
-========================= */
 
-.popup-title {
-  font-size: 16px;
+/* =========================================================
+   SIDEBAR HEADER
+========================================================= */
 
-  font-weight: bold;
-
-  margin-bottom: 6px;
+.sidebar-intro {
+  padding: 25px 24px 17px;
 }
 
-.popup-date {
-  color: #117864;
-
-  font-weight: bold;
-
-  margin-bottom: 6px;
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-100);
+  color: var(--green-800);
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .7px;
 }
 
-.popup-description {
-  line-height: 1.4;
-
-  margin-top: 8px;
-
-  max-width: 300px;
+.sidebar-intro h1 {
+  margin:
+    12px 0 8px;
+  font-size: 27px;
+  line-height: 1.1;
+  letter-spacing: -.5px;
 }
 
-/* =========================
-   LEGENDA
-========================= */
-
-.legend {
-  position: fixed;
-
-  right: 15px;
-  bottom: 15px;
-
-  z-index: 999;
-
-  background: white;
-
-  border-radius: 9px;
-
-  padding: 10px 12px;
-
-  box-shadow:
-    0 2px 10px rgba(0,0,0,.18);
-
-  font-size: 12px;
+.sidebar-intro p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 13px;
 }
 
-.legend-dot {
-  display: inline-block;
 
-  width: 10px;
-  height: 10px;
+/* =========================================================
+   QUICK FILTERS
+========================================================= */
 
-  background: #16a085;
-
-  border-radius: 50%;
-
-  margin-right: 5px;
-}
-
-/* =========================
-   MARKER DLA WIELU BIEGÓW
-========================= */
-
-.multi-marker {
-  width: 34px;
-  height: 34px;
-
-  border-radius: 50%;
-
-  background: #16a085;
-
-  border: 3px solid white;
-
-  box-shadow:
-    0 2px 8px rgba(0,0,0,.35);
-
+.quick-filters {
   display: flex;
+  gap: 7px;
+  padding:
+    0 20px 18px;
+  overflow-x: auto;
+}
 
+.quick-filter {
+  flex-shrink: 0;
+  border:
+    1px solid var(--border);
+  background: white;
+  color: #35533e;
+  border-radius: 22px;
+  padding:
+    8px 12px;
+  font-size: 11px;
+  transition: .18s;
+}
+
+.quick-filter:hover {
+  border-color: #b9cfbd;
+}
+
+.quick-filter.active {
+  background: var(--green-700);
+  border-color: var(--green-700);
+  color: white;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  gap: 8px;
+  padding:
+    0 20px 18px;
+}
+
+.stat {
+  background: var(--green-50);
+  border:
+    1px solid #e1ebe2;
+  border-radius: 13px;
+  padding:
+    11px 7px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 20px;
+  color: var(--green-800);
+}
+
+.stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-title {
+  padding:
+    16px 20px 7px;
+  border-top:
+    1px solid #edf0ed;
+  color: #6c786f;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.cards {
+  padding-bottom: 25px;
+}
+
+.card {
+  margin:
+    9px 14px;
+  background: white;
+  border:
+    1px solid var(--border);
+  border-radius: 16px;
+  padding: 15px;
+  transition:
+    transform .18s,
+    box-shadow .18s,
+    border-color .18s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #bed2c1;
+  box-shadow:
+    0 9px 25px rgba(25,70,40,.08);
+}
+
+.card-main {
+  display: flex;
+  gap: 12px;
+}
+
+.card-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  color: white;
-
-  font-size: 13px;
-
-  font-weight: bold;
+  font-size: 22px;
+  flex-shrink: 0;
 }
 
-/* =========================
-   MOBILE
-========================= */
+.icon-route {
+  background: #e4f0fb;
+}
+
+.icon-nature {
+  background: #e2f3e8;
+}
+
+.icon-heritage {
+  background: #f7ecdb;
+}
+
+.icon-family {
+  background: #eee8f7;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.card-description {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+  margin-top: 5px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.tag {
+  padding:
+    4px 7px;
+  background: #f4f6f4;
+  border-radius: 7px;
+  color: #637068;
+  font-size: 9px;
+}
+
+.difficulty {
+  flex-shrink: 0;
+  height: fit-content;
+  padding:
+    5px 7px;
+  border-radius: 12px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.easy {
+  color: #347126;
+  background: #e5f3df;
+}
+
+.medium {
+  color: #8b620e;
+  background: #fff0d3;
+}
+
+.hard {
+  color: #8a352e;
+  background: #f8e1df;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top:
+    1px solid #edf0ed;
+}
+
+.route-meta {
+  display: flex;
+  gap: 9px;
+  color: #69746d;
+  font-size: 10px;
+}
+
+.card-button {
+  border: 0;
+  background: var(--green-700);
+  color: white;
+  border-radius: 9px;
+  padding:
+    7px 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.card-button:hover {
+  background: var(--green-800);
+}
+
+
+/* =========================================================
+   MAP BUTTONS
+========================================================= */
+
+.map-tools {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-tool {
+  border: 0;
+  background: rgba(255,255,255,.96);
+  border-radius: 12px;
+  padding:
+    10px 13px;
+  box-shadow:
+    0 4px 17px rgba(0,0,0,.16);
+  color: #294832;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.map-tool:hover {
+  background: white;
+}
+
+
+/* =========================================================
+   LEGEND
+========================================================= */
+
+.legend {
+  position: absolute;
+  bottom: 20px;
+  left: 16px;
+  z-index: 800;
+  background: rgba(255,255,255,.96);
+  border-radius: 14px;
+  box-shadow:
+    0 4px 17px rgba(0,0,0,.16);
+  padding:
+    13px 15px;
+  min-width: 170px;
+}
+
+.legend-title {
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 10px;
+  color: #59655d;
+}
+
+.legend-line {
+  width: 28px;
+  height: 4px;
+  border-radius: 5px;
+}
+
+.line-blue {
+  background: var(--blue);
+}
+
+.line-yellow {
+  background: var(--yellow);
+}
+
+.line-green {
+  background: #29904d;
+}
+
+.line-black {
+  background: var(--black);
+}
+
+.legend-point {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #418653;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.route-loading {
+  position: absolute;
+  top: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  background: rgba(255,255,255,.96);
+  padding:
+    9px 15px;
+  border-radius: 22px;
+  box-shadow:
+    0 3px 14px rgba(0,0,0,.15);
+  font-size: 11px;
+  display: none;
+}
+
+
+/* =========================================================
+   POPUP
+========================================================= */
+
+.leaflet-popup-content-wrapper {
+  border-radius: 15px;
+}
+
+.leaflet-popup-content {
+  margin: 15px 16px;
+}
+
+.popup {
+  min-width: 225px;
+}
+
+.popup h3 {
+  margin:
+    0 0 7px;
+  color: #1d4d2e;
+  font-size: 15px;
+}
+
+.popup p {
+  color: #657169;
+  font-size: 11px;
+  line-height: 1.5;
+  margin:
+    5px 0;
+}
+
+.popup-stats {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.popup-stat {
+  background: #f3f7f3;
+  border-radius: 8px;
+  padding: 7px 4px;
+  text-align: center;
+}
+
+.popup-stat strong {
+  display: block;
+  font-size: 12px;
+  color: #245b38;
+}
+
+.popup-stat span {
+  display: block;
+  font-size: 8px;
+  color: #7a847d;
+  margin-top: 2px;
+}
+
+.popup-link {
+  display: inline-block;
+  margin-top: 9px;
+  color: #287044;
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   MOBILE BOTTOM NAV
+========================================================= */
+
+.mobile-nav {
+  display: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (max-width: 900px) {
 
-  .layout {
-    grid-template-columns: 1fr;
-
-    height: auto;
+  body {
+    overflow: hidden;
   }
 
-  .sidebar {
-    height: 55vh;
+  .topbar {
+    height: 70px;
+    padding:
+      10px 13px;
+  }
 
-    border-right: 0;
+  .brand {
+    min-width: auto;
+  }
 
-    border-bottom: 1px solid #ddd;
+  .brand-subtitle {
+    display: none;
+  }
+
+  .brand-title {
+    font-size: 14px;
+  }
+
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 21px;
+  }
+
+  .header-search {
+    max-width: none;
+  }
+
+  .app {
+    height: calc(100vh - 70px);
+    display: block;
+    position: relative;
+  }
+
+  .map-area {
+    height: 100%;
   }
 
   #map {
-    height: 55vh;
+    height: 100%;
   }
 
-  header h1 {
-    font-size: 22px;
+  .sidebar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 48%;
+    max-height: 520px;
+    border: 0;
+    border-radius:
+      20px 20px 0 0;
+    box-shadow:
+      0 -5px 25px rgba(0,0,0,.15);
+    z-index: 1100;
   }
 
+  .sidebar-intro {
+    padding:
+      17px 18px 10px;
+  }
+
+  .sidebar-intro h1 {
+    font-size: 21px;
+    margin-top: 8px;
+  }
+
+  .sidebar-intro p {
+    display: none;
+  }
+
+  .stats {
+    padding-bottom: 10px;
+  }
+
+  .section-title {
+    padding-top: 10px;
+  }
+
+  .legend {
+    bottom: calc(48% + 12px);
+  }
+
+  .map-tools {
+    top: 12px;
+    right: 12px;
+  }
+
+}
+
+
+@media (max-width: 620px) {
+
+  .header-search {
+    display: none;
+  }
+
+  .topbar {
+    justify-content: center;
+  }
+
+  .brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .brand-title {
+    font-size: 16px;
+  }
+
+  .sidebar {
+    height: 54%;
+  }
+
+  .legend {
+    display: none;
+  }
+
+  .quick-filters {
+    padding-left: 15px;
+  }
+
+  .stats {
+    padding:
+      0 15px 9px;
+  }
+
+  .card {
+    margin:
+      7px 10px;
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP SCROLLBAR
+========================================================= */
+
+.sidebar::-webkit-scrollbar {
+  width: 7px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f4f6f4;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #ccd7ce;
+  border-radius: 10px;
 }
 
 </style>
 </head>
 
+
 <body>
 
-<header>
 
-  <h1>🏃 Kalendarz Biegowy Polska 2026</h1>
+<!-- ======================================================
+     HEADER
+======================================================= -->
 
-  <p>
-    Październik • Listopad • Grudzień
-  </p>
+<header class="topbar">
+
+  <div class="brand">
+
+    <div class="brand-icon">
+      🚴
+    </div>
+
+    <div>
+
+      <div class="brand-title">
+        Rowerem po Łęczyńskiem
+      </div>
+
+      <div class="brand-subtitle">
+        Powiat łęczyński i najbliższe okolice
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="header-search">
+
+    <input
+      id="search"
+      type="search"
+      placeholder="Szukaj trasy, jeziora, zabytku..."
+      autocomplete="off"
+    >
+
+    <span class="search-icon">
+      🔎
+    </span>
+
+  </div>
 
 </header>
 
 
-<!-- =========================
-     FILTRY
-========================= -->
+<!-- ======================================================
+     APP
+======================================================= -->
 
-<div class="toolbar">
-
-  <select id="monthFilter">
-
-    <option value="all">
-      Wszystkie miesiące
-    </option>
-
-    <option value="2026-10">
-      Październik 2026
-    </option>
-
-    <option value="2026-11">
-      Listopad 2026
-    </option>
-
-    <option value="2026-12">
-      Grudzień 2026
-    </option>
-
-  </select>
+<main class="app">
 
 
-  <select id="provinceFilter">
-
-    <option value="all">
-      Wszystkie województwa
-    </option>
-
-  </select>
-
-
-  <input
-    id="search"
-    type="search"
-    placeholder="🔎 Szukaj biegu, miasta..."
-  >
-
-
-  <button id="showAll">
-    Pokaż wszystkie
-  </button>
-
-</div>
-
-
-<!-- =========================
-     UKŁAD
-========================= -->
-
-<div class="layout">
+  <!-- ====================================================
+       SIDEBAR
+  ===================================================== -->
 
   <aside class="sidebar">
 
-    <div
-      id="summary"
-      class="summary"
-    ></div>
+
+    <section class="sidebar-intro">
+
+      <span class="eyebrow">
+        🌿 Turystyka rowerowa
+      </span>
+
+      <h1>
+        Odkryj Łęczyńskie
+        na dwóch kołach
+      </h1>
+
+      <p>
+        Trasy, jeziora, lasy, zabytki i miejsca,
+        w których warto zrobić dłuższy postój.
+      </p>
+
+    </section>
+
+
+    <!-- QUICK FILTERS -->
+
+    <div class="quick-filters">
+
+      <button
+        class="quick-filter active"
+        data-filter="all"
+      >
+        Wszystko
+      </button>
+
+      <button
+        class="quick-filter"
+        data-filter="route"
+      >
+        🚴 Trasy
+      </button>
+
+      <button
+        class="quick-filter"
+        data-filter="easy"
+      >
+        🟢 Łatwe
+      </button>
+
+      <button
+        class="quick-filter"
+        data-filter="medium"
+      >
+        🟠 Średnie
+      </button>
+
+      <button
+        class="quick-filter"
+        data-filter="nature"
+      >
+        🌿 Przyroda
+      </button>
+
+      <button
+        class="quick-filter"
+        data-filter="heritage"
+      >
+        🏛 Zabytki
+      </button>
+
+    </div>
+
+
+    <!-- STATYSTYKI -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong>4</strong>
+        <span>oficjalne trasy</span>
+      </div>
+
+      <div class="stat">
+        <strong>30–42</strong>
+        <span>km</span>
+      </div>
+
+      <div class="stat">
+        <strong>15+</strong>
+        <span>miejsc</span>
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      Polecane trasy i miejsca
+    </div>
+
 
     <div
-      id="eventList"
+      id="cards"
+      class="cards"
     ></div>
+
 
   </aside>
 
 
-  <main id="map"></main>
+  <!-- ====================================================
+       MAP
+  ===================================================== -->
 
-</div>
+  <section class="map-area">
 
-
-<div class="legend">
-
-  <span class="legend-dot"></span>
-
-  Termin wydarzenia
-
-</div>
+    <div id="map"></div>
 
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <div
+      id="loading"
+      class="route-loading"
+    >
+      ⏳ Wyznaczanie przebiegu tras...
+    </div>
+
+
+    <div class="map-tools">
+
+      <button
+        class="map-tool"
+        onclick="showAll()"
+      >
+        🗺 Pokaż wszystko
+      </button>
+
+      <button
+        class="map-tool"
+        onclick="locateUser()"
+      >
+        📍 Moja lokalizacja
+      </button>
+
+      <button
+        class="map-tool"
+        onclick="resetMap()"
+      >
+        ↺ Powiat łęczyński
+      </button>
+
+    </div>
+
+
+    <div class="legend">
+
+      <div class="legend-title">
+        Legenda
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-line line-blue"></span>
+        Niebieska trasa
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-line line-yellow"></span>
+        Żółta trasa
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-line line-green"></span>
+        Zielona trasa
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-line line-black"></span>
+        Czarna trasa
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-point"></span>
+        Atrakcja
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 
 <script>
-
-/* =========================================================
-   DANE BIEGÓW
-========================================================= */
-
-const events = [
-
-  /* =========================
-     PAŹDZIERNIK
-  ========================= */
-
-  {
-    date: "2026-10-02",
-    name: "Silesia 5K RUN",
-    city: "Katowice / Chorzów",
-    province: "śląskie",
-    distance: "5 km",
-    description:
-      "Bieg otwierający weekend Silesia Marathon. Krótki dystans rozgrywany dzień przed biegiem na 10 km.",
-    lat: 50.2649,
-    lng: 19.0238
-  },
-
-  {
-    date: "2026-10-03",
-    name: "ING Biegnij Warszawo",
-    city: "Warszawa",
-    province: "mazowieckie",
-    distance: "10 km",
-    description:
-      "Duży uliczny bieg na dystansie 10 km rozgrywany w Warszawie.",
-    lat: 52.2297,
-    lng: 21.0122
-  },
-
-  {
-    date: "2026-10-03",
-    name: "Silesia 10K RUN",
-    city: "Katowice / Chorzów",
-    province: "śląskie",
-    distance: "10 km",
-    description:
-      "Bieg na dystansie 10 km rozgrywany w ramach weekendu Silesia Marathon.",
-    lat: 50.2649,
-    lng: 19.0238
-  },
-
-  {
-    date: "2026-10-03",
-    name: "Bison Ultra Trail",
-    city: "Supraśl",
-    province: "podlaskie",
-    distance: "biegi trail / ultra",
-    description:
-      "Festiwal biegów terenowych w Puszczy Knyszyńskiej z wieloma dystansami.",
-    lat: 53.2056,
-    lng: 23.3386
-  },
-
-  {
-    date: "2026-10-04",
-    name: "Silesia Half Marathon",
-    city: "Katowice / Chorzów",
-    province: "śląskie",
-    distance: "21,1 km",
-    description:
-      "Półmaraton rozgrywany podczas głównego weekendu Silesia Marathon.",
-    lat: 50.2649,
-    lng: 19.0238
-  },
-
-  {
-    date: "2026-10-04",
-    name: "Silesia Marathon",
-    city: "Katowice / Chorzów",
-    province: "śląskie",
-    distance: "42,2 km",
-    description:
-      "Główny maraton weekendu Silesia Marathon.",
-    lat: 50.2649,
-    lng: 19.0238
-  },
-
-  {
-    date: "2026-10-04",
-    name: "Silesia Ultramarathon",
-    city: "Katowice / Chorzów",
-    province: "śląskie",
-    distance: "ultra",
-    description:
-      "Długi bieg rozgrywany w ramach weekendu Silesia Marathon.",
-    lat: 50.2649,
-    lng: 19.0238
-  },
-
-  {
-    date: "2026-10-04",
-    name: "LOTTO Poznań Maraton",
-    city: "Poznań",
-    province: "wielkopolskie",
-    distance: "42,2 km",
-    description:
-      "Poznański maraton uliczny z metą na terenie Międzynarodowych Targów Poznańskich.",
-    lat: 52.4064,
-    lng: 16.9252
-  },
-
-  {
-    date: "2026-10-04",
-    name: "PKO Olsztyn Półmaraton",
-    city: "Olsztyn",
-    province: "warmińsko-mazurskie",
-    distance: "21,1 km",
-    description:
-      "Uliczny półmaraton w Olsztynie.",
-    lat: 53.7784,
-    lng: 20.4801
-  },
-
-  {
-    date: "2026-10-04",
-    name: "PKO Olsztyn 5K",
-    city: "Olsztyn",
-    province: "warmińsko-mazurskie",
-    distance: "5 km",
-    description:
-      "Bieg na 5 km rozgrywany tego samego dnia co olsztyński półmaraton.",
-    lat: 53.7784,
-    lng: 20.4801
-  },
-
-  {
-    date: "2026-10-10",
-    name: "II Korczyński Półmaraton Górski",
-    city: "Korczyna",
-    province: "podkarpackie",
-    distance: "21,1 km",
-    description:
-      "Górski półmaraton w rejonie Korczyny.",
-    lat: 49.7167,
-    lng: 21.8167
-  },
-
-  {
-    date: "2026-10-17",
-    name: "Dębowiec Nocna Pętla",
-    city: "Bielsko-Biała",
-    province: "śląskie",
-    distance: "bieg terenowy",
-    description:
-      "Jesienny bieg terenowy rozgrywany po zmroku.",
-    lat: 49.8224,
-    lng: 19.0444
-  },
-
-  {
-    date: "2026-10-18",
-    name: "52. Maraton Dębno",
-    city: "Dębno",
-    province: "zachodniopomorskie",
-    distance: "42,2 km",
-    description:
-      "Jeden z najbardziej znanych polskich maratonów ulicznych.",
-    lat: 52.7392,
-    lng: 14.6985
-  },
-
-  {
-    date: "2026-10-18",
-    name: "Maratońska Dziesiątka",
-    city: "Dębno",
-    province: "zachodniopomorskie",
-    distance: "10 km",
-    description:
-      "Towarzyszący bieg na dystansie 10 km podczas weekendu Maratonu Dębno.",
-    lat: 52.7392,
-    lng: 14.6985
-  },
-
-  {
-    date: "2026-10-18",
-    name: "STOKROTKA 10. Półmaraton Lubelski",
-    city: "Lublin",
-    province: "lubelskie",
-    distance: "21,1 km",
-    description:
-      "Jubileuszowa edycja Półmaratonu Lubelskiego. Start i meta znajdują się na Stadionie Lekkoatletycznym w Lublinie.",
-    lat: 51.2465,
-    lng: 22.5684
-  },
-
-  {
-    date: "2026-10-24",
-    name: "Botaniczna Piątka – jesień",
-    city: "Poznań",
-    province: "wielkopolskie",
-    distance: "5 km",
-    description:
-      "Jesienna odsłona biegu Botaniczna Piątka.",
-    lat: 52.4186,
-    lng: 16.8917
-  },
-
-  {
-    date: "2026-10-25",
-    name: "34. Memoriał Jerzego Chromika",
-    city: "Mysłowice",
-    province: "śląskie",
-    distance: "bieg uliczny",
-    description:
-      "Tradycyjny jesienny bieg memoriałowy w Mysłowicach.",
-    lat: 50.2080,
-    lng: 19.1668
-  },
-
-  {
-    date: "2026-10-25",
-    name: "Toruń Maraton",
-    city: "Toruń",
-    province: "kujawsko-pomorskie",
-    distance: "42,2 km",
-    description:
-      "Jesienny maraton uliczny w Toruniu.",
-    lat: 53.0138,
-    lng: 18.5984
-  },
-
-
-  /* =========================
-     LISTOPAD
-  ========================= */
-
-  {
-    date: "2026-11-07",
-    name: "11. RST Półmaraton Świdnicki",
-    city: "Świdnica",
-    province: "dolnośląskie",
-    distance: "21,1 km",
-    description:
-      "Półmaraton ze startem w Świdnicy i trasą prowadzącą również przez okolice miasta.",
-    lat: 50.8437,
-    lng: 16.4870
-  },
-
-  {
-    date: "2026-11-07",
-    name: "RST Dzika Piątka",
-    city: "Świdnica",
-    province: "dolnośląskie",
-    distance: "5 km",
-    description:
-      "Bieg na 5 km towarzyszący Półmaratonowi Świdnickiemu.",
-    lat: 50.8437,
-    lng: 16.4870
-  },
-
-  {
-    date: "2026-11-08",
-    name: "Marceliński Bieg Jesienny",
-    city: "Poznań",
-    province: "wielkopolskie",
-    distance: "5 / 10 km",
-    description:
-      "Jesienny bieg w zielonej części Poznania.",
-    lat: 52.3985,
-    lng: 16.8246
-  },
-
-  {
-    date: "2026-11-11",
-    name: "36. Bieg Niepodległości",
-    city: "Warszawa",
-    province: "mazowieckie",
-    distance: "10 km",
-    description:
-      "Uliczny bieg organizowany w Warszawie z okazji Święta Niepodległości.",
-    lat: 52.2297,
-    lng: 21.0122
-  },
-
-  {
-    date: "2026-11-11",
-    name: "PKO Bieg Niepodległości",
-    city: "Rzeszów",
-    province: "podkarpackie",
-    distance: "10 km",
-    description:
-      "Rzeszowski bieg uliczny organizowany 11 listopada.",
-    lat: 50.0412,
-    lng: 21.9991
-  },
-
-  {
-    date: "2026-11-11",
-    name: "Bieg Niepodległości RUNPOLAND",
-    city: "Poznań",
-    province: "wielkopolskie",
-    distance: "10 km",
-    description:
-      "Poznański bieg uliczny na dystansie 10 km. Start zaplanowano na 11:11.",
-    lat: 52.4064,
-    lng: 16.9252
-  },
-
-  {
-    date: "2026-11-11",
-    name: "Gdyński Bieg Niepodległości",
-    city: "Gdynia",
-    province: "pomorskie",
-    distance: "10 km",
-    description:
-      "Dziesięciokilometrowy bieg uliczny w Gdyni.",
-    lat: 54.5189,
-    lng: 18.5305
-  },
-
-  {
-    date: "2026-11-11",
-    name: "Sopocki Bieg Niepodległości",
-    city: "Sopot",
-    province: "pomorskie",
-    distance: "5 km",
-    description:
-      "Bieg organizowany w Sopocie w Święto Niepodległości.",
-    lat: 54.4416,
-    lng: 18.5601
-  },
-
-  {
-    date: "2026-11-11",
-    name: "Krakowski Bieg Niepodległości",
-    city: "Kraków",
-    province: "małopolskie",
-    distance: "10 km",
-    description:
-      "Krakowski bieg uliczny organizowany 11 listopada.",
-    lat: 50.0614,
-    lng: 19.9383
-  },
-
-  {
-    date: "2026-11-11",
-    name: "Bieg Niepodległości Czechowice-Dziedzice",
-    city: "Czechowice-Dziedzice",
-    province: "śląskie",
-    distance: "10 km",
-    description:
-      "Bieg uliczny organizowany w Święto Niepodległości.",
-    lat: 49.9132,
-    lng: 19.0048
-  },
-
-  {
-    date: "2026-11-11",
-    name: "XXXIII Biegi Niepodległości",
-    city: "Ruda Śląska",
-    province: "śląskie",
-    distance: "bieg uliczny",
-    description:
-      "Tradycyjne biegi niepodległościowe w Rudzie Śląskiej.",
-    lat: 50.2558,
-    lng: 18.8556
-  },
-
-  {
-    date: "2026-11-11",
-    name: "Wolsztyński Bieg Niepodległości",
-    city: "Wolsztyn",
-    province: "wielkopolskie",
-    distance: "bieg uliczny",
-    description:
-      "Lokalny bieg organizowany w Wolsztynie 11 listopada.",
-    lat: 52.1212,
-    lng: 16.3655
-  },
-
-  {
-    date: "2026-11-20",
-    name: "Piekło Czantorii",
-    city: "Ustroń",
-    province: "śląskie",
-    distance: "bieg górski",
-    description:
-      "Górskie wydarzenie biegowe w rejonie Czantorii.",
-    lat: 49.7217,
-    lng: 18.8100
-  },
-
-  {
-    date: "2026-11-21",
-    name: "Nocny Telegraf Trail",
-    city: "Kielce",
-    province: "świętokrzyskie",
-    distance: "trail",
-    description:
-      "Nocny bieg terenowy na stokach Telegrafu w Kielcach.",
-    lat: 50.8661,
-    lng: 20.6286
-  },
-
-  {
-    date: "2026-11-21",
-    name: "Koszęcińska Dycha",
-    city: "Koszęcin",
-    province: "śląskie",
-    distance: "10 km",
-    description:
-      "Jesienny bieg na dystansie 10 km w Koszęcinie.",
-    lat: 50.6351,
-    lng: 18.8411
-  },
-
-  {
-    date: "2026-11-21",
-    name: "Półmaraton Górski Orzeł",
-    city: "Świeradów-Zdrój",
-    province: "dolnośląskie",
-    distance: "21,1 km",
-    description:
-      "Górski półmaraton prowadzący po terenach Gór Izerskich.",
-    lat: 50.9092,
-    lng: 15.3430
-  },
-
-  {
-    date: "2026-11-28",
-    name: "XXIII Maraton Komandosa",
-    city: "Lubliniec",
-    province: "śląskie",
-    distance: "maraton",
-    description:
-      "Bieg o charakterze wojskowym organizowany w Lublińcu.",
-    lat: 50.6680,
-    lng: 18.6840
-  },
-
-  {
-    date: "2026-11-29",
-    name: "Bieg po Ciacho",
-    city: "Puszczykowo",
-    province: "wielkopolskie",
-    distance: "bieg terenowy",
-    description:
-      "Jesienny bieg o charakterze rekreacyjnym i terenowym.",
-    lat: 52.2850,
-    lng: 16.8490
-  },
-
-
-  /* =========================
-     GRUDZIEŃ
-  ========================= */
-
-  {
-    date: "2026-12-05",
-    name: "VI Nocny Mikołajkowy Bieg Nyski",
-    city: "Nysa",
-    province: "opolskie",
-    distance: "bieg uliczny",
-    description:
-      "Mikołajkowy bieg uliczny rozgrywany po zmroku.",
-    lat: 50.4738,
-    lng: 17.3344
-  },
-
-  {
-    date: "2026-12-06",
-    name: "22. Bieg Barbórkowy",
-    city: "Rybnik",
-    province: "śląskie",
-    distance: "10 km",
-    description:
-      "Bieg uliczny na dystansie 10 km organizowany w Rybniku.",
-    lat: 50.0971,
-    lng: 18.5418
-  },
-
-  {
-    date: "2026-12-06",
-    name: "Turbacz Trail – Podhalański Bieg Mikołajkowy",
-    city: "Nowy Targ",
-    province: "małopolskie",
-    distance: "trail",
-    description:
-      "Mikołajkowe wydarzenie trailowe w rejonie Gorców.",
-    lat: 49.4775,
-    lng: 20.0320
-  },
-
-  {
-    date: "2026-12-12",
-    name: "Winter Trail Małopolska",
-    city: "Mszana Dolna",
-    province: "małopolskie",
-    distance: "13–145 km",
-    description:
-      "Zimowy festiwal biegów górskich w Beskidzie Wyspowym z kilkoma dystansami.",
-    lat: 49.6747,
-    lng: 20.0790
-  },
-
-  {
-    date: "2026-12-12",
-    name: "WTM 64",
-    city: "Mszana Dolna",
-    province: "małopolskie",
-    distance: "ok. 67 km",
-    description:
-      "Jeden z dłuższych biegów Winter Trail Małopolska.",
-    lat: 49.6747,
-    lng: 20.0790
-  },
-
-  {
-    date: "2026-12-12",
-    name: "WTM 140",
-    city: "Mszana Dolna",
-    province: "małopolskie",
-    distance: "ok. 145 km",
-    description:
-      "Najdłuższy dystans Winter Trail Małopolska.",
-    lat: 49.6747,
-    lng: 20.0790
-  },
-
-  {
-    date: "2026-12-20",
-    name: "Bieg Charytatywny – Oława",
-    city: "Oława",
-    province: "dolnośląskie",
-    distance: "bieg",
-    description:
-      "Grudniowy bieg charytatywny organizowany w Oławie.",
-    lat: 50.9466,
-    lng: 17.2926
-  },
-
-
-  /* =========================
-     LUBLIN — DODATKOWE BIEGI
-  ========================= */
-
-  {
-    date: "2026-11-29",
-    name: "Chęć na pięć – Szybka Piątka",
-    city: "Lublin",
-    province: "lubelskie",
-    distance: "5 km",
-    description:
-      "Szybki bieg uliczny na dystansie 5 km w Lublinie.",
-    lat: 51.2465,
-    lng: 22.5684
-  }
-
-];
-
 
 /* =========================================================
    MAPA
 ========================================================= */
 
 const map = L.map("map", {
-
   zoomControl: true
-
 }).setView(
-
-  [52.1, 19.4],
-
-  6
-
+  [51.34, 22.98],
+  10
 );
 
 
 L.tileLayer(
-
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
   {
-
+    maxZoom: 19,
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-
+      '&copy; OpenStreetMap contributors'
   }
-
 ).addTo(map);
 
 
-/* Warstwa markerów */
-
-const markerLayer =
-  L.layerGroup().addTo(map);
-
-
-/*
-   Przechowujemy marker dla każdego wydarzenia.
-
-   Dzięki temu kliknięcie karty na liście
-   zawsze znajdzie właściwy marker.
-*/
-
-const eventMarkers = new Map();
-
-
 /* =========================================================
-   ELEMENTY
+   OFICJALNE TRASY
+=========================================================
+
+   Punkty pochodzą z oficjalnych opisów tras.
+   Linia jest wyznaczana przez OSRM po drogach.
+
 ========================================================= */
 
-const eventList =
-  document.getElementById("eventList");
+const routes = [
 
-const summary =
-  document.getElementById("summary");
+  {
+    id: "blue",
 
-const monthFilter =
-  document.getElementById("monthFilter");
+    type: "route",
 
-const provinceFilter =
-  document.getElementById("provinceFilter");
+    title:
+      "Niebieska trasa – Kijany • Zawieprzyce • Dratów • Puchaczów",
 
-const search =
-  document.getElementById("search");
+    short:
+      "Kijany – Zawieprzyce – Stary Radzic – Zezulin – Krzczeń – Dratów – Puchaczów",
 
-const showAll =
-  document.getElementById("showAll");
+    distance:
+      "42 km",
 
+    officialDistance:
+      "42 km",
 
-/* =========================================================
-   WOJEWÓDZTWA
-========================================================= */
+    time:
+      "3 h",
 
-const provinces = [
+    difficulty:
+      "hard",
 
-  ...new Set(
+    difficultyText:
+      "Trudna",
 
-    events.map(
-      event => event.province
-    )
+    color:
+      "#1976d2",
 
-  )
+    icon:
+      "🔵",
 
-].sort(
+    official:
+      true,
 
-  (a, b) =>
-    a.localeCompare(b, "pl")
+    waypoints: [
 
-);
+      [51.3770, 22.9440], // Kijany
+      [51.3645, 22.9440], // Zawieprzyce
+      [51.3550, 22.9810], // Stary Radzic
+      [51.3650, 23.0200], // Zezulin
+      [51.3700, 23.0450], // Krzczeń
+      [51.3340, 23.0110], // Dratów
+      [51.3100, 22.9730]  // Puchaczów
 
+    ],
 
-provinces.forEach(province => {
+    tags: [
+      "42 km",
+      "oznakowana",
+      "Wieprz",
+      "historia"
+    ],
 
-  const option =
-    document.createElement("option");
+    description:
+      "Oficjalna lokalna trasa rowerowa. Jako jedyna z czterech lokalnych tras powiatu jest oznakowana w terenie.",
 
-  option.value = province;
+    source:
+      "https://powiatleczynski.pl/turystyka/aktywny-wypoczynek/trasy-rowerowe/"
 
-  option.textContent =
-    province.charAt(0).toUpperCase()
-    + province.slice(1);
+  },
 
-  provinceFilter.appendChild(option);
 
-});
+  {
+    id: "yellow",
 
+    type: "route",
 
-/* =========================================================
-   FORMAT DATY
-========================================================= */
+    title:
+      "Żółta trasa – Nadrybie • Ciechanki • Łańcuchów",
 
-function formatDate(dateString) {
+    short:
+      "Nadrybie – Stefanów – Albertów – Jasieniec – Ciechanki – Łańcuchów – Wólka Łańcuchowska",
 
-  const date =
-    new Date(
-      dateString + "T12:00:00"
-    );
+    distance:
+      "30 km",
 
-  return date.toLocaleDateString(
+    officialDistance:
+      "30 km",
 
-    "pl-PL",
+    time:
+      "2 h",
 
-    {
+    difficulty:
+      "easy",
 
-      weekday: "long",
+    difficultyText:
+      "Łatwa",
 
-      day: "numeric",
+    color:
+      "#d5a316",
 
-      month: "long",
+    icon:
+      "🟡",
 
-      year: "numeric"
+    official:
+      true,
 
-    }
+    waypoints: [
 
-  );
+      [51.3370, 23.0140], // Nadrybie
+      [51.3200, 23.0000], // Stefanów
+      [51.3030, 22.9820], // Albertów
+      [51.2900, 22.9630], // Jasieniec
+      [51.2750, 22.9500], // Ciechanki
+      [51.2520, 22.9520], // Łańcuchów
+      [51.2380, 22.9630]  // Wólka Łańcuchowska
 
-}
+    ],
 
+    tags: [
+      "30 km",
+      "łatwa",
+      "rodzinna",
+      "zabytki"
+    ],
 
-/* =========================================================
-   POBIERANIE PRZEFILTROWANYCH WYDARZEŃ
-========================================================= */
+    description:
+      "Łatwa trasa o długości około 30 km, prowadzona przez Nadrybie, Ciechanki, Łańcuchów i Wólkę Łańcuchowską.",
 
-function getFilteredEvents() {
+    source:
+      "https://powiatleczynski.pl/turystyka/aktywny-wypoczynek/trasy-rowerowe/"
 
-  const month =
-    monthFilter.value;
+  },
 
-  const province =
-    provinceFilter.value;
 
-  const phrase =
-    search.value
-      .trim()
-      .toLowerCase();
+  {
+    id: "green",
 
+    type: "route",
 
-  return events
+    title:
+      "Zielona trasa – Łęczna • Milejów • Klarów",
 
-    .filter(event => {
+    short:
+      "Łęczna – Milejów – Klarów – Wólka Bielecka – Ostrówek – Ciechanki – Łęczna",
 
-      const monthOK =
+    distance:
+      "37 km",
 
-        month === "all"
-        ||
-        event.date.startsWith(month);
+    officialDistance:
+      "37 km",
 
+    time:
+      "2,5 h",
 
-      const provinceOK =
+    difficulty:
+      "medium",
 
-        province === "all"
-        ||
-        event.province === province;
+    difficultyText:
+      "Średnia",
 
+    color:
+      "#29904d",
 
-      const searchOK =
+    icon:
+      "🟢",
 
-        !phrase
-        ||
-        event.name
-          .toLowerCase()
-          .includes(phrase)
-        ||
-        event.city
-          .toLowerCase()
-          .includes(phrase)
-        ||
-        event.province
-          .toLowerCase()
-          .includes(phrase)
-        ||
-        event.distance
-          .toLowerCase()
-          .includes(phrase);
+    official:
+      true,
 
+    waypoints: [
 
-      return (
+      [51.3020, 22.8820], // Łęczna
+      [51.2320, 22.9520], // Milejów
+      [51.2490, 22.9860], // Klarów
+      [51.2720, 22.9950], // Wólka Bielecka
+      [51.2940, 22.9800], // Ostrówek
+      [51.2830, 22.9340], // Ciechanki
+      [51.3020, 22.8820]  // Łęczna
 
-        monthOK
-        &&
-        provinceOK
-        &&
-        searchOK
+    ],
 
-      );
+    tags: [
+      "37 km",
+      "Wieprz",
+      "Milejów",
+      "Klarów"
+    ],
 
-    })
+    description:
+      "Trasa prowadząca z Łęcznej przez Milejów, Klarów, Wólkę Bielecką, Ostrówek i Ciechanki z powrotem do Łęcznej.",
 
-    .sort(
+    source:
+      "https://powiatleczynski.pl/turystyka/aktywny-wypoczynek/trasy-rowerowe/"
 
-      (a, b) =>
-        a.date.localeCompare(b.date)
+  },
 
-    );
 
-}
+  {
+    id: "black",
 
+    type: "route",
 
-/* =========================================================
-   KLUCZ LOKALIZACJI
-========================================================= */
+    title:
+      "Czarna trasa – Nadrybie • Cyców • Świerszczów",
 
-/*
-   Wydarzenia mające identyczne współrzędne
-   traktujemy jako znajdujące się w tej samej lokalizacji.
-*/
+    short:
+      "Nadrybie – Stefanów – Cyców – Bekiesza – Świerszczów – Garbatówka – Nadrybie",
 
-function locationKey(event) {
+    distance:
+      "30 km",
 
-  return (
+    officialDistance:
+      "30 km",
 
-    `${event.lat.toFixed(5)},`
-    +
-    `${event.lng.toFixed(5)}`
+    time:
+      "2 h",
 
-  );
+    difficulty:
+      "medium",
 
-}
+    difficultyText:
+      "Średnia",
 
+    color:
+      "#252525",
 
-/* =========================================================
-   TWORZENIE WŁASNEJ IKONY
-========================================================= */
+    icon:
+      "⚫",
 
-function createMarkerIcon(number, multiple) {
+    official:
+      true,
 
-  if (!multiple) {
+    waypoints: [
 
-    return L.divIcon({
+      [51.3370, 23.0140], // Nadrybie
+      [51.3200, 23.0000], // Stefanów
+      [51.2950, 23.0330], // Cyców
+      [51.2760, 23.0220], // Bekiesza
+      [51.2650, 23.0500], // Świerszczów
+      [51.2850, 23.0750], // Garbatówka
+      [51.3370, 23.0140]  // Nadrybie
 
-      className: "",
+    ],
 
-      html: `
-        <div
-          style="
-            width:24px;
-            height:24px;
-            border-radius:50%;
-            background:#16a085;
-            border:3px solid white;
-            box-shadow:0 2px 7px rgba(0,0,0,.35);
-          "
-        ></div>
-      `,
+    tags: [
+      "30 km",
+      "pętla",
+      "Cyców",
+      "przyroda"
+    ],
 
-      iconSize: [24, 24],
+    description:
+      "Pętla przez Nadrybie, Cyców, Bekieszę, Świerszczów i Garbatówkę.",
 
-      iconAnchor: [12, 12],
-
-      popupAnchor: [0, -12]
-
-    });
+    source:
+      "https://powiatleczynski.pl/turystyka/aktywny-wypoczynek/trasy-rowerowe/"
 
   }
 
+];
+
+
+/* =========================================================
+   ATRAKCJE
+========================================================= */
+
+const places = [
+
+  {
+    id: "leczna",
+
+    type: "heritage",
+
+    icon: "🏛",
+
+    title:
+      "Łęczna – Stare Miasto",
+
+    description:
+      "Historyczne centrum Łęcznej z trzema rynkami i zabytkową zabudową.",
+
+    coords:
+      [51.3018, 22.8815],
+
+    tags: [
+      "historia",
+      "centrum",
+      "zabytki"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/warto-zobaczyc/"
+
+  },
+
+
+  {
+    id: "zawieprzyce",
+
+    type: "heritage",
+
+    icon: "🏰",
+
+    title:
+      "Zawieprzyce – ruiny zamku",
+
+    description:
+      "Zespół parkowo-pałacowy z ruinami dawnego zamku i oranżerii, położony nad Bystrzycą i Wieprzem.",
+
+    coords:
+      [51.3650, 22.9440],
+
+    tags: [
+      "zamek",
+      "historia",
+      "Wieprz"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/warto-zobaczyc/najciekawsze-miejsca/zawieprzyce/"
+
+  },
+
+
+  {
+    id: "puchaczow",
+
+    type: "heritage",
+
+    icon: "⛪",
+
+    title:
+      "Puchaczów – kościół pw. Wniebowzięcia NMP",
+
+    description:
+      "Późnobarokowy kościół z końca XVIII wieku, jeden z ważniejszych zabytków Puchaczowa.",
+
+    coords:
+      [51.3102, 22.9730],
+
+    tags: [
+      "kościół",
+      "barok",
+      "zabytek"
+    ],
+
+    source:
+      "https://zabytek.pl/pl/obiekty/puchaczow-zespol-kosciola-par-pw-wniebowziecia-najswietszej-ma"
+
+  },
+
+
+  {
+    id: "dratow",
+
+    type: "heritage",
+
+    icon: "⛪",
+
+    title:
+      "Dratów – cerkiew",
+
+    description:
+      "Cerkiew i okolice Dratowa są jednym z charakterystycznych punktów kulturowego krajobrazu Pojezierza.",
+
+    coords:
+      [51.3340, 23.0110],
+
+    tags: [
+      "cerkiew",
+      "historia",
+      "szlak"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "slovian",
+
+    type: "family",
+
+    icon: "🏕",
+
+    title:
+      "Słowiański Gród – Wólka Bielecka",
+
+    description:
+      "Rekonstrukcja średniowiecznego grodziska i miejsce związane z edukacją historyczną.",
+
+    coords:
+      [51.2720, 22.9950],
+
+    tags: [
+      "rodzinne",
+      "historia",
+      "dzieci"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "piaseczno",
+
+    type: "nature",
+
+    icon: "🌊",
+
+    title:
+      "Jezioro Piaseczno",
+
+    description:
+      "Jedno z najbardziej znanych jezior Pojezierza Łęczyńsko-Włodawskiego – dobry kierunek na rowerowy odpoczynek nad wodą.",
+
+    coords:
+      [51.4200, 23.0200],
+
+    tags: [
+      "jezioro",
+      "woda",
+      "odpoczynek"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "rogozno",
+
+    type: "nature",
+
+    icon: "🌊",
+
+    title:
+      "Jezioro Rogóźno",
+
+    description:
+      "Jedno z jezior Pojezierza Łęczyńsko-Włodawskiego, położone w gminie Ludwin.",
+
+    coords:
+      [51.4110, 22.9970],
+
+    tags: [
+      "jezioro",
+      "Ludwin",
+      "odpoczynek"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "krzczen",
+    type: "nature",
+    icon: "🌊",
+    title: "Jezioro Krzczeń",
+    description: "Jezioro położone w rejonie trasy niebieskiej.",
+    coords: [51.3700, 23.0450],
+    tags: ["jezioro", "niebieska trasa", "przyroda"],
+    source: "https://powiatleczynski.pl/turystyka/"
+  },
+
+
+  {
+    id: "poleskipn",
+
+    type: "nature",
+
+    icon: "🌿",
+
+    title:
+      "Poleski Park Narodowy",
+
+    description:
+      "Torfowiska, bagna, jeziora i lasy Polesia. W okolicy dostępne są również trasy rowerowe.",
+
+    coords:
+      [51.4440, 23.0910],
+
+    tags: [
+      "park narodowy",
+      "przyroda",
+      "Polesie"
+    ],
+
+    source:
+      "https://www.poleskipn.pl/"
+
+  },
+
+
+  {
+    id: "mietiulka",
+
+    type: "nature",
+
+    icon: "🚲",
+
+    title:
+      "Ścieżka rowerowa „Mietiułka”",
+
+    description:
+      "Rowerowa trasa Poleskiego Parku Narodowego o długości około 21 km.",
+
+    coords:
+      [51.4720, 23.1660],
+
+    tags: [
+      "21 km",
+      "PPN",
+      "rower"
+    ],
+
+    source:
+      "https://www.poleskipn.pl/"
+
+  },
+
+
+  {
+    id: "stare-zalucze",
+
+    type: "nature",
+
+    icon: "🦆",
+
+    title:
+      "Stare Załucze – Ośrodek Dydaktyczno-Muzealny",
+
+    description:
+      "Ośrodek Poleskiego Parku Narodowego z ekspozycją i informacjami o przyrodzie Polesia.",
+
+    coords:
+      [51.4550, 23.1450],
+
+    tags: [
+      "PPN",
+      "muzeum",
+      "rodzinne"
+    ],
+
+    source:
+      "https://www.poleskipn.pl/"
+
+  },
+
+
+  {
+    id: "milejow",
+
+    type: "heritage",
+
+    icon: "🏡",
+
+    title:
+      "Milejów",
+
+    description:
+      "Miejscowość położona nad Wieprzem, przez którą prowadzi zielona trasa rowerowa.",
+
+    coords:
+      [51.2320, 22.9520],
+
+    tags: [
+      "Wieprz",
+      "zielona trasa",
+      "historia"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "klarow",
+
+    type: "heritage",
+
+    icon: "🌳",
+
+    title:
+      "Klarów",
+
+    description:
+      "Miejscowość na zielonej trasie rowerowej. W okolicy zachowały się elementy dawnego krajobrazu dworskiego.",
+
+    coords:
+      [51.2490, 22.9860],
+
+    tags: [
+      "zielona trasa",
+      "krajobraz",
+      "historia"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "cycow",
+
+    type: "heritage",
+
+    icon: "🏛",
+
+    title:
+      "Cyców – Izba Tradycji",
+
+    description:
+      "Miejsce związane z historią Cycowa i bitwą z 1920 roku.",
+
+    coords:
+      [51.2960, 23.0330],
+
+    tags: [
+      "historia",
+      "Cyców",
+      "czarna trasa"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  },
+
+
+  {
+    id: "lancuchow",
+
+    type: "heritage",
+
+    icon: "🏡",
+
+    title:
+      "Łańcuchów – dwór",
+
+    description:
+      "Historyczny zespół związany z dawnym majątkiem Łańcuchów.",
+
+    coords:
+      [51.2520, 22.9520],
+
+    tags: [
+      "dwór",
+      "historia",
+      "żółta trasa"
+    ],
+
+    source:
+      "https://powiatleczynski.pl/turystyka/"
+
+  }
+
+];
+
+
+/* =========================================================
+   WARSTWY
+========================================================= */
+
+const routeLayers = {};
+const placeMarkers = {};
+
+
+/* =========================================================
+   ICONY
+========================================================= */
+
+function createIcon(type, icon) {
 
   return L.divIcon({
 
     className: "",
 
     html: `
-
-      <div class="multi-marker">
-
-        ${number}
-
+      <div style="
+        width:34px;
+        height:34px;
+        border-radius:50%;
+        background:white;
+        box-shadow:0 3px 12px rgba(0,0,0,.22);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:18px;
+        border:2px solid #ffffff;
+      ">
+        ${icon}
       </div>
-
     `,
 
-    iconSize: [34, 34],
+    iconSize:
+      [34,34],
 
-    iconAnchor: [17, 17],
+    iconAnchor:
+      [17,17],
 
-    popupAnchor: [0, -17]
+    popupAnchor:
+      [0,-18]
 
   });
 
@@ -1307,101 +1832,450 @@ function createMarkerIcon(number, multiple) {
 
 
 /* =========================================================
-   WYLICZANIE POZYCJI MARKERA
+   POPUP TRASY
 ========================================================= */
 
-/*
-   Jeżeli w jednym miejscu są np. 2 wydarzenia:
+function routePopup(route) {
 
-      ●       ●
+  return `
 
-   zamiast:
+    <div class="popup">
 
-      ●
-      ●
+      <h3>
+        ${route.icon}
+        ${route.title}
+      </h3>
 
-   Jeżeli jest ich więcej:
+      <p>
+        ${route.description}
+      </p>
 
-          ●
+      <div class="popup-stats">
 
-      ●       ●
+        <div class="popup-stat">
+          <strong>${route.distance}</strong>
+          <span>dystans</span>
+        </div>
 
-          ●
+        <div class="popup-stat">
+          <strong>${route.time}</strong>
+          <span>jazda</span>
+        </div>
 
-   Dzięki temu żaden marker nie zasłania drugiego.
-*/
+        <div class="popup-stat">
+          <strong>${route.difficultyText}</strong>
+          <span>trudność</span>
+        </div>
 
-function getMarkerPosition(event, index, count) {
+      </div>
 
-  if (count <= 1) {
+      <a
+        class="popup-link"
+        href="${route.source}"
+        target="_blank"
+        rel="noopener"
+      >
+        Oficjalne informacje →
+      </a>
 
-    return [
-      event.lat,
-      event.lng
-    ];
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   POPUP ATRAKCJI
+========================================================= */
+
+function placePopup(place) {
+
+  return `
+
+    <div class="popup">
+
+      <h3>
+        ${place.icon}
+        ${place.title}
+      </h3>
+
+      <p>
+        ${place.description}
+      </p>
+
+      <div class="card-tags">
+
+        ${place.tags.map(tag => `
+          <span class="tag">
+            ${tag}
+          </span>
+        `).join("")}
+
+      </div>
+
+      <a
+        class="popup-link"
+        href="${place.source}"
+        target="_blank"
+        rel="noopener"
+      >
+        Więcej informacji →
+      </a>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OSRM – WYZNACZANIE PRAWDZIWEJ GEOMETRII DROGOWEJ
+========================================================= */
+
+async function buildRoute(route) {
+
+  const coordinates =
+    route.waypoints
+      .map(point =>
+        `${point[1]},${point[0]}`
+      )
+      .join(";");
+
+
+  const url =
+    `https://router.project-osrm.org/route/v1/cycling/${coordinates}?overview=full&geometries=geojson&steps=false`;
+
+
+  try {
+
+    const response =
+      await fetch(url);
+
+
+    if (!response.ok) {
+      throw new Error("OSRM error");
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.routes ||
+      !data.routes.length
+    ) {
+      throw new Error("Brak trasy");
+    }
+
+
+    const geometry =
+      data.routes[0].geometry.coordinates
+        .map(point => [
+          point[1],
+          point[0]
+        ]);
+
+
+    const line =
+      L.polyline(
+        geometry,
+        {
+          color: route.color,
+          weight: 5,
+          opacity: .88,
+          lineJoin: "round",
+          lineCap: "round"
+        }
+      );
+
+
+    line.bindPopup(
+      routePopup(route)
+    );
+
+
+    routeLayers[route.id] =
+      line;
+
+
+    return line;
 
   }
 
+  catch (error) {
 
-  /*
-     Promień przesunięcia.
+    /*
+      Jeżeli routing chwilowo nie działa,
+      pokazujemy przebieg pomiędzy oficjalnymi
+      punktami trasy.
+    */
 
-     0.0015 stopnia to około 150–170 metrów,
-     więc markery są widoczne, ale nadal pozostają
-     blisko właściwej lokalizacji.
-  */
+    const fallback =
+      L.polyline(
+        route.waypoints,
+        {
+          color: route.color,
+          weight: 5,
+          opacity: .7,
+          dashArray: "8 7"
+        }
+      );
 
-  const radius = 0.0015;
+
+    fallback.bindPopup(
+      routePopup(route)
+    );
 
 
-  /*
-     Dla dwóch markerów ustawiamy je poziomo.
-  */
+    routeLayers[route.id] =
+      fallback;
 
-  if (count === 2) {
 
-    const positions = [
-
-      [0, -radius],
-
-      [0, radius]
-
-    ];
-
-    return [
-
-      event.lat + positions[index][0],
-
-      event.lng + positions[index][1]
-
-    ];
+    return fallback;
 
   }
 
-
-  /*
-     Dla większej liczby markerów
-     używamy okręgu.
-  */
-
-  const angle =
-
-    (2 * Math.PI * index / count)
-    -
-    Math.PI / 2;
+}
 
 
-  return [
+/* =========================================================
+   ŁADOWANIE TRAS
+========================================================= */
 
-    event.lat
-      +
-      Math.sin(angle) * radius,
+async function loadRoutes() {
 
-    event.lng
-      +
-      Math.cos(angle) * radius
+  document
+    .getElementById("loading")
+    .style.display = "block";
 
-  ];
+
+  const promises =
+    routes.map(route =>
+      buildRoute(route)
+    );
+
+
+  const lines =
+    await Promise.all(promises);
+
+
+  lines.forEach(line =>
+    line.addTo(map)
+  );
+
+
+  document
+    .getElementById("loading")
+    .style.display = "none";
+
+}
+
+
+loadRoutes();
+
+
+/* =========================================================
+   ATRAKCJE
+========================================================= */
+
+places.forEach(place => {
+
+  const marker =
+    L.marker(
+      place.coords,
+      {
+        icon:
+          createIcon(
+            place.type,
+            place.icon
+          )
+      }
+    );
+
+
+  marker.bindPopup(
+    placePopup(place)
+  );
+
+
+  marker.addTo(map);
+
+
+  placeMarkers[place.id] =
+    marker;
+
+});
+
+
+/* =========================================================
+   KARTY
+========================================================= */
+
+const cards =
+  document.getElementById("cards");
+
+
+function createRouteCard(route) {
+
+  return `
+
+    <article
+      class="card"
+      data-id="${route.id}"
+      data-type="route"
+    >
+
+      <div class="card-main">
+
+        <div class="card-icon icon-route">
+          ${route.icon}
+        </div>
+
+        <div class="card-info">
+
+          <h3 class="card-title">
+            ${route.title}
+          </h3>
+
+          <div class="card-description">
+            ${route.description}
+          </div>
+
+          <div class="card-tags">
+
+            ${route.tags.map(tag => `
+              <span class="tag">
+                ${tag}
+              </span>
+            `).join("")}
+
+          </div>
+
+        </div>
+
+        <span
+          class="difficulty ${route.difficulty}"
+        >
+          ${route.difficultyText}
+        </span>
+
+      </div>
+
+
+      <div class="card-bottom">
+
+        <div class="route-meta">
+
+          <span>
+            📏 ${route.distance}
+          </span>
+
+          <span>
+            ⏱ ${route.time}
+          </span>
+
+        </div>
+
+        <button
+          class="card-button"
+          onclick="focusRoute('${route.id}')"
+        >
+          Pokaż
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+function createPlaceCard(place) {
+
+  let iconClass =
+    "icon-nature";
+
+
+  if (
+    place.type === "heritage"
+  ) {
+    iconClass =
+      "icon-heritage";
+  }
+
+
+  if (
+    place.type === "family"
+  ) {
+    iconClass =
+      "icon-family";
+  }
+
+
+  return `
+
+    <article
+      class="card"
+      data-id="${place.id}"
+      data-type="${place.type}"
+    >
+
+      <div class="card-main">
+
+        <div
+          class="card-icon ${iconClass}"
+        >
+          ${place.icon}
+        </div>
+
+        <div class="card-info">
+
+          <h3 class="card-title">
+            ${place.title}
+          </h3>
+
+          <div class="card-description">
+            ${place.description}
+          </div>
+
+          <div class="card-tags">
+
+            ${place.tags.map(tag => `
+              <span class="tag">
+                ${tag}
+              </span>
+            `).join("")}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card-bottom">
+
+        <div class="route-meta">
+          📍 punkt na mapie
+        </div>
+
+        <button
+          class="card-button"
+          onclick="focusPlace('${place.id}')"
+        >
+          Pokaż
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
 
 }
 
@@ -1410,389 +2284,467 @@ function getMarkerPosition(event, index, count) {
    RENDER
 ========================================================= */
 
-function render() {
+function renderCards(
+  routeData = routes,
+  placeData = places
+) {
 
-  const filtered =
-    getFilteredEvents();
-
-
-  /*
-     Czyścimy listę
-  */
-
-  eventList.innerHTML = "";
+  cards.innerHTML = "";
 
 
-  /*
-     Czyścimy markery
-  */
+  routeData.forEach(route => {
 
-  markerLayer.clearLayers();
+    cards.innerHTML +=
+      createRouteCard(route);
 
-
-  /*
-     Czyścimy mapę markerów
-  */
-
-  eventMarkers.clear();
+  });
 
 
-  /*
-     Liczba wydarzeń
-  */
+  placeData.forEach(place => {
 
-  summary.innerHTML = `
+    cards.innerHTML +=
+      createPlaceCard(place);
 
-    <strong>
-      ${filtered.length}
-    </strong>
+  });
 
-    ${
-      filtered.length === 1
-        ? "wydarzenie"
-        : "wydarzeń"
-    }
-
-    na mapie
-
-  `;
+}
 
 
-  /*
-     Brak wyników
-  */
+renderCards();
 
-  if (!filtered.length) {
 
-    eventList.innerHTML = `
+/* =========================================================
+   FOCUS TRASA
+========================================================= */
 
-      <div
-        style="
-          padding:25px;
-          text-align:center;
-          color:#68737a;
-        "
-      >
+function focusRoute(id) {
 
-        Brak wydarzeń
-        spełniających
-        wybrane kryteria.
+  const route =
+    routes.find(
+      item => item.id === id
+    );
 
-      </div>
 
-    `;
-
+  if (!route) {
     return;
-
   }
 
 
-  /*
-     Grupujemy wydarzenia
-     według lokalizacji.
-  */
+  const layer =
+    routeLayers[id];
 
-  const groups = {};
 
+  if (layer) {
 
-  filtered.forEach(event => {
-
-    const key =
-      locationKey(event);
-
-
-    if (!groups[key]) {
-
-      groups[key] = [];
-
-    }
-
-
-    groups[key].push(event);
-
-  });
-
-
-  /*
-     Lista wszystkich współrzędnych
-     do dopasowania mapy.
-  */
-
-  const bounds = [];
-
-
-  /* =======================================================
-     RYSOWANIE
-  ======================================================= */
-
-  filtered.forEach(event => {
-
-    const key =
-      locationKey(event);
-
-    const group =
-      groups[key];
-
-    const index =
-      group.indexOf(event);
-
-    const count =
-      group.length;
-
-
-    /*
-       Obliczamy pozycję markera.
-    */
-
-    const position =
-      getMarkerPosition(
-
-        event,
-
-        index,
-
-        count
-
-      );
-
-
-    bounds.push(position);
-
-
-    /* =====================================================
-       KARTA
-    ===================================================== */
-
-    const card =
-      document.createElement("article");
-
-
-    card.className =
-      "event";
-
-
-    card.dataset.event =
-      event.name
-      + event.date
-      + event.city;
-
-
-    card.innerHTML = `
-
-      <div class="event-date">
-
-        ${formatDate(event.date)}
-
-      </div>
-
-
-      <div class="event-name">
-
-        ${event.name}
-
-      </div>
-
-
-      <div class="event-location">
-
-        📍 ${event.city}
-
-        · ${event.province}
-
-        · ${event.distance}
-
-      </div>
-
-
-      <div class="event-description">
-
-        ${event.description}
-
-      </div>
-
-
-      <div class="badge">
-
-        ✓ termin potwierdzony
-
-      </div>
-
-    `;
-
-
-    eventList.appendChild(card);
-
-
-    /* =====================================================
-       MARKER
-    ===================================================== */
-
-    const marker =
-      L.marker(
-
-        position,
-
-        {
-
-          icon:
-            createMarkerIcon(
-
-              index + 1,
-
-              count > 1
-
-            )
-
-        }
-
-      );
-
-
-    /*
-       Popup
-    */
-
-    marker.bindPopup(`
-
-      <div class="popup-title">
-
-        ${event.name}
-
-      </div>
-
-
-      <div class="popup-date">
-
-        ${formatDate(event.date)}
-
-      </div>
-
-
-      <div>
-
-        📍 ${event.city}
-
-        <br>
-
-        🏃 ${event.distance}
-
-      </div>
-
-
-      <div class="popup-description">
-
-        ${event.description}
-
-      </div>
-
-    `);
-
-
-    marker.addTo(markerLayer);
-
-
-    /*
-       Zapamiętujemy marker.
-    */
-
-    eventMarkers.set(
-
-      event,
-
-      marker
-
+    map.fitBounds(
+      layer.getBounds(),
+      {
+        padding: [45,45]
+      }
     );
 
 
-    /* =====================================================
-       KLIKNIĘCIE KARTY
-    ===================================================== */
+    setTimeout(() => {
+      layer.openPopup();
+    }, 300);
 
-    card.addEventListener(
+  }
 
+}
+
+
+/* =========================================================
+   FOCUS MIEJSCE
+========================================================= */
+
+function focusPlace(id) {
+
+  const place =
+    places.find(
+      item => item.id === id
+    );
+
+
+  if (!place) {
+    return;
+  }
+
+
+  map.setView(
+    place.coords,
+    13,
+    {
+      animate: true
+    }
+  );
+
+
+  setTimeout(() => {
+
+    placeMarkers[id]
+      .openPopup();
+
+  }, 300);
+
+}
+
+
+/* =========================================================
+   FILTRY
+========================================================= */
+
+let activeFilter =
+  "all";
+
+
+document
+  .querySelectorAll(".quick-filter")
+  .forEach(button => {
+
+    button.addEventListener(
       "click",
-
       () => {
 
-        /*
-           Usuwamy zaznaczenie
-           z innych kart.
-        */
-
         document
-
-          .querySelectorAll(".event.active")
-
-          .forEach(
-
-            element =>
-              element.classList.remove("active")
-
+          .querySelectorAll(".quick-filter")
+          .forEach(btn =>
+            btn.classList.remove("active")
           );
 
 
-        /*
-           Zaznaczamy aktualną.
-        */
-
-        card.classList.add("active");
-
-
-        /*
-           Pobieramy właściwy marker.
-        */
-
-        const selectedMarker =
-          eventMarkers.get(event);
-
-
-        /*
-           Przybliżamy mapę.
-        */
-
-        map.setView(
-
-          position,
-
-          Math.max(
-            map.getZoom(),
-            13
-          ),
-
-          {
-
-            animate: true
-
-          }
-
+        button.classList.add(
+          "active"
         );
 
 
-        /*
-           Otwieramy właściwy popup.
-        */
+        activeFilter =
+          button.dataset.filter;
 
-        selectedMarker.openPopup();
+
+        applyFilters();
 
       }
-
     );
 
   });
 
 
+function applyFilters() {
+
+  const query =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const filteredRoutes =
+    routes.filter(route => {
+
+      const text = `
+
+        ${route.title}
+        ${route.description}
+        ${route.tags.join(" ")}
+
+      `.toLowerCase();
+
+
+      const searchMatch =
+        !query ||
+        text.includes(query);
+
+
+      let filterMatch =
+        true;
+
+
+      if (
+        activeFilter === "route"
+      ) {
+        filterMatch = true;
+      }
+
+
+      if (
+        activeFilter === "easy"
+      ) {
+
+        filterMatch =
+          route.difficulty === "easy";
+
+      }
+
+
+      if (
+        activeFilter === "medium"
+      ) {
+
+        filterMatch =
+          route.difficulty === "medium";
+
+      }
+
+
+      if (
+        activeFilter === "nature" ||
+        activeFilter === "heritage"
+      ) {
+
+        filterMatch = false;
+
+      }
+
+
+      return (
+        searchMatch &&
+        filterMatch
+      );
+
+    });
+
+
+  const filteredPlaces =
+    places.filter(place => {
+
+      const text = `
+
+        ${place.title}
+        ${place.description}
+        ${place.tags.join(" ")}
+
+      `.toLowerCase();
+
+
+      const searchMatch =
+        !query ||
+        text.includes(query);
+
+
+      let filterMatch =
+        true;
+
+
+      if (
+        activeFilter === "nature"
+      ) {
+
+        filterMatch =
+          place.type === "nature";
+
+      }
+
+
+      if (
+        activeFilter === "heritage"
+      ) {
+
+        filterMatch =
+          place.type === "heritage";
+
+      }
+
+
+      if (
+        activeFilter === "route" ||
+        activeFilter === "easy" ||
+        activeFilter === "medium"
+      ) {
+
+        filterMatch = false;
+
+      }
+
+
+      return (
+        searchMatch &&
+        filterMatch
+      );
+
+    });
+
+
   /*
-     Automatyczne dopasowanie mapy.
+    Widoczność tras
   */
 
-  if (bounds.length === 1) {
+  routes.forEach(route => {
 
-    map.setView(
+    const visible =
+      filteredRoutes.includes(route);
 
-      bounds[0],
 
-      12
+    const layer =
+      routeLayers[route.id];
 
+
+    if (!layer) {
+      return;
+    }
+
+
+    if (visible) {
+
+      if (!map.hasLayer(layer)) {
+        layer.addTo(map);
+      }
+
+    } else {
+
+      if (map.hasLayer(layer)) {
+        map.removeLayer(layer);
+      }
+
+    }
+
+  });
+
+
+  /*
+    Widoczność atrakcji
+  */
+
+  places.forEach(place => {
+
+    const visible =
+      filteredPlaces.includes(place);
+
+
+    const marker =
+      placeMarkers[place.id];
+
+
+    if (visible) {
+
+      if (!map.hasLayer(marker)) {
+        marker.addTo(map);
+      }
+
+    } else {
+
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+
+    }
+
+  });
+
+
+  renderCards(
+    filteredRoutes,
+    filteredPlaces
+  );
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    applyFilters
+  );
+
+
+/* =========================================================
+   SHOW ALL
+========================================================= */
+
+function showAll() {
+
+  activeFilter =
+    "all";
+
+
+  document
+    .querySelectorAll(".quick-filter")
+    .forEach(button =>
+      button.classList.remove("active")
+    );
+
+
+  document
+    .querySelector(
+      '[data-filter="all"]'
+    )
+    .classList.add("active");
+
+
+  document
+    .getElementById("search")
+    .value = "";
+
+
+  routes.forEach(route => {
+
+    const layer =
+      routeLayers[route.id];
+
+
+    if (
+      layer &&
+      !map.hasLayer(layer)
+    ) {
+
+      layer.addTo(map);
+
+    }
+
+  });
+
+
+  places.forEach(place => {
+
+    const marker =
+      placeMarkers[place.id];
+
+
+    if (
+      marker &&
+      !map.hasLayer(marker)
+    ) {
+
+      marker.addTo(map);
+
+    }
+
+  });
+
+
+  renderCards();
+
+
+  const bounds =
+    L.latLngBounds([]);
+
+
+  routes.forEach(route => {
+
+    route.waypoints.forEach(point =>
+      bounds.extend(point)
+    );
+
+  });
+
+
+  places.forEach(place =>
+    bounds.extend(place.coords)
+  );
+
+
+  if (bounds.isValid()) {
+
+    map.fitBounds(
+      bounds,
+      {
+        padding: [35,35]
+      }
     );
 
   }
@@ -1801,113 +2753,112 @@ function render() {
 
 
 /* =========================================================
-   POKAŻ WSZYSTKIE
+   RESET
 ========================================================= */
 
-showAll.addEventListener(
+function resetMap() {
 
-  "click",
+  map.setView(
+    [51.34,22.98],
+    10
+  );
 
-  () => {
-
-    monthFilter.value = "all";
-
-    provinceFilter.value = "all";
-
-    search.value = "";
-
-    render();
+}
 
 
-    /*
-       Wszystkie lokalizacje.
-    */
+/* =========================================================
+   LOKALIZACJA
+========================================================= */
 
-    const allPositions =
-
-      events.map(event => [
-
-        event.lat,
-
-        event.lng
-
-      ]);
+let userMarker =
+  null;
 
 
-    if (allPositions.length) {
+function locateUser() {
 
-      map.fitBounds(
+  if (
+    !navigator.geolocation
+  ) {
 
-        allPositions,
+    alert(
+      "Twoja przeglądarka nie obsługuje geolokalizacji."
+    );
 
+    return;
+
+  }
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      const lat =
+        position.coords.latitude;
+
+      const lng =
+        position.coords.longitude;
+
+
+      if (userMarker) {
+
+        map.removeLayer(
+          userMarker
+        );
+
+      }
+
+
+      userMarker =
+        L.circleMarker(
+          [lat,lng],
+          {
+            radius: 9,
+            color: "#ffffff",
+            weight: 3,
+            fillColor: "#267d42",
+            fillOpacity: 1
+          }
+        )
+        .addTo(map);
+
+
+      userMarker
+        .bindPopup(
+          "📍 Twoja lokalizacja"
+        )
+        .openPopup();
+
+
+      map.setView(
+        [lat,lng],
+        13,
         {
-
-          padding: [40, 40]
-
+          animate: true
         }
+      );
 
+    },
+
+
+    () => {
+
+      alert(
+        "Nie udało się pobrać lokalizacji. Sprawdź uprawnienia przeglądarki."
       );
 
     }
 
-  }
+  );
 
-);
-
-
-/* =========================================================
-   FILTRY
-========================================================= */
-
-monthFilter.addEventListener(
-
-  "change",
-
-  render
-
-);
-
-
-provinceFilter.addEventListener(
-
-  "change",
-
-  render
-
-);
-
-
-search.addEventListener(
-
-  "input",
-
-  render
-
-);
+}
 
 
 /* =========================================================
    START
 ========================================================= */
 
-render();
-
-
-/*
-   Mała poprawka po załadowaniu strony.
-*/
-
-setTimeout(
-
-  () => {
-
-    map.invalidateSize();
-
-  },
-
-  300
-
-);
+showAll();
 
 </script>
 
